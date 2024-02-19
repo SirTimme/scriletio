@@ -1,9 +1,10 @@
 plugins {
-    id("java")
+    java
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "dev.sirtimme"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -11,4 +12,10 @@ repositories {
 
 dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "dev.sirtimme.Main"
+    }
 }
