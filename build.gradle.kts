@@ -16,6 +16,6 @@ dependencies {
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "dev.sirtimme.Main"
+        attributes["Main-Class"] = "dev.sirtimme.scriletio.Main"
     }
 }

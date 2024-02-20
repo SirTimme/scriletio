@@ -2,8 +2,8 @@ FROM gradle:8.6.0-jdk21-alpine as build
 ENV HOME=/home/gradle/src
 RUN mkdir -p $HOME
 WORKDIR $HOME
-COPY . $HOME
-RUN gradle build
+ADD . $HOME
+RUN gradle shadowJar
 
 FROM openjdk:21
 ENV HOME=/home/gradle/src
