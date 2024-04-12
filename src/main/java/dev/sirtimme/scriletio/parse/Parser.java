@@ -36,7 +36,7 @@ public class Parser {
             case Token.Day day -> Duration.ofDays(digit.value());
             case Token.Hour hour -> Duration.ofHours(digit.value());
             case Token.Minute minute -> Duration.ofMinutes(digit.value());
-            default -> throw new ParsingException("A digit must be followed by an unit (D,d,H,h,M,m)", digit.column());
+            default -> throw new ParsingException("A digit must be followed by one of [ D, d, H, h, M, m ]", digit.column());
         };
     }
 }
