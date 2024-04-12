@@ -40,7 +40,7 @@ public class Lexer {
                     tokens.add(new Token.Minute(index));
                     break;
                 default:
-                    throw new ParsingException("Scriletio expected one of [ D, d, H, h, M, m ] got [ " + currentToken + " ] instead", index);
+                    throw new ParsingException("Scriletio expected one of [ `D, d, H, h, M, m` ] got [ `" + currentToken + "` ] instead", index);
             }
             index++;
         }
