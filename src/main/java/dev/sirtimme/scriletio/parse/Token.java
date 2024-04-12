@@ -9,5 +9,5 @@ public sealed interface Token {
 
     record Minute(int column) implements Token {}
 
-    record Unknown(int column) implements Token {}
+    record EOF(int column) implements Token {}
 }

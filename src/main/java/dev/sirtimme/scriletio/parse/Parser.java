@@ -31,7 +31,7 @@ public class Parser {
     }
 
     private Duration getDuration(Token.Digit digit) throws ParsingException {
-        final var nextToken = index + 1 >= tokens.size() ? new Token.Unknown(index) : tokens.get(index + 1);
+        final var nextToken = index + 1 >= tokens.size() ? new Token.EOF(index) : tokens.get(index + 1);
         return switch (nextToken) {
             case Token.Day day -> Duration.ofDays(digit.value());
             case Token.Hour hour -> Duration.ofHours(digit.value());
