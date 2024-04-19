@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.commands;
 import dev.sirtimme.scriletio.commands.admin.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.owner.UpdateCommand;
 import dev.sirtimme.scriletio.commands.user.PingCommand;
-import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
+import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -21,7 +21,7 @@ public class CommandManager {
             put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
         }};
         final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
-        final var repository = new DeleteConfigRepository(entityManagerFactory);
+        final var repository = new UserRepository(entityManagerFactory);
 
         this.commands = new HashMap<>();
         this.commands.put("ping", new PingCommand());
