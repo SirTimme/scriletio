@@ -56,8 +56,8 @@ public class AutoDeleteCommand extends AdminCommand {
             return;
         }
 
-        final var user = getOrCreateUser(event.getUser().getIdLong());
         final var deleteConfig = new DeleteConfig(event.getGuild().getIdLong(), channel.getIdLong(), duration);
+        final var user = getOrCreateUser(event.getUser().getIdLong());
 
         user.addConfig(deleteConfig);
         repository.update(user);
@@ -67,8 +67,8 @@ public class AutoDeleteCommand extends AdminCommand {
 
     private void handleGetCommand(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-        final var user = repository.get(userId);
 
+        final var user = repository.get(userId);
         if (user == null) {
             event.reply("You dont have any configs saved").queue();
             return;
@@ -89,20 +89,20 @@ public class AutoDeleteCommand extends AdminCommand {
 
     private User getOrCreateUser(final long userId) {
         final var dbUser = repository.get(userId);
-
-        if (dbUser == null) {
-            final var newUser = new User(userId, new ArrayList<>());
-            repository.add(newUser);
-            return newUser;
+        if (dbUser != null) {
+            return dbUser;
         }
 
-        return dbUser;
+        final var newUser = new User(userId, new ArrayList<>());
+        repository.add(newUser);
+
+        return newUser;
     }
 
     private enum DeleteSubCommand {
         ADD,
         GET,
         UPDATE,
-        DELETE
+        DELETE,
     }
 }
