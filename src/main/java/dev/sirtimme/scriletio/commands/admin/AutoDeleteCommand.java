@@ -45,7 +45,6 @@ public class AutoDeleteCommand extends AdminCommand {
     }
 
     private void handleAddCommand(final SlashCommandInteractionEvent event) {
-        final var channel = event.getOption("channel").getAsChannel();
         final var durationString = event.getOption("duration").getAsString();
 
         var duration = 0L;
@@ -56,6 +55,7 @@ public class AutoDeleteCommand extends AdminCommand {
             return;
         }
 
+        final var channel = event.getOption("channel").getAsChannel();
         final var deleteConfig = new DeleteConfig(event.getGuild().getIdLong(), channel.getIdLong(), duration);
         final var user = getOrCreateUser(event.getUser().getIdLong());
 
@@ -67,7 +67,6 @@ public class AutoDeleteCommand extends AdminCommand {
 
     private void handleGetCommand(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-
         final var user = repository.get(userId);
         if (user == null) {
             event.reply("You dont have any configs saved").queue();
