@@ -47,8 +47,8 @@ public class AutoDeleteCommand extends AdminCommand {
     private void handleAddCommand(final SlashCommandInteractionEvent event) {
         final var channel = event.getOption("channel").getAsChannel();
         final var durationString = event.getOption("duration").getAsString();
-        var duration = 0L;
 
+        var duration = 0L;
         try {
             duration = new Parser().parse(durationString);
         } catch (ParsingException exception) {
