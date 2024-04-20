@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class AutoDeleteCommand extends AdminCommand {
     private final IRepository<User> repository;
@@ -56,23 +56,25 @@ public class AutoDeleteCommand extends AdminCommand {
             return;
         }
 
+        final var user = getOrCreateUser(event.getUser().getIdLong());
         final var deleteConfig = new DeleteConfig(event.getGuild().getIdLong(), channel.getIdLong(), duration);
 
-        addOrUpdateUser(event.getUser().getIdLong(), deleteConfig);
+        user.addConfig(deleteConfig);
+        repository.update(user);
 
         event.reply("Successfully created an auto delete config for **" + channel + "**").queue();
     }
 
     private void handleGetCommand(final SlashCommandInteractionEvent event) {
-        final var authorId = event.getUser().getIdLong();
-        final var result = repository.get(authorId);
+        final var userId = event.getUser().getIdLong();
+        final var user = repository.get(userId);
 
-        if (result == null) {
+        if (user == null) {
             event.reply("You dont have any configs saved").queue();
             return;
         }
 
-        final var amountConfigs = result.getConfigs().size();
+        final var amountConfigs = user.getConfigs().size();
 
         event.reply("You have currently **" + amountConfigs + "** configs saved").queue();
     }
@@ -85,23 +87,22 @@ public class AutoDeleteCommand extends AdminCommand {
 
     }
 
-    private void addOrUpdateUser(final long userId, final DeleteConfig created) {
+    private User getOrCreateUser(final long userId) {
         final var dbUser = repository.get(userId);
 
         if (dbUser == null) {
-            final var user = new User(userId, List.of(created));
-            repository.add(user);
-            return;
+            final var newUser = new User(userId, new ArrayList<>());
+            repository.add(newUser);
+            return newUser;
         }
 
-        dbUser.addConfig(created);
-        repository.update(dbUser);
+        return dbUser;
     }
 
     private enum DeleteSubCommand {
         ADD,
         GET,
         UPDATE,
-        DELETE;
+        DELETE
     }
 }
