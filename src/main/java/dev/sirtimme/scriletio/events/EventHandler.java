@@ -13,16 +13,28 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandler extends ListenerAdapter {
-    private final CommandManager manager;
+    private final CommandManager commandManager;
     private final ButtonManager buttonManager;
+    private final MessageManager messageManager;
 
     public EventHandler() {
-        this.manager = new CommandManager();
+        final var properties = new HashMap<String, String>() {{
+            put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
+            put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
+            put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
+        }};
+        final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
+        final var userRepository = new UserRepository(entityManagerFactory);
+        final var deleteConfigRepository = new DeleteConfigRepository(entityManagerFactory);
+
+        this.commandManager = new CommandManager(userRepository);
+        this.buttonManager = new ButtonManager(userRepository);
+        this.messageManager = new MessageManager(deleteConfigRepository);
     }
 
     @Override
     public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
-        this.manager.handleCommand(event);
+        this.commandManager.handleCommand(event);
     }
 
     @Override
