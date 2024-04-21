@@ -1,17 +1,16 @@
 package dev.sirtimme.scriletio.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "delete_configs")
+@Table(name = "delete_configs", indexes = @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"))
 public class DeleteConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "guild_id", nullable = false)
-    private long guildId;
-
+    @NaturalId
     @Column(name = "channel_id", nullable = false)
     private long channelId;
 
@@ -21,9 +20,12 @@ public class DeleteConfig {
     public DeleteConfig() {
     }
 
-    public DeleteConfig(final long guildId, final long channelId, final long duration) {
-        this.guildId = guildId;
+    public DeleteConfig(final long channelId, final long duration) {
         this.channelId = channelId;
         this.duration = duration;
+    }
+
+    public long getDuration() {
+        return this.duration;
     }
 }
