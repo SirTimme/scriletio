@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.commands;
 
 import dev.sirtimme.scriletio.commands.admin.AutoDeleteCommand;
+import dev.sirtimme.scriletio.commands.admin.RegisterCommand;
 import dev.sirtimme.scriletio.commands.owner.UpdateCommand;
 import dev.sirtimme.scriletio.commands.user.PingCommand;
 import dev.sirtimme.scriletio.repositories.UserRepository;
@@ -27,6 +28,7 @@ public class CommandManager {
         this.commands.put("ping", new PingCommand());
         this.commands.put("update", new UpdateCommand(this));
         this.commands.put("autodelete", new AutoDeleteCommand(repository));
+        this.commands.put("register", new RegisterCommand(repository));
     }
 
     public void handleCommand(final SlashCommandInteractionEvent event) {
