@@ -4,8 +4,8 @@ import dev.sirtimme.scriletio.commands.admin.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.admin.RegisterCommand;
 import dev.sirtimme.scriletio.commands.owner.UpdateCommand;
 import dev.sirtimme.scriletio.commands.user.PingCommand;
-import dev.sirtimme.scriletio.repositories.UserRepository;
-import jakarta.persistence.Persistence;
+import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -15,15 +15,7 @@ import java.util.List;
 public class CommandManager {
     private final HashMap<String, ISlashCommand> commands;
 
-    public CommandManager() {
-        final var properties = new HashMap<String, String>() {{
-            put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
-            put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
-            put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
-        }};
-        final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
-        final var repository = new UserRepository(entityManagerFactory);
-
+    public CommandManager(final IRepository<User> repository) {
         this.commands = new HashMap<>();
         this.commands.put("ping", new PingCommand());
         this.commands.put("update", new UpdateCommand(this));
