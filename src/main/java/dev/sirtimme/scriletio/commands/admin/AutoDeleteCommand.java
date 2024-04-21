@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.admin;
 
-import dev.sirtimme.scriletio.error.ExceptionFormatter;
 import dev.sirtimme.scriletio.error.ParsingException;
+import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.parse.Parser;
@@ -13,8 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-
-import java.util.ArrayList;
 
 public class AutoDeleteCommand extends AdminCommand {
     private final IRepository<User> repository;
@@ -51,13 +49,18 @@ public class AutoDeleteCommand extends AdminCommand {
         try {
             duration = new Parser().parse(durationString);
         } catch (ParsingException exception) {
-            event.reply(ExceptionFormatter.format(durationString, exception)).queue();
+            event.reply(Formatter.format(durationString, exception)).queue();
             return;
         }
 
         final var channel = event.getOption("channel").getAsChannel();
-        final var deleteConfig = new DeleteConfig(event.getGuild().getIdLong(), channel.getIdLong(), duration);
-        final var user = getOrCreateUser(event.getUser().getIdLong());
+        final var deleteConfig = new DeleteConfig(channel.getIdLong(), duration);
+
+        final var user = repository.get(event.getUser().getIdLong());
+        if (user == null) {
+            event.reply("You are not registered, please use `/register` first").queue();
+            return;
+        }
 
         user.addConfig(deleteConfig);
         repository.update(user);
@@ -69,7 +72,7 @@ public class AutoDeleteCommand extends AdminCommand {
         final var userId = event.getUser().getIdLong();
         final var user = repository.get(userId);
         if (user == null) {
-            event.reply("You dont have any configs saved").queue();
+            event.reply("You are not registered, please use `/register` first").queue();
             return;
         }
 
@@ -84,18 +87,6 @@ public class AutoDeleteCommand extends AdminCommand {
 
     private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
 
-    }
-
-    private User getOrCreateUser(final long userId) {
-        final var dbUser = repository.get(userId);
-        if (dbUser != null) {
-            return dbUser;
-        }
-
-        final var newUser = new User(userId, new ArrayList<>());
-        repository.add(newUser);
-
-        return newUser;
     }
 
     private enum DeleteSubCommand {
