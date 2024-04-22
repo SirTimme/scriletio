@@ -34,6 +34,10 @@ public class User {
         this.configs.add(created);
     }
 
+    public void removeConfig(final DeleteConfig removed) {
+        this.configs.remove(removed);
+    }
+
     public List<DeleteConfig> getConfigs() {
         return this.configs;
     }
