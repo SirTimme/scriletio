@@ -8,6 +8,7 @@ import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +47,11 @@ public class EventHandler extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-        this.messageManager.handleMessage(event);
+        this.messageManager.handleMessageReceive(event);
+    }
+
+    @Override
+    public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
+        this.messageManager.handleMessageDelete(event);
     }
 }
