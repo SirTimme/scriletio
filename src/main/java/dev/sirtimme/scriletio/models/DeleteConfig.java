@@ -3,6 +3,8 @@ package dev.sirtimme.scriletio.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "delete_configs", indexes = @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"))
 public class DeleteConfig {
@@ -27,5 +29,22 @@ public class DeleteConfig {
 
     public long getDuration() {
         return this.duration;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final DeleteConfig that = (DeleteConfig) o;
+        return channelId == that.channelId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(channelId);
     }
 }
