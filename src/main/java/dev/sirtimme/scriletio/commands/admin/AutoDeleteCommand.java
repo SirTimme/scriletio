@@ -36,10 +36,14 @@ public class AutoDeleteCommand extends AdminCommand {
     public CommandData getCommandData() {
         final var channelOptionData = new OptionData(OptionType.CHANNEL, "channel", "The channel to delete the messages in", true).setChannelTypes(ChannelType.TEXT);
         final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
+
         final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
         final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
+        final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config");
+        final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
 
-        return Commands.slash("autodelete", "Manage auto delete configs").addSubcommands(addCommandData, getCommandData);
+        return Commands.slash("autodelete", "Manage auto delete configs")
+                       .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
     }
 
     private void handleAddCommand(final SlashCommandInteractionEvent event) {
