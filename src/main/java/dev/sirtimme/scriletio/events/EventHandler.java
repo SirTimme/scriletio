@@ -1,8 +1,8 @@
 package dev.sirtimme.scriletio.events;
 
-import dev.sirtimme.scriletio.commands.CommandManager;
+import dev.sirtimme.scriletio.commands.slash.CommandManager;
 import dev.sirtimme.scriletio.components.buttons.ButtonManager;
-import dev.sirtimme.scriletio.messages.MessageManager;
+import dev.sirtimme.scriletio.commands.message.MessageManager;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.Persistence;

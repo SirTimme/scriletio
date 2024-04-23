@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.commands.admin;
+package dev.sirtimme.scriletio.commands.slash.admin;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.slash.ISlashCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 

@@ -1,9 +1,9 @@
-package dev.sirtimme.scriletio.commands;
+package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.admin.AutoDeleteCommand;
-import dev.sirtimme.scriletio.commands.admin.RegisterCommand;
-import dev.sirtimme.scriletio.commands.owner.UpdateCommand;
-import dev.sirtimme.scriletio.commands.user.PingCommand;
+import dev.sirtimme.scriletio.commands.slash.admin.AutoDeleteCommand;
+import dev.sirtimme.scriletio.commands.slash.admin.RegisterCommand;
+import dev.sirtimme.scriletio.commands.slash.owner.UpdateCommand;
+import dev.sirtimme.scriletio.commands.slash.user.PingCommand;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.commands.user;
+package dev.sirtimme.scriletio.commands.slash.user;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.slash.ISlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

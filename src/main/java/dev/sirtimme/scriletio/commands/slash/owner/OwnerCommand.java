@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.commands.owner;
+package dev.sirtimme.scriletio.commands.slash.owner;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.slash.ISlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public abstract class OwnerCommand implements ISlashCommand {

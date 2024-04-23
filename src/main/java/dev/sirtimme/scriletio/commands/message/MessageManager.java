@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.messages;
+package dev.sirtimme.scriletio.commands.message;
 
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.repositories.IRepository;
@@ -49,6 +49,11 @@ public class MessageManager {
     }
 
     public void handleMessageDelete(final MessageDeleteEvent event) {
+        final var deleteConfig = repository.get(event.getChannel().getIdLong());
+        if (deleteConfig == null) {
+            return;
+        }
+
         final var msgId = event.getMessageIdLong();
         final var deleteJob = pendingTasks.get(msgId);
 

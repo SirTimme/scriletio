@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.admin;
+package dev.sirtimme.scriletio.commands.slash.admin;
 
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;

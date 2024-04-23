@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.admin;
+package dev.sirtimme.scriletio.commands.slash.admin;
 
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.User;

@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.commands.owner;
+package dev.sirtimme.scriletio.commands.slash.owner;
 
-import dev.sirtimme.scriletio.commands.CommandManager;
+import dev.sirtimme.scriletio.commands.slash.CommandManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
