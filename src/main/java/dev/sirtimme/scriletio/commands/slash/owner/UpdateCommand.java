@@ -8,27 +8,27 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 public class UpdateCommand extends OwnerCommand {
-    private final CommandManager manager;
+	private final CommandManager manager;
 
-    public UpdateCommand(final CommandManager manager) {
-        this.manager = manager;
-    }
+	public UpdateCommand(final CommandManager manager) {
+		this.manager = manager;
+	}
 
-    @Override
-    protected void handleCommand(final SlashCommandInteractionEvent event) {
-        event.getJDA()
-             .updateCommands()
-             .addCommands(this.manager.getCommandData())
-             .queue();
+	@Override
+	protected void handleCommand(final SlashCommandInteractionEvent event) {
+		event.getJDA()
+			 .updateCommands()
+			 .addCommands(this.manager.getCommandData())
+			 .queue();
 
-        event.reply("Update of slash commands were successful!").queue();
-    }
+		event.reply("Update of slash commands were successful!").queue();
+	}
 
-    @Override
-    public CommandData getCommandData() {
-        return Commands.slash("update", "Refreshes all slash commands")
-                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
-                       .setGuildOnly(true)
-                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
-    }
+	@Override
+	public CommandData getCommandData() {
+		return Commands.slash("update", "Refreshes all slash commands")
+					   .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
+					   .setGuildOnly(true)
+					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+	}
 }

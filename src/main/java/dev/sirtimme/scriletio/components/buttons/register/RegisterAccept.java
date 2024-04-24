@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class RegisterAccept extends MessageButton {
-    private final IRepository<User> repository;
+	private final IRepository<User> repository;
 
-    public RegisterAccept(final IRepository<User> repository) {
-        this.repository = repository;
-    }
+	public RegisterAccept(final IRepository<User> repository) {
+		this.repository = repository;
+	}
 
-    @Override
-    protected void handleCommand(final ButtonInteractionEvent event) {
-        final var userId = event.getUser().getIdLong();
-        final var user = new User(userId, new ArrayList<>());
+	@Override
+	protected void handleCommand(final ButtonInteractionEvent event) {
+		final var userId = event.getUser().getIdLong();
+		final var user = new User(userId, new ArrayList<>());
 
-        repository.add(user);
+		repository.add(user);
 
-        event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();
-    }
+		event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();
+	}
 }

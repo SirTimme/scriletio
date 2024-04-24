@@ -9,29 +9,29 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class RegisterCommand extends AdminCommand {
-    private final IRepository<User> repository;
+	private final IRepository<User> repository;
 
-    public RegisterCommand(final IRepository<User> repository) {
-        this.repository = repository;
-    }
+	public RegisterCommand(final IRepository<User> repository) {
+		this.repository = repository;
+	}
 
-    @Override
-    protected void handleCommand(final SlashCommandInteractionEvent event) {
-        final var userId = event.getUser().getIdLong();
-        final var user = repository.get(userId);
-        if (user != null) {
-            event.reply("You are already registered, no need to use that command again").queue();
-            return;
-        }
-        
-        final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
-        final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
+	@Override
+	protected void handleCommand(final SlashCommandInteractionEvent event) {
+		final var userId = event.getUser().getIdLong();
+		final var user = repository.get(userId);
+		if (user != null) {
+			event.reply("You are already registered, no need to use that command again").queue();
+			return;
+		}
 
-        event.reply(Formatter.format()).addActionRow(btnAccept, btnCancel).queue();
-    }
+		final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
+		final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
 
-    @Override
-    public CommandData getCommandData() {
-        return Commands.slash("register", "Register yourself to use Scriletios services");
-    }
+		event.reply(Formatter.format()).addActionRow(btnAccept, btnCancel).queue();
+	}
+
+	@Override
+	public CommandData getCommandData() {
+		return Commands.slash("register", "Register yourself to use Scriletios services");
+	}
 }
