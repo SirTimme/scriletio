@@ -1,8 +1,8 @@
-package dev.sirtimme.scriletio.components.buttons;
+package dev.sirtimme.scriletio.components.button;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-public abstract class MessageButton implements IButton {
+public abstract class Button implements IButton {
 	@Override
 	public void execute(final ButtonInteractionEvent event) {
 		final var authorId = event.getComponentId().split(":")[0];

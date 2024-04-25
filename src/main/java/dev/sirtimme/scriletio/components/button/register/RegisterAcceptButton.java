@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.components.buttons.register;
+package dev.sirtimme.scriletio.components.button.register;
 
-import dev.sirtimme.scriletio.components.buttons.MessageButton;
+import dev.sirtimme.scriletio.components.button.Button;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -8,10 +8,10 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class RegisterAccept extends MessageButton {
+public class RegisterAcceptButton extends Button {
 	private final IRepository<User> repository;
 
-	public RegisterAccept(final IRepository<User> repository) {
+	public RegisterAcceptButton(final IRepository<User> repository) {
 		this.repository = repository;
 	}
 
