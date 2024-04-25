@@ -3,14 +3,15 @@ package dev.sirtimme.scriletio.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "delete_configs", indexes = @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"))
 public class DeleteConfig {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@ManyToOne
+	private User user;
 
 	@NaturalId
 	@Column(name = "channel_id", nullable = false)
@@ -19,10 +20,12 @@ public class DeleteConfig {
 	@Column(name = "duration", nullable = false)
 	private long duration;
 
+	// needed for Hibernate
 	public DeleteConfig() {
 	}
 
-	public DeleteConfig(final long channelId, final long duration) {
+	public DeleteConfig(final User user, final long channelId, final long duration) {
+		this.user = user;
 		this.channelId = channelId;
 		this.duration = duration;
 	}
@@ -31,20 +34,15 @@ public class DeleteConfig {
 		return this.duration;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(channelId);
+	public void setDuration(final long duration) {
+		this.duration = duration;
 	}
 
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		final DeleteConfig that = (DeleteConfig) o;
-		return channelId == that.channelId;
+	public long getChannelId() {
+		return this.channelId;
+	}
+
+	public void setUser(final User user) {
+		this.user = user;
 	}
 }

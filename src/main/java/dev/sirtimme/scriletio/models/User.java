@@ -1,8 +1,6 @@
 package dev.sirtimme.scriletio.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
@@ -18,10 +16,10 @@ public class User {
 	@Column(name = "user_id", nullable = false)
 	private long userId;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<DeleteConfig> configs;
 
+	// needed for Hibernate
 	public User() {
 	}
 
@@ -34,8 +32,9 @@ public class User {
 		this.configs.add(created);
 	}
 
-	public void removeConfig(final DeleteConfig removed) {
-		this.configs.remove(removed);
+	public void removeConfig(final long channelId) {
+		final var toBeRemoved = this.configs.stream().filter(config -> config.getChannelId() == channelId).findFirst().orElse(null);
+		this.configs.remove(toBeRemoved);
 	}
 
 	public List<DeleteConfig> getConfigs() {
