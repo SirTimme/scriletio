@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.components.buttons;
+package dev.sirtimme.scriletio.components.button;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
