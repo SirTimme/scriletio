@@ -2,12 +2,16 @@ package dev.sirtimme.scriletio.events;
 
 import dev.sirtimme.scriletio.commands.message.MessageManager;
 import dev.sirtimme.scriletio.commands.slash.CommandManager;
-import dev.sirtimme.scriletio.components.buttons.ButtonManager;
+import dev.sirtimme.scriletio.components.button.ButtonManager;
+import dev.sirtimme.scriletio.components.menu.MenuManager;
+import dev.sirtimme.scriletio.components.modal.ModalManager;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.Persistence;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -19,6 +23,8 @@ public class EventHandler extends ListenerAdapter {
 	private final CommandManager commandManager;
 	private final ButtonManager buttonManager;
 	private final MessageManager messageManager;
+	private final MenuManager menuManager;
+	private final ModalManager modalManager;
 
 	public EventHandler() {
 		final var properties = new HashMap<String, String>() {{
@@ -33,6 +39,8 @@ public class EventHandler extends ListenerAdapter {
 		this.commandManager = new CommandManager(userRepository);
 		this.buttonManager = new ButtonManager(userRepository);
 		this.messageManager = new MessageManager(deleteConfigRepository);
+		this.menuManager = new MenuManager(userRepository);
+		this.modalManager = new ModalManager(deleteConfigRepository);
 	}
 
 	@Override
@@ -53,5 +61,15 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
 		this.messageManager.handleMessageDelete(event);
+	}
+
+	@Override
+	public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
+		this.modalManager.handleCommand(event);
+	}
+
+	@Override
+	public void onStringSelectInteraction(@NotNull final StringSelectInteractionEvent event) {
+		this.menuManager.handleCommand(event);
 	}
 }
