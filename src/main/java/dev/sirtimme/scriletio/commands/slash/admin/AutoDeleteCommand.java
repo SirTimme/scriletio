@@ -7,12 +7,15 @@ import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 public class AutoDeleteCommand extends AdminCommand {
 	private final IRepository<User> repository;
@@ -43,14 +46,19 @@ public class AutoDeleteCommand extends AdminCommand {
 			return;
 		}
 
-		final var channel = event.getOption("channel").getAsChannel();
-		final var deleteConfig = new DeleteConfig(channel.getIdLong(), duration);
-
 		final var user = repository.get(event.getUser().getIdLong());
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
 			return;
 		}
+
+		if (user.getConfigs().size() == 25) {
+			event.reply("Due to discord limitations, you cannot have more than **25** auto delete configs").queue();
+			return;
+		}
+
+		final var channel = event.getOption("channel").getAsChannel();
+		final var deleteConfig = new DeleteConfig(user, channel.getIdLong(), duration);
 
 		user.addConfig(deleteConfig);
 		repository.update(user);
@@ -72,11 +80,47 @@ public class AutoDeleteCommand extends AdminCommand {
 	}
 
 	private void handleUpdateCommand(final SlashCommandInteractionEvent event) {
+		final var selectMenu = buildConfigSelectMenu(event, "update");
+		if (selectMenu == null) {
+			return;
+		}
+		event.reply("Please select the config you want to update").addActionRow(selectMenu).queue();
+	}
 
+	private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
+		final var userId = event.getUser().getIdLong();
+		final var user = repository.get(userId);
+		if (user == null) {
+			event.reply("You are not registered, please use `/register` first").queue();
+			return null;
+		}
+
+		final var userConfigs = user.getConfigs();
+		if (userConfigs.isEmpty()) {
+			event.reply("You don't have any configs saved").queue();
+			return null;
+		}
+
+		final var menuBuilder = StringSelectMenu.create(userId + ":" + menuId).setPlaceholder("Saved configs");
+
+		for (var config : userConfigs) {
+			final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
+			final var label = "#" + channel.getName();
+			final var value = String.valueOf(config.getChannelId());
+			final var description = "Messages are deleted after " + config.getDuration() + " minutes";
+
+			menuBuilder.addOption(label, value, description, Emoji.fromUnicode("U+1F4D1"));
+		}
+
+		return menuBuilder.build();
 	}
 
 	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
-
+		final var selectMenu = buildConfigSelectMenu(event, "delete");
+		if (selectMenu == null) {
+			return;
+		}
+		event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
 	}
 
 	@Override
