@@ -37,8 +37,10 @@ public abstract class Repository<T> implements IRepository<T> {
 	}
 
 	@Override
-	public void delete(final T entity) {
+	public void delete(final long id) {
 		final var entityManager = entityManagerFactory.createEntityManager();
+		final var entity = entityManager.unwrap(Session.class).bySimpleNaturalId(getEntityClass()).load(id);
+
 		entityManager.getTransaction().begin();
 		entityManager.remove(entity);
 		entityManager.getTransaction().commit();
