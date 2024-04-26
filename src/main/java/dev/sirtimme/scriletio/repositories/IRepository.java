@@ -7,5 +7,5 @@ public interface IRepository<T> {
 
 	void update(final T entity);
 
-	void delete(final long id);
+	void delete(final T entity);
 }

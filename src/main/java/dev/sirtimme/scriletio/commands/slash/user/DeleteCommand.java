@@ -17,9 +17,13 @@ public class DeleteCommand implements ISlashCommand {
 
 	@Override
 	public void execute(final SlashCommandInteractionEvent event) {
-		final var userId = event.getUser().getIdLong();
+		final var user = repository.get(event.getUser().getIdLong());
+		if (user == null) {
+			event.reply("There is no data stored about you no need to execute this command").queue();
+			return;
+		}
 
-		repository.delete(userId);
+		repository.delete(user);
 
 		event.reply("All of your stored data is gone").queue();
 	}

@@ -5,8 +5,6 @@ import dev.sirtimme.scriletio.commands.slash.CommandManager;
 import dev.sirtimme.scriletio.components.button.ButtonManager;
 import dev.sirtimme.scriletio.components.menu.MenuManager;
 import dev.sirtimme.scriletio.components.modal.ModalManager;
-import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
-import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -33,14 +31,12 @@ public class EventHandler extends ListenerAdapter {
 			put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
 		}};
 		final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
-		final var userRepository = new UserRepository(entityManagerFactory);
-		final var deleteConfigRepository = new DeleteConfigRepository(entityManagerFactory);
 
-		this.commandManager = new CommandManager(userRepository);
-		this.buttonManager = new ButtonManager(userRepository);
-		this.messageManager = new MessageManager(deleteConfigRepository);
-		this.menuManager = new MenuManager(userRepository);
-		this.modalManager = new ModalManager(deleteConfigRepository);
+		this.commandManager = new CommandManager(entityManagerFactory);
+		this.buttonManager = new ButtonManager(entityManagerFactory);
+		this.messageManager = new MessageManager(entityManagerFactory);
+		this.menuManager = new MenuManager(entityManagerFactory);
+		this.modalManager = new ModalManager(entityManagerFactory);
 	}
 
 	@Override

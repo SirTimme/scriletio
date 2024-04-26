@@ -3,22 +3,18 @@ package dev.sirtimme.scriletio.components.modal.update;
 import dev.sirtimme.scriletio.components.modal.Modal;
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;
-import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.parse.Parser;
-import dev.sirtimme.scriletio.repositories.IRepository;
+import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
+import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 
 import java.util.Collections;
 
 public class UpdateModal extends Modal {
-	private final IRepository<DeleteConfig> repository;
-
-	public UpdateModal(final IRepository<DeleteConfig> repository) {
-		this.repository = repository;
-	}
-
 	@Override
-	protected void handleCommand(final ModalInteractionEvent event) {
+	protected void handleCommand(final ModalInteractionEvent event, final EntityManager entityManager) {
+		final var repository = new DeleteConfigRepository(entityManager);
+
 		final var durationString = event.getValues().getFirst().getAsString();
 		var newDuration = 0L;
 		try {

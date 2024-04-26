@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.message;
 
-import dev.sirtimme.scriletio.models.DeleteConfig;
-import dev.sirtimme.scriletio.repositories.IRepository;
+import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
+import jakarta.persistence.EntityManagerFactory;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,15 +11,18 @@ import java.util.concurrent.*;
 public class MessageManager {
 	private final ConcurrentMap<Long, ScheduledFuture<?>> pendingTasks;
 	private final ScheduledExecutorService executorService;
-	private final IRepository<DeleteConfig> repository;
+	private final EntityManagerFactory entityManagerFactory;
 
-	public MessageManager(final IRepository<DeleteConfig> repository) {
+	public MessageManager(final EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
 		this.pendingTasks = new ConcurrentHashMap<>();
-		this.repository = repository;
 		this.executorService = Executors.newScheduledThreadPool(5);
 	}
 
 	public void handleMessageReceive(final MessageReceivedEvent event) {
+		final var entityManager = entityManagerFactory.createEntityManager();
+		final var repository = new DeleteConfigRepository(entityManager);
+
 		final var deleteConfig = repository.get(event.getChannel().getIdLong());
 		if (deleteConfig == null) {
 			return;
@@ -49,6 +52,9 @@ public class MessageManager {
 	}
 
 	public void handleMessageDelete(final MessageDeleteEvent event) {
+		final var entityManager = entityManagerFactory.createEntityManager();
+		final var repository = new DeleteConfigRepository(entityManager);
+		
 		final var deleteConfig = repository.get(event.getChannel().getIdLong());
 		if (deleteConfig == null) {
 			return;
