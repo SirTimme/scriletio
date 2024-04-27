@@ -23,8 +23,8 @@ public class MenuManager {
 
 	public void handleCommand(final StringSelectInteractionEvent event) {
 		final var menuName = event.getComponentId().split(":")[1];
-		final var entityManager = entityManagerFactory.createEntityManager();
 		final var function = menus.get(menuName);
+		final var entityManager = entityManagerFactory.createEntityManager();
 		final var menu = function.apply(entityManager);
 
 		entityManager.getTransaction().begin();

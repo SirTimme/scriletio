@@ -31,8 +31,8 @@ public class CommandManager {
 	}
 
 	public void handleCommand(final SlashCommandInteractionEvent event) {
-		final var entityManager = entityManagerFactory.createEntityManager();
 		final var function = this.commands.get(event.getName());
+		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
 
 		entityManager.getTransaction().begin();
