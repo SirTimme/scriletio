@@ -15,7 +15,8 @@ public class DeleteCommand {
 	}
 
 	public void execute(final MessageDeleteEvent event) {
-		final var deleteConfig = repository.get(event.getChannel().getIdLong());
+		final var channelId = event.getChannel().getIdLong();
+		final var deleteConfig = repository.get(channelId);
 		if (deleteConfig == null) {
 			return;
 		}
