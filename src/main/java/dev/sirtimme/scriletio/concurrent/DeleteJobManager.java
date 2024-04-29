@@ -5,33 +5,33 @@ import net.dv8tion.jda.api.entities.Message;
 import java.util.concurrent.*;
 
 public class DeleteJobManager {
-	private final ConcurrentMap<Long, ScheduledFuture<?>> pendingTasks;
+	private final ConcurrentMap<Long, ScheduledFuture<?>> pendingJobs;
 	private final ScheduledExecutorService executorService;
 
 	public DeleteJobManager() {
-		this.pendingTasks = new ConcurrentHashMap<>();
+		this.pendingJobs = new ConcurrentHashMap<>();
 		this.executorService = Executors.newScheduledThreadPool(5);
 	}
 
 	public void cancelJob(final long jobId) {
-		final var deleteJob = pendingTasks.get(jobId);
+		final var deleteJob = pendingJobs.get(jobId);
 
 		if (deleteJob != null) {
 			deleteJob.cancel(true);
-			pendingTasks.remove(jobId);
+			pendingJobs.remove(jobId);
 		}
 	}
 
 	public void submitJob(final long jobId, final Message message, final long duration) {
-		final var deleteMessageJob = new Runnable() {
+		final var deleteJob = new Runnable() {
 			@Override
 			public void run() {
 				message.delete().queue();
-				pendingTasks.remove(jobId);
+				pendingJobs.remove(jobId);
 			}
 		};
 
-		final var future = executorService.schedule(deleteMessageJob, duration, TimeUnit.MINUTES);
-		pendingTasks.put(jobId, future);
+		final var scheduledJob = executorService.schedule(deleteJob, duration, TimeUnit.MINUTES);
+		pendingJobs.put(jobId, scheduledJob);
 	}
 }
