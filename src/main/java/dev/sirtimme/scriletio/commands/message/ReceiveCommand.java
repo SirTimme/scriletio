@@ -23,10 +23,9 @@ public class ReceiveCommand {
 
 		if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
 			final var msgReference = event.getMessage().getMessageReference();
-			final var msgId = msgReference.getMessageIdLong();
+			final var jobId = msgReference.getMessageIdLong();
 
-			deleteJobManager.cancelJob(msgId);
-			return;
+			deleteJobManager.cancelJob(jobId);
 		}
 
 		final var jobId = event.getMessageIdLong();
