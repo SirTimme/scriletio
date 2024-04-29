@@ -16,13 +16,7 @@ import java.util.HashMap;
 
 public class Main {
 	public static void main(String[] args) {
-		final var properties = new HashMap<String, String>() {{
-			put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
-			put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
-			put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
-		}};
-		final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
-		final var eventHandler = buildEventhandler(entityManagerFactory);
+		final var eventHandler = buildEventhandler();
 
 		JDABuilder.createLight(System.getenv("TOKEN"))
 				  .addEventListeners(eventHandler)
@@ -30,12 +24,12 @@ public class Main {
 				  .build();
 	}
 
-	private static EventHandler buildEventhandler(EntityManagerFactory entityManagerFactory) {
-		final var deleteJobManager = new DeleteJobManager();
+	private static EventHandler buildEventhandler() {
+		final var entityManagerFactory = buildEntityManagerFactory();
 
 		final var commandManager = new CommandManager(entityManagerFactory);
 		final var buttonManager = new ButtonManager(entityManagerFactory);
-		final var messageManager = new MessageManager(entityManagerFactory, deleteJobManager);
+		final var messageManager = new MessageManager(entityManagerFactory);
 		final var menuManager = new MenuManager(entityManagerFactory);
 		final var modalManager = new ModalManager(entityManagerFactory);
 
@@ -46,5 +40,15 @@ public class Main {
 				menuManager,
 				modalManager
 		);
+	}
+
+	private static EntityManagerFactory buildEntityManagerFactory() {
+		final var properties = new HashMap<String, String>() {{
+			put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
+			put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
+			put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
+		}};
+
+		return Persistence.createEntityManagerFactory("scriletio", properties);
 	}
 }

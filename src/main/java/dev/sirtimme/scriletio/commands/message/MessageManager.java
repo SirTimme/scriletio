@@ -10,9 +10,9 @@ public class MessageManager {
 	private final EntityManagerFactory entityManagerFactory;
 	private final DeleteJobManager deleteJobManager;
 
-	public MessageManager(final EntityManagerFactory entityManagerFactory, final DeleteJobManager deleteJobManager) {
+	public MessageManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
-		this.deleteJobManager = deleteJobManager;
+		this.deleteJobManager = new DeleteJobManager();
 	}
 
 	public void handleMessageReceive(final MessageReceivedEvent event) {
