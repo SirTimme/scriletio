@@ -20,6 +20,8 @@ public class DeleteCommand {
 			return;
 		}
 
-		deleteJobManager.cancelJob(event.getMessageIdLong());
+		final var jobId = event.getMessageIdLong();
+
+		deleteJobManager.cancelJob(jobId);
 	}
 }
