@@ -31,7 +31,7 @@ public class DeleteConfig {
 	}
 
 	public long getDuration() {
-		return this.duration;
+		return duration;
 	}
 
 	public void setDuration(final long duration) {
@@ -39,10 +39,6 @@ public class DeleteConfig {
 	}
 
 	public long getChannelId() {
-		return this.channelId;
-	}
-
-	public void setUser(final User user) {
-		this.user = user;
+		return channelId;
 	}
 }

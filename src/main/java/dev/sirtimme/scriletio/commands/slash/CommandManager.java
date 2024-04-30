@@ -31,7 +31,7 @@ public class CommandManager {
 	}
 
 	public void handleCommand(final SlashCommandInteractionEvent event) {
-		final var function = this.commands.get(event.getName());
+		final var function = commands.get(event.getName());
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
 
@@ -42,6 +42,6 @@ public class CommandManager {
 	}
 
 	public List<CommandData> getCommandData() {
-		return this.commands.values().stream().map(entry -> entry.apply(null).getCommandData()).toList();
+		return commands.values().stream().map(entry -> entry.apply(null).getCommandData()).toList();
 	}
 }

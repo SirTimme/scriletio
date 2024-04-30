@@ -37,31 +37,31 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
-		this.commandManager.handleCommand(event);
+		commandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onButtonInteraction(@NotNull final ButtonInteractionEvent event) {
-		this.buttonManager.handleCommand(event);
+		buttonManager.handleCommand(event);
 	}
 
 	@Override
 	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-		this.messageManager.handleMessageReceive(event);
+		messageManager.handleMessageReceive(event);
 	}
 
 	@Override
 	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
-		this.messageManager.handleMessageDelete(event);
+		messageManager.handleMessageDelete(event);
 	}
 
 	@Override
 	public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
-		this.modalManager.handleCommand(event);
+		modalManager.handleCommand(event);
 	}
 
 	@Override
 	public void onStringSelectInteraction(@NotNull final StringSelectInteractionEvent event) {
-		this.menuManager.handleCommand(event);
+		menuManager.handleCommand(event);
 	}
 }

@@ -29,15 +29,15 @@ public class User {
 	}
 
 	public void addConfig(final DeleteConfig created) {
-		this.configs.add(created);
+		configs.add(created);
 	}
 
 	public void removeConfig(final long channelId) {
 		final var toBeRemoved = this.configs.stream().filter(config -> config.getChannelId() == channelId).findFirst().orElse(null);
-		this.configs.remove(toBeRemoved);
+		configs.remove(toBeRemoved);
 	}
 
 	public List<DeleteConfig> getConfigs() {
-		return this.configs;
+		return configs;
 	}
 }
