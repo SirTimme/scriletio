@@ -5,6 +5,7 @@ import dev.sirtimme.scriletio.commands.slash.owner.UpdateCommand;
 import dev.sirtimme.scriletio.commands.slash.user.DeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.user.PingCommand;
 import dev.sirtimme.scriletio.commands.slash.user.RegisterCommand;
+import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -25,7 +26,7 @@ public class CommandManager {
 		this.commands = new HashMap<>();
 		this.commands.put("ping", entityManager -> new PingCommand());
 		this.commands.put("update", entityManager -> new UpdateCommand(this));
-		this.commands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager)));
+		this.commands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
 		this.commands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
 		this.commands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
 	}
@@ -42,6 +43,10 @@ public class CommandManager {
 	}
 
 	public List<CommandData> getCommandData() {
-		return commands.values().stream().map(entry -> entry.apply(null).getCommandData()).toList();
+		return commands
+				.values()
+				.stream()
+				.map(function -> function.apply(null).getCommandData())
+				.toList();
 	}
 }
