@@ -21,11 +21,6 @@ public abstract class Repository<T> implements IRepository<T> {
 	}
 
 	@Override
-	public void update(final T entity) {
-		entityManager.merge(entity);
-	}
-
-	@Override
 	public void delete(final T entity) {
 		entityManager.remove(entity);
 	}
