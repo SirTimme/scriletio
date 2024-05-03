@@ -9,8 +9,8 @@ import java.util.List;
 public class DeleteConfigRepository implements IRepository<DeleteConfig> {
 	private final EntityManager entityManager;
 
-	public DeleteConfigRepository(final EntityManager entityManager1) {
-		this.entityManager = entityManager1;
+	public DeleteConfigRepository(final EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 	@Override
