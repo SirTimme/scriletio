@@ -33,11 +33,20 @@ public class User {
 	}
 
 	public void removeConfig(final long channelId) {
-		final var toBeRemoved = this.configs.stream().filter(config -> config.getChannelId() == channelId).findFirst().orElse(null);
+		final var toBeRemoved = configs
+				.stream()
+				.filter(config -> config.getChannelId() == channelId)
+				.findFirst()
+				.orElse(null);
+
 		configs.remove(toBeRemoved);
 	}
 
 	public List<DeleteConfig> getConfigs() {
-		return configs;
+		return this.configs;
+	}
+
+	public long getUserId() {
+		return this.userId;
 	}
 }
