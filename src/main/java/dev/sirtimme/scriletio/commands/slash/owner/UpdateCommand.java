@@ -18,7 +18,7 @@ public class UpdateCommand extends OwnerCommand {
 	protected void handleCommand(final SlashCommandInteractionEvent event) {
 		event.getJDA()
 			 .updateCommands()
-			 .addCommands(this.manager.getCommandData())
+			 .addCommands(manager.getCommandData())
 			 .queue();
 
 		event.reply("Update of slash commands were successful!").queue();

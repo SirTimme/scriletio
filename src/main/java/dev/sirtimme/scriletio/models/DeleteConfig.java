@@ -41,8 +41,4 @@ public class DeleteConfig {
 	public long getChannelId() {
 		return this.channelId;
 	}
-
-	public void setUser(final User user) {
-		this.user = user;
-	}
 }

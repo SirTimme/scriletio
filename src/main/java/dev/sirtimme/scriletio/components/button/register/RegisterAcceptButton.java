@@ -5,8 +5,8 @@ import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class RegisterAcceptButton extends Button {
 	private final IRepository<User> repository;
@@ -18,7 +18,7 @@ public class RegisterAcceptButton extends Button {
 	@Override
 	protected void handleCommand(final ButtonInteractionEvent event) {
 		final var userId = event.getUser().getIdLong();
-		final var user = new User(userId, new ArrayList<>());
+		final var user = new User(userId, List.of());
 
 		repository.add(user);
 

@@ -21,7 +21,6 @@ public class DeleteMenu extends Menu {
 		final var channelId = event.getValues().getFirst();
 
 		user.removeConfig(Long.parseLong(channelId));
-		repository.update(user);
 
 		event.editMessage("Config for channel <#" + channelId + "> was successfully deleted").setComponents(Collections.emptyList()).queue();
 	}

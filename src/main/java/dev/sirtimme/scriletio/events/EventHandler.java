@@ -5,7 +5,6 @@ import dev.sirtimme.scriletio.commands.slash.CommandManager;
 import dev.sirtimme.scriletio.components.button.ButtonManager;
 import dev.sirtimme.scriletio.components.menu.MenuManager;
 import dev.sirtimme.scriletio.components.modal.ModalManager;
-import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -15,8 +14,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 public class EventHandler extends ListenerAdapter {
 	private final CommandManager commandManager;
 	private final ButtonManager buttonManager;
@@ -24,48 +21,47 @@ public class EventHandler extends ListenerAdapter {
 	private final MenuManager menuManager;
 	private final ModalManager modalManager;
 
-	public EventHandler() {
-		final var properties = new HashMap<String, String>() {{
-			put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
-			put("jakarta.persistence.jdbc.password", System.getenv("POSTGRES_PASSWORD"));
-			put("jakarta.persistence.jdbc.url", System.getenv("POSTGRES_URL"));
-		}};
-		final var entityManagerFactory = Persistence.createEntityManagerFactory("scriletio", properties);
-
-		this.commandManager = new CommandManager(entityManagerFactory);
-		this.buttonManager = new ButtonManager(entityManagerFactory);
-		this.messageManager = new MessageManager(entityManagerFactory);
-		this.menuManager = new MenuManager(entityManagerFactory);
-		this.modalManager = new ModalManager(entityManagerFactory);
+	public EventHandler(
+			final CommandManager commandManager,
+			final ButtonManager buttonManager,
+			final MessageManager messageManager,
+			final MenuManager menuManager,
+			final ModalManager modalManager
+	) {
+		this.commandManager = commandManager;
+		this.buttonManager = buttonManager;
+		this.messageManager = messageManager;
+		this.menuManager = menuManager;
+		this.modalManager = modalManager;
 	}
 
 	@Override
 	public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
-		this.commandManager.handleCommand(event);
+		commandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onButtonInteraction(@NotNull final ButtonInteractionEvent event) {
-		this.buttonManager.handleCommand(event);
+		buttonManager.handleCommand(event);
 	}
 
 	@Override
 	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-		this.messageManager.handleMessageReceive(event);
+		messageManager.handleMessageReceive(event);
 	}
 
 	@Override
 	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
-		this.messageManager.handleMessageDelete(event);
+		messageManager.handleMessageDelete(event);
 	}
 
 	@Override
 	public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
-		this.modalManager.handleCommand(event);
+		modalManager.handleCommand(event);
 	}
 
 	@Override
 	public void onStringSelectInteraction(@NotNull final StringSelectInteractionEvent event) {
-		this.menuManager.handleCommand(event);
+		menuManager.handleCommand(event);
 	}
 }

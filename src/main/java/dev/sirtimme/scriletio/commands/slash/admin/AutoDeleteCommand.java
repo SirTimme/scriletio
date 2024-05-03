@@ -18,10 +18,12 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 public class AutoDeleteCommand extends AdminCommand {
-	private final IRepository<User> repository;
+	private final IRepository<User> userRepository;
+	private final IRepository<DeleteConfig> deleteConfigRepository;
 
-	public AutoDeleteCommand(final IRepository<User> repository) {
-		this.repository = repository;
+	public AutoDeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
+		this.userRepository = userRepository;
+		this.deleteConfigRepository = deleteConfigRepository;
 	}
 
 	@Override
@@ -35,6 +37,26 @@ public class AutoDeleteCommand extends AdminCommand {
 		}
 	}
 
+	@Override
+	public CommandData getCommandData() {
+		final var channelOptionData = new OptionData(
+				OptionType.CHANNEL,
+				"channel",
+				"The channel to delete the messages in",
+				true
+		).setChannelTypes(ChannelType.TEXT);
+
+		final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
+
+		final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
+		final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
+		final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config");
+		final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
+
+		return Commands.slash("autodelete", "Manage auto delete configs")
+					   .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
+	}
+
 	private void handleAddCommand(final SlashCommandInteractionEvent event) {
 		final var durationString = event.getOption("duration").getAsString();
 
@@ -46,29 +68,35 @@ public class AutoDeleteCommand extends AdminCommand {
 			return;
 		}
 
-		final var user = repository.get(event.getUser().getIdLong());
+		final var user = userRepository.get(event.getUser().getIdLong());
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
 			return;
 		}
 
+		// TODO pagination?...
 		if (user.getConfigs().size() == 25) {
 			event.reply("Due to discord limitations, you cannot have more than **25** auto delete configs").queue();
 			return;
 		}
 
 		final var channel = event.getOption("channel").getAsChannel();
+		final var config = deleteConfigRepository.get(channel.getIdLong());
+		if (config != null) {
+			event.reply("There is already a delete config for that channel!").queue();
+			return;
+		}
+
 		final var deleteConfig = new DeleteConfig(user, channel.getIdLong(), duration);
 
 		user.addConfig(deleteConfig);
-		repository.update(user);
 
 		event.reply("Successfully created an auto delete config for **" + channel + "**").queue();
 	}
 
 	private void handleGetCommand(final SlashCommandInteractionEvent event) {
 		final var userId = event.getUser().getIdLong();
-		final var user = repository.get(userId);
+		final var user = userRepository.get(userId);
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
 			return;
@@ -87,9 +115,18 @@ public class AutoDeleteCommand extends AdminCommand {
 		event.reply("Please select the config you want to update").addActionRow(selectMenu).queue();
 	}
 
+	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
+		final var selectMenu = buildConfigSelectMenu(event, "delete");
+		if (selectMenu == null) {
+			return;
+		}
+
+		event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
+	}
+
 	private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
 		final var userId = event.getUser().getIdLong();
-		final var user = repository.get(userId);
+		final var user = userRepository.get(userId);
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
 			return null;
@@ -107,7 +144,7 @@ public class AutoDeleteCommand extends AdminCommand {
 			final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
 			final var label = "#" + channel.getName();
 			final var value = String.valueOf(config.getChannelId());
-			final var description = "Messages are deleted after " + config.getDuration() + " minutes";
+			final var description = createReadableDuration(config.getDuration());
 
 			menuBuilder.addOption(label, value, description, Emoji.fromUnicode("U+1F4D1"));
 		}
@@ -115,26 +152,12 @@ public class AutoDeleteCommand extends AdminCommand {
 		return menuBuilder.build();
 	}
 
-	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
-		final var selectMenu = buildConfigSelectMenu(event, "delete");
-		if (selectMenu == null) {
-			return;
-		}
-		event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
-	}
+	private String createReadableDuration(final long minutes) {
+		final var days = minutes / (24 * 60);
+		final var hours = (minutes % (24 * 60)) / 60;
+		final var remaining = minutes % 60;
 
-	@Override
-	public CommandData getCommandData() {
-		final var channelOptionData = new OptionData(OptionType.CHANNEL, "channel", "The channel to delete the messages in", true).setChannelTypes(ChannelType.TEXT);
-		final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
-
-		final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
-		final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
-		final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config");
-		final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
-
-		return Commands.slash("autodelete", "Manage auto delete configs")
-					   .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
+		return "Duration: " + days + " days, " + hours + " hours, " + remaining + " minutes";
 	}
 
 	private enum DeleteSubCommand {
