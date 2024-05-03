@@ -32,7 +32,6 @@ public class UpdateModal extends Modal {
 		final var config = repository.get(Long.parseLong(channelId));
 
 		config.setDuration(newDuration);
-		repository.update(config);
 
 		event.editMessage("Config for channel <#" + config.getChannelId() + "> was updated successfully. The new duration is **" + config.getDuration() + "** minutes")
 			 .setComponents(Collections.emptyList())
