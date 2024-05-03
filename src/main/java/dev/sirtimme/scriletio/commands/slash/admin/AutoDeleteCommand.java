@@ -39,18 +39,16 @@ public class AutoDeleteCommand extends AdminCommand {
 
 	@Override
 	public CommandData getCommandData() {
-		final var channelOptionData = new OptionData(
-				OptionType.CHANNEL,
-				"channel",
-				"The channel to delete the messages in",
-				true
-		).setChannelTypes(ChannelType.TEXT);
+		final var channelOptionData = new OptionData(OptionType.CHANNEL, "channel", "The channel to delete the messages in", true)
+				.setChannelTypes(ChannelType.TEXT);
 
 		final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
+		final var deleteChannelData = new OptionData(OptionType.CHANNEL, "channel", "Directly specify a channel to delete a config for", false)
+				.setChannelTypes(ChannelType.TEXT);
 
 		final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
 		final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
-		final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config");
+		final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config").addOptions(deleteChannelData);
 		final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
 
 		return Commands.slash("autodelete", "Manage auto delete configs")
@@ -58,25 +56,23 @@ public class AutoDeleteCommand extends AdminCommand {
 	}
 
 	private void handleAddCommand(final SlashCommandInteractionEvent event) {
-		final var durationString = event.getOption("duration").getAsString();
-
-		var duration = 0L;
-		try {
-			duration = new Parser().parse(durationString);
-		} catch (ParsingException exception) {
-			event.reply(Formatter.format(durationString, exception)).queue();
-			return;
-		}
-
 		final var user = userRepository.get(event.getUser().getIdLong());
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
 			return;
 		}
 
-		// TODO pagination?...
 		if (user.getConfigs().size() == 25) {
-			event.reply("Due to discord limitations, you cannot have more than **25** auto delete configs").queue();
+			event.reply("Due to discords limitations, you cannot have more than **25** auto delete configs").queue();
+			return;
+		}
+
+		final var durationString = event.getOption("duration").getAsString();
+		var duration = 0L;
+		try {
+			duration = new Parser().parse(durationString);
+		} catch (ParsingException exception) {
+			event.reply(Formatter.format(durationString, exception)).queue();
 			return;
 		}
 
@@ -87,24 +83,20 @@ public class AutoDeleteCommand extends AdminCommand {
 			return;
 		}
 
-		final var deleteConfig = new DeleteConfig(user, channel.getIdLong(), duration);
-
-		user.addConfig(deleteConfig);
+		user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channel.getIdLong(), duration));
 
 		event.reply("Successfully created an auto delete config for **" + channel + "**").queue();
 	}
 
 	private void handleGetCommand(final SlashCommandInteractionEvent event) {
-		final var userId = event.getUser().getIdLong();
-		final var user = userRepository.get(userId);
-		if (user == null) {
-			event.reply("You are not registered, please use `/register` first").queue();
-			return;
+		final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+		final var sb = new StringBuilder();
+		sb.append("**Saved configs for ").append(event.getGuild().getName()).append(":**\n\n");
+		for (var config : deleteConfigs) {
+			sb.append("- <#").append(config.getChannelId()).append("> ").append(config.getDuration()).append(" minutes\n");
 		}
 
-		final var amountConfigs = user.getConfigs().size();
-
-		event.reply("You have currently **" + amountConfigs + "** configs saved").queue();
+		event.reply(sb.toString()).queue();
 	}
 
 	private void handleUpdateCommand(final SlashCommandInteractionEvent event) {
@@ -112,10 +104,25 @@ public class AutoDeleteCommand extends AdminCommand {
 		if (selectMenu == null) {
 			return;
 		}
+
 		event.reply("Please select the config you want to update").addActionRow(selectMenu).queue();
 	}
 
 	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
+		final var channelOption = event.getOption("channel");
+		if (channelOption != null) {
+			final var selectedChannel = channelOption.getAsChannel();
+			final var deleteConfig = deleteConfigRepository.get(selectedChannel.getIdLong());
+			if (deleteConfig != null) {
+				final var author = deleteConfig.getUser();
+
+				author.removeConfig(selectedChannel.getIdLong());
+
+				event.reply("Config for channel " + selectedChannel.getAsMention() + " has been deleted").queue();
+				return;
+			}
+		}
+
 		final var selectMenu = buildConfigSelectMenu(event, "delete");
 		if (selectMenu == null) {
 			return;
