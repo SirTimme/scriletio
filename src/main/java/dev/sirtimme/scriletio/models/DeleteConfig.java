@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "delete_configs", indexes = @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"))
+@Table(name = "delete_configs", indexes = { @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"), @Index(name = "idx_guild_id", columnList = "guild_id") })
+@NamedQuery(name = "DeleteConfig_findByGuildId", query = "FROM DeleteConfig WHERE guildId = :guildId")
 public class DeleteConfig {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +13,9 @@ public class DeleteConfig {
 
 	@ManyToOne
 	private User user;
+
+	@Column(name = "guild_id", nullable = false)
+	private long guildId;
 
 	@NaturalId
 	@Column(name = "channel_id", nullable = false)
@@ -24,8 +28,9 @@ public class DeleteConfig {
 	public DeleteConfig() {
 	}
 
-	public DeleteConfig(final User user, final long channelId, final long duration) {
+	public DeleteConfig(final User user, final long guildId, final long channelId, final long duration) {
 		this.user = user;
+		this.guildId = guildId;
 		this.channelId = channelId;
 		this.duration = duration;
 	}
@@ -40,5 +45,9 @@ public class DeleteConfig {
 
 	public long getChannelId() {
 		return this.channelId;
+	}
+
+	public User getUser() {
+		return this.user;
 	}
 }
