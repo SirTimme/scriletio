@@ -7,7 +7,7 @@ import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.HasRegistered;
-import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
+import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.IsAdmin;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
@@ -62,7 +62,7 @@ public class AutoDeleteCommand implements ISlashCommand {
 	}
 
 	@Override
-	public List<IPreconditionCheck> getPreconditions() {
+	public List<IPrecondition> getPreconditions() {
 		return List.of(
 				new HasRegistered(userRepository),
 				new IsAdmin()

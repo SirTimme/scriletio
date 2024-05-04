@@ -2,7 +2,7 @@ package dev.sirtimme.scriletio.preconditions;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class IsOwner implements IPreconditionCheck {
+public class IsOwner implements IPrecondition {
 	@Override
 	public boolean check(final SlashCommandInteractionEvent event) {
 		if (!event.getUser().getId().equals(System.getenv("OWNER_ID"))) {

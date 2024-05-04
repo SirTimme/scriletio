@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.commands.slash;
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.User;
-import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
+import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -40,7 +40,7 @@ public class RegisterCommand implements ISlashCommand {
 	}
 
 	@Override
-	public List<IPreconditionCheck> getPreconditions() {
+	public List<IPrecondition> getPreconditions() {
 		return List.of();
 	}
 }

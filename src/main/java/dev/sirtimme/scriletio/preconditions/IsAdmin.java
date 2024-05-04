@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.preconditions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class IsAdmin implements IPreconditionCheck {
+public class IsAdmin implements IPrecondition {
 	@Override
 	public boolean check(final SlashCommandInteractionEvent event) {
 		if (event.getGuild() == null) {
