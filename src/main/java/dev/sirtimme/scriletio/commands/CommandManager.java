@@ -4,6 +4,7 @@ import dev.sirtimme.scriletio.commands.slash.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.DeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.RegisterCommand;
 import dev.sirtimme.scriletio.commands.slash.UpdateCommand;
+import dev.sirtimme.scriletio.preconditions.PreconditionResult;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -34,7 +35,7 @@ public class CommandManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
 
-		if (!command.verifyPreconditions(event)) {
+		if (command.verifyPreconditions(event) == PreconditionResult.FAILURE) {
 			return;
 		}
 

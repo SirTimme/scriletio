@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.commands;
 
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
+import dev.sirtimme.scriletio.preconditions.PreconditionResult;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -13,12 +14,13 @@ public interface ISlashCommand {
 
 	List<IPrecondition> getPreconditions();
 
-	default boolean verifyPreconditions(final SlashCommandInteractionEvent event) {
-		for (var precondition : getPreconditions()) {
-			if (!precondition.check(event)) {
-				return false;
+	default PreconditionResult verifyPreconditions(final SlashCommandInteractionEvent event) {
+		for (final var precondition : getPreconditions()) {
+			if (precondition.check(event) == PreconditionResult.FAILURE) {
+				return PreconditionResult.FAILURE;
 			}
 		}
-		return true;
+
+		return PreconditionResult.SUCCESS;
 	}
 }

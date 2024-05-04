@@ -12,12 +12,13 @@ public class IsRegistered implements IPrecondition {
 	}
 
 	@Override
-	public boolean check(final SlashCommandInteractionEvent event) {
+	public PreconditionResult check(final SlashCommandInteractionEvent event) {
 		final var user = repository.get(event.getUser().getIdLong());
 		if (user == null) {
 			event.reply("You are not registered, please use `/register` first").queue();
-			return false;
+			return PreconditionResult.FAILURE;
 		}
-		return true;
+
+		return PreconditionResult.SUCCESS;
 	}
 }

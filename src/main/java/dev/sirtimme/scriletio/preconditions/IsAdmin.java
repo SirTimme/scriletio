@@ -5,17 +5,17 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 public class IsAdmin implements IPrecondition {
 	@Override
-	public boolean check(final SlashCommandInteractionEvent event) {
+	public PreconditionResult check(final SlashCommandInteractionEvent event) {
 		if (event.getGuild() == null) {
 			event.reply("Admin commands can only be executed within a guild!").queue();
-			return false;
+			return PreconditionResult.FAILURE;
 		}
 
 		if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
 			event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
-			return false;
+			return PreconditionResult.FAILURE;
 		}
 
-		return true;
+		return PreconditionResult.SUCCESS;
 	}
 }
