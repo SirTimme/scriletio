@@ -4,6 +4,7 @@ import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
+import dev.sirtimme.scriletio.preconditions.IsNotRegistered;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -22,12 +23,6 @@ public class RegisterCommand implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event) {
 		final var userId = event.getUser().getIdLong();
-		final var user = repository.get(userId);
-		if (user != null) {
-			event.reply("You are already registered, no need to use that command again").queue();
-			return;
-		}
-
 		final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
 		final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
 
@@ -41,6 +36,8 @@ public class RegisterCommand implements ISlashCommand {
 
 	@Override
 	public List<IPrecondition> getPreconditions() {
-		return List.of();
+		return List.of(
+				new IsNotRegistered(repository)
+		);
 	}
 }
