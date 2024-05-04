@@ -2,8 +2,8 @@ package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.preconditions.HasRegistered;
 import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
-import dev.sirtimme.scriletio.preconditions.IsUserPresent;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -37,7 +37,7 @@ public class DeleteCommand implements ISlashCommand {
 	@Override
 	public List<IPreconditionCheck> getPreconditions() {
 		return List.of(
-				new IsUserPresent(repository)
+				new HasRegistered(repository)
 		);
 	}
 }

@@ -4,10 +4,10 @@ import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class IsUserPresent implements IPreconditionCheck {
+public class HasRegistered implements IPreconditionCheck {
 	final IRepository<User> repository;
 
-	public IsUserPresent(final IRepository<User> repository) {
+	public HasRegistered(final IRepository<User> repository) {
 		this.repository = repository;
 	}
 
