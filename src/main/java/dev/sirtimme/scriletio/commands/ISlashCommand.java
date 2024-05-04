@@ -14,7 +14,7 @@ public interface ISlashCommand {
 
 	List<IPrecondition> getPreconditions();
 
-	default PreconditionResult verifyPreconditions(final SlashCommandInteractionEvent event) {
+	default PreconditionResult checkPreconditions(final SlashCommandInteractionEvent event) {
 		for (final var precondition : getPreconditions()) {
 			if (precondition.check(event) == PreconditionResult.FAILURE) {
 				return PreconditionResult.FAILURE;
