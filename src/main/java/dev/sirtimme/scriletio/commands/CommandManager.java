@@ -1,6 +1,9 @@
 package dev.sirtimme.scriletio.commands;
 
-import dev.sirtimme.scriletio.commands.slash.*;
+import dev.sirtimme.scriletio.commands.slash.AutoDeleteCommand;
+import dev.sirtimme.scriletio.commands.slash.DeleteCommand;
+import dev.sirtimme.scriletio.commands.slash.RegisterCommand;
+import dev.sirtimme.scriletio.commands.slash.UpdateCommand;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -20,7 +23,6 @@ public class CommandManager {
 		this.entityManagerFactory = entityManagerFactory;
 
 		this.commands = new HashMap<>();
-		this.commands.put("ping", entityManager -> new PingCommand());
 		this.commands.put("update", entityManager -> new UpdateCommand(this));
 		this.commands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
 		this.commands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
