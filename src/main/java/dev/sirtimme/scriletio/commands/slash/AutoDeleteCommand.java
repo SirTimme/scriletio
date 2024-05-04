@@ -71,11 +71,6 @@ public class AutoDeleteCommand implements ISlashCommand {
 
 	private void handleAddCommand(final SlashCommandInteractionEvent event) {
 		final var user = userRepository.get(event.getUser().getIdLong());
-		if (user == null) {
-			event.reply("You are not registered, please use `/register` first").queue();
-			return;
-		}
-
 		if (user.getConfigs().size() == 25) {
 			event.reply("Due to discords limitations, you cannot have more than **25** auto delete configs").queue();
 			return;
@@ -148,12 +143,8 @@ public class AutoDeleteCommand implements ISlashCommand {
 	private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
 		final var userId = event.getUser().getIdLong();
 		final var user = userRepository.get(userId);
-		if (user == null) {
-			event.reply("You are not registered, please use `/register` first").queue();
-			return null;
-		}
-
 		final var userConfigs = user.getConfigs();
+
 		if (userConfigs.isEmpty()) {
 			event.reply("You don't have any configs saved").queue();
 			return null;
