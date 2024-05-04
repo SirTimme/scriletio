@@ -34,10 +34,8 @@ public class CommandManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
 
-		for (var precondition : command.getPreconditions()) {
-			if (!precondition.check(event)) {
-				return;
-			}
+		if (!command.verifyPreconditions(event)) {
+			return;
 		}
 
 		entityManager.getTransaction().begin();

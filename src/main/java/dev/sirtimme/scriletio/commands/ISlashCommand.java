@@ -12,4 +12,13 @@ public interface ISlashCommand {
 	CommandData getCommandData();
 
 	List<IPreconditionCheck> getPreconditions();
+
+	default boolean verifyPreconditions(final SlashCommandInteractionEvent event) {
+		for (var precondition : getPreconditions()) {
+			if (!precondition.check(event)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
