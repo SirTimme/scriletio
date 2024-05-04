@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.events;
 
-import dev.sirtimme.scriletio.commands.message.MessageManager;
-import dev.sirtimme.scriletio.commands.slash.CommandManager;
+import dev.sirtimme.scriletio.commands.CommandManager;
+import dev.sirtimme.scriletio.commands.MessageManager;
 import dev.sirtimme.scriletio.components.button.ButtonManager;
 import dev.sirtimme.scriletio.components.menu.MenuManager;
 import dev.sirtimme.scriletio.components.modal.ModalManager;

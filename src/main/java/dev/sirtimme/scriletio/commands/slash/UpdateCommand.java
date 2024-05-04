@@ -1,13 +1,18 @@
-package dev.sirtimme.scriletio.commands.slash.owner;
+package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.slash.CommandManager;
+import dev.sirtimme.scriletio.commands.CommandManager;
+import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
+import dev.sirtimme.scriletio.preconditions.IsOwner;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class UpdateCommand extends OwnerCommand {
+import java.util.List;
+
+public class UpdateCommand implements ISlashCommand {
 	private final CommandManager manager;
 
 	public UpdateCommand(final CommandManager manager) {
@@ -15,7 +20,7 @@ public class UpdateCommand extends OwnerCommand {
 	}
 
 	@Override
-	protected void handleCommand(final SlashCommandInteractionEvent event) {
+	public void execute(final SlashCommandInteractionEvent event) {
 		event.getJDA()
 			 .updateCommands()
 			 .addCommands(manager.getCommandData())
@@ -30,5 +35,12 @@ public class UpdateCommand extends OwnerCommand {
 					   .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
 					   .setGuildOnly(true)
 					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+	}
+
+	@Override
+	public List<IPreconditionCheck> getPreconditions() {
+		return List.of(
+				new IsOwner()
+		);
 	}
 }

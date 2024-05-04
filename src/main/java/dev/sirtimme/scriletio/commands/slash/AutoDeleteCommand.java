@@ -1,10 +1,14 @@
-package dev.sirtimme.scriletio.commands.slash.admin;
+package dev.sirtimme.scriletio.commands.slash;
 
+import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.parse.Parser;
+import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
+import dev.sirtimme.scriletio.preconditions.IsAdmin;
+import dev.sirtimme.scriletio.preconditions.IsUserPresent;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -17,7 +21,9 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
-public class AutoDeleteCommand extends AdminCommand {
+import java.util.List;
+
+public class AutoDeleteCommand implements ISlashCommand {
 	private final IRepository<User> userRepository;
 	private final IRepository<DeleteConfig> deleteConfigRepository;
 
@@ -27,7 +33,7 @@ public class AutoDeleteCommand extends AdminCommand {
 	}
 
 	@Override
-	protected void handleCommand(final SlashCommandInteractionEvent event) {
+	public void execute(final SlashCommandInteractionEvent event) {
 		final var subCommand = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
 		switch (subCommand) {
 			case ADD -> handleAddCommand(event);
@@ -53,6 +59,14 @@ public class AutoDeleteCommand extends AdminCommand {
 
 		return Commands.slash("autodelete", "Manage auto delete configs")
 					   .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
+	}
+
+	@Override
+	public List<IPreconditionCheck> getPreconditions() {
+		return List.of(
+				new IsUserPresent(userRepository),
+				new IsAdmin()
+		);
 	}
 
 	private void handleAddCommand(final SlashCommandInteractionEvent event) {

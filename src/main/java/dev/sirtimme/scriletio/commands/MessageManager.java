@@ -1,5 +1,7 @@
-package dev.sirtimme.scriletio.commands.message;
+package dev.sirtimme.scriletio.commands;
 
+import dev.sirtimme.scriletio.commands.message.DeleteCommand;
+import dev.sirtimme.scriletio.commands.message.ReceiveCommand;
 import dev.sirtimme.scriletio.concurrent.DeleteJobManager;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import jakarta.persistence.EntityManagerFactory;

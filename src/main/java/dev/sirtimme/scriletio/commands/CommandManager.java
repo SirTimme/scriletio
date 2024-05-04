@@ -1,10 +1,6 @@
-package dev.sirtimme.scriletio.commands.slash;
+package dev.sirtimme.scriletio.commands;
 
-import dev.sirtimme.scriletio.commands.slash.admin.AutoDeleteCommand;
-import dev.sirtimme.scriletio.commands.slash.owner.UpdateCommand;
-import dev.sirtimme.scriletio.commands.slash.user.DeleteCommand;
-import dev.sirtimme.scriletio.commands.slash.user.PingCommand;
-import dev.sirtimme.scriletio.commands.slash.user.RegisterCommand;
+import dev.sirtimme.scriletio.commands.slash.*;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -35,6 +31,12 @@ public class CommandManager {
 		final var function = commands.get(event.getName());
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
+
+		for (var precondition : command.getPreconditions()) {
+			if (!precondition.check(event)) {
+				return;
+			}
+		}
 
 		entityManager.getTransaction().begin();
 		command.execute(event);

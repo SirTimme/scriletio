@@ -1,12 +1,16 @@
-package dev.sirtimme.scriletio.commands.slash.user;
+package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.slash.ISlashCommand;
+import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.preconditions.IPreconditionCheck;
+import dev.sirtimme.scriletio.preconditions.IsUserPresent;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+
+import java.util.List;
 
 public class DeleteCommand implements ISlashCommand {
 	private final IRepository<User> repository;
@@ -18,10 +22,6 @@ public class DeleteCommand implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event) {
 		final var user = repository.get(event.getUser().getIdLong());
-		if (user == null) {
-			event.reply("There is no data stored about you no need to execute this command").queue();
-			return;
-		}
 
 		repository.delete(user);
 
@@ -32,5 +32,12 @@ public class DeleteCommand implements ISlashCommand {
 	public CommandData getCommandData() {
 		return Commands.slash("delete", "Deletes all of your stored data")
 					   .setDescriptionLocalization(DiscordLocale.GERMAN, "Löscht all deine gespeicherten Daten");
+	}
+
+	@Override
+	public List<IPreconditionCheck> getPreconditions() {
+		return List.of(
+				new IsUserPresent(repository)
+		);
 	}
 }
