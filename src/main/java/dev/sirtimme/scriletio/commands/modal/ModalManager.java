@@ -1,6 +1,8 @@
-package dev.sirtimme.scriletio.components.modal;
+package dev.sirtimme.scriletio.commands.modal;
 
-import dev.sirtimme.scriletio.components.modal.update.UpdateModal;
+import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.modal.update.UpdateModal;
+import dev.sirtimme.scriletio.preconditions.PreconditionResult;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -11,7 +13,7 @@ import java.util.function.Function;
 
 public class ModalManager {
 	private final EntityManagerFactory entityManagerFactory;
-	private final HashMap<String, Function<EntityManager, IModal>> modals;
+	private final HashMap<String, Function<EntityManager, ICommand<ModalInteractionEvent>>> modals;
 
 	public ModalManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
@@ -24,6 +26,10 @@ public class ModalManager {
 		final var function = modals.get(modalName);
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var modal = function.apply(entityManager);
+
+		if (modal.checkPreconditions(event) == PreconditionResult.FAILURE) {
+			return;
+		}
 
 		entityManager.getTransaction().begin();
 		modal.execute(event);

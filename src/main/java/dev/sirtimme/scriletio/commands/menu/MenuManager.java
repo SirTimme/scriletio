@@ -1,7 +1,8 @@
-package dev.sirtimme.scriletio.components.menu;
+package dev.sirtimme.scriletio.commands.menu;
 
-import dev.sirtimme.scriletio.components.menu.delete.DeleteMenu;
-import dev.sirtimme.scriletio.components.menu.update.UpdateMenu;
+import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.menu.delete.DeleteMenu;
+import dev.sirtimme.scriletio.commands.menu.update.UpdateMenu;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,7 +13,7 @@ import java.util.function.Function;
 
 public class MenuManager {
 	private final EntityManagerFactory entityManagerFactory;
-	private final HashMap<String, Function<EntityManager, IMenu>> menus;
+	private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menus;
 
 	public MenuManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;

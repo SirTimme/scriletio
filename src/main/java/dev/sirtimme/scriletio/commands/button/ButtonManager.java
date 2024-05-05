@@ -1,7 +1,8 @@
-package dev.sirtimme.scriletio.components.button;
+package dev.sirtimme.scriletio.commands.button;
 
-import dev.sirtimme.scriletio.components.button.register.RegisterAcceptButton;
-import dev.sirtimme.scriletio.components.button.register.RegisterCancelButton;
+import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.button.register.RegisterAcceptButton;
+import dev.sirtimme.scriletio.commands.button.register.RegisterCancelButton;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public class ButtonManager {
-	private final HashMap<String, Function<EntityManager, IButton>> buttons;
+	private final HashMap<String, Function<EntityManager, ICommand<ButtonInteractionEvent>>> buttons;
 	private final EntityManagerFactory entityManagerFactory;
 
 	public ButtonManager(final EntityManagerFactory entityManagerFactory) {

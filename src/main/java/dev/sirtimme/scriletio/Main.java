@@ -2,9 +2,9 @@ package dev.sirtimme.scriletio;
 
 import dev.sirtimme.scriletio.commands.CommandManager;
 import dev.sirtimme.scriletio.commands.MessageManager;
-import dev.sirtimme.scriletio.components.button.ButtonManager;
-import dev.sirtimme.scriletio.components.menu.MenuManager;
-import dev.sirtimme.scriletio.components.modal.ModalManager;
+import dev.sirtimme.scriletio.commands.button.ButtonManager;
+import dev.sirtimme.scriletio.commands.menu.MenuManager;
+import dev.sirtimme.scriletio.commands.modal.ModalManager;
 import dev.sirtimme.scriletio.events.EventHandler;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

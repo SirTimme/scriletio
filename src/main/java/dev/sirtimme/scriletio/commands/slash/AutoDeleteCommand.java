@@ -7,8 +7,8 @@ import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.preconditions.IsAdmin;
-import dev.sirtimme.scriletio.preconditions.IsRegistered;
+import dev.sirtimme.scriletio.preconditions.slash.IsAdmin;
+import dev.sirtimme.scriletio.preconditions.slash.IsRegistered;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -62,7 +62,7 @@ public class AutoDeleteCommand implements ISlashCommand {
 	}
 
 	@Override
-	public List<IPrecondition> getPreconditions() {
+	public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
 		return List.of(
 				new IsRegistered(userRepository),
 				new IsAdmin()
@@ -76,33 +76,45 @@ public class AutoDeleteCommand implements ISlashCommand {
 			return;
 		}
 
-		final var durationString = event.getOption("duration").getAsString();
+		final var durationOption = event.getOption("duration").getAsString();
 		var duration = 0L;
 		try {
-			duration = new Parser().parse(durationString);
+			duration = new Parser().parse(durationOption);
 		} catch (ParsingException exception) {
-			event.reply(Formatter.format(durationString, exception)).queue();
+			event.reply(Formatter.format(durationOption, exception)).queue();
 			return;
 		}
 
-		final var channel = event.getOption("channel").getAsChannel();
-		final var config = deleteConfigRepository.get(channel.getIdLong());
+		if (duration == 0) {
+			event.reply("Please specify a duration of at least 1 minute").queue();
+			return;
+		}
+
+		final var channelOption = event.getOption("channel").getAsChannel();
+		final var config = deleteConfigRepository.get(channelOption.getIdLong());
 		if (config != null) {
 			event.reply("There is already a delete config for that channel!").queue();
 			return;
 		}
 
-		user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channel.getIdLong(), duration));
+		user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channelOption.getIdLong(), duration));
 
-		event.reply("Successfully created an auto delete config for **" + channel + "**").queue();
+		event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
 	}
 
 	private void handleGetCommand(final SlashCommandInteractionEvent event) {
 		final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+
+		if (deleteConfigs.isEmpty()) {
+			event.reply("**" + event.getGuild().getName() + "** has no saved configs").queue();
+			return;
+		}
+
 		final var sb = new StringBuilder();
 		sb.append("**Saved configs for ").append(event.getGuild().getName()).append(":**\n\n");
+
 		for (var config : deleteConfigs) {
-			sb.append("- <#").append(config.getChannelId()).append("> ").append(config.getDuration()).append(" minutes\n");
+			sb.append("- <#").append(config.getChannelId()).append("> ").append(createReadableDuration(config.getDuration())).append("\n");
 		}
 
 		event.reply(sb.toString()).queue();
@@ -119,25 +131,26 @@ public class AutoDeleteCommand implements ISlashCommand {
 
 	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
 		final var channelOption = event.getOption("channel");
-		if (channelOption != null) {
-			final var selectedChannel = channelOption.getAsChannel();
-			final var deleteConfig = deleteConfigRepository.get(selectedChannel.getIdLong());
-			if (deleteConfig != null) {
-				final var author = deleteConfig.getUser();
-
-				author.removeConfig(selectedChannel.getIdLong());
-
-				event.reply("Config for channel " + selectedChannel.getAsMention() + " has been deleted").queue();
+		if (channelOption == null) {
+			final var selectMenu = buildConfigSelectMenu(event, "delete");
+			if (selectMenu == null) {
 				return;
 			}
-		}
 
-		final var selectMenu = buildConfigSelectMenu(event, "delete");
-		if (selectMenu == null) {
+			event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
 			return;
 		}
 
-		event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
+		final var selectedChannel = channelOption.getAsChannel();
+		final var deleteConfig = deleteConfigRepository.get(selectedChannel.getIdLong());
+
+		if (deleteConfig != null) {
+			final var author = deleteConfig.getUser();
+
+			author.removeConfig(selectedChannel.getIdLong());
+
+			event.reply("Config for channel " + selectedChannel.getAsMention() + " has been deleted").queue();
+		}
 	}
 
 	private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
@@ -152,7 +165,7 @@ public class AutoDeleteCommand implements ISlashCommand {
 
 		final var menuBuilder = StringSelectMenu.create(userId + ":" + menuId).setPlaceholder("Saved configs");
 
-		for (var config : userConfigs) {
+		for (final var config : userConfigs) {
 			final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
 			final var label = "#" + channel.getName();
 			final var value = String.valueOf(config.getChannelId());
