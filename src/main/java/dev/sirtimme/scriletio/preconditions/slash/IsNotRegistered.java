@@ -2,7 +2,6 @@ package dev.sirtimme.scriletio.preconditions.slash;
 
 import dev.sirtimme.scriletio.models.User;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.preconditions.PreconditionResult;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
@@ -14,13 +13,12 @@ public class IsNotRegistered implements IPrecondition<SlashCommandInteractionEve
 	}
 
 	@Override
-	public PreconditionResult check(final SlashCommandInteractionEvent event) {
+	public boolean check(final SlashCommandInteractionEvent event) {
 		final var user = repository.get(event.getUser().getIdLong());
 		if (user != null) {
 			event.reply("You are already registered").queue();
-			return PreconditionResult.FAILURE;
+			return false;
 		}
-
-		return PreconditionResult.SUCCESS;
+		return true;
 	}
 }

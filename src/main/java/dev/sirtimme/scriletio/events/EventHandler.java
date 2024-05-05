@@ -1,9 +1,9 @@
 package dev.sirtimme.scriletio.events;
 
 import dev.sirtimme.scriletio.commands.CommandManager;
-import dev.sirtimme.scriletio.commands.MessageManager;
 import dev.sirtimme.scriletio.commands.button.ButtonManager;
 import dev.sirtimme.scriletio.commands.menu.MenuManager;
+import dev.sirtimme.scriletio.commands.message.MessageManager;
 import dev.sirtimme.scriletio.commands.modal.ModalManager;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

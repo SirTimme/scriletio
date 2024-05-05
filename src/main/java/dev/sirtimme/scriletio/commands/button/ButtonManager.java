@@ -29,6 +29,10 @@ public class ButtonManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var button = function.apply(entityManager);
 
+		if (!button.checkPreconditions(event)) {
+			return;
+		}
+
 		entityManager.getTransaction().begin();
 		button.execute(event);
 		entityManager.getTransaction().commit();

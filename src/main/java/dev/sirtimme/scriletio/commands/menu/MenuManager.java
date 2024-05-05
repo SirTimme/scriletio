@@ -28,6 +28,10 @@ public class MenuManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var menu = function.apply(entityManager);
 
+		if (!menu.checkPreconditions(event)) {
+			return;
+		}
+
 		entityManager.getTransaction().begin();
 		menu.execute(event);
 		entityManager.getTransaction().commit();
