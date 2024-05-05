@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.message;
+package dev.sirtimme.scriletio.commands.message.receive;
 
 import dev.sirtimme.scriletio.concurrent.DeleteJobManager;
 import dev.sirtimme.scriletio.models.DeleteConfig;

@@ -1,9 +1,10 @@
-package dev.sirtimme.scriletio.commands;
+package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.slash.AutoDeleteCommand;
-import dev.sirtimme.scriletio.commands.slash.DeleteCommand;
-import dev.sirtimme.scriletio.commands.slash.RegisterCommand;
-import dev.sirtimme.scriletio.commands.slash.UpdateCommand;
+import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.slash.autodelete.AutoDeleteCommand;
+import dev.sirtimme.scriletio.commands.slash.delete.DeleteCommand;
+import dev.sirtimme.scriletio.commands.slash.register.RegisterCommand;
+import dev.sirtimme.scriletio.commands.slash.update.UpdateCommand;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;

@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.slash;
+package dev.sirtimme.scriletio.commands.slash.autodelete;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.error.ParsingException;
