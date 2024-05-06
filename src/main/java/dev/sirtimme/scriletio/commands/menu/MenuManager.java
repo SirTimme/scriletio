@@ -28,7 +28,7 @@ public class MenuManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var menu = function.apply(entityManager);
 
-		if (!menu.checkPreconditions(event)) {
+		if (menu.hasInvalidPreconditions(event)) {
 			return;
 		}
 

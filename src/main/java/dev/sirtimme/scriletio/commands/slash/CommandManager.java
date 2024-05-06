@@ -35,7 +35,7 @@ public class CommandManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var command = function.apply(entityManager);
 
-		if (!command.checkPreconditions(event)) {
+		if (command.hasInvalidPreconditions(event)) {
 			return;
 		}
 

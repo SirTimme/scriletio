@@ -29,7 +29,7 @@ public class ButtonManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var button = function.apply(entityManager);
 
-		if (!button.checkPreconditions(event)) {
+		if (button.hasInvalidPreconditions(event)) {
 			return;
 		}
 

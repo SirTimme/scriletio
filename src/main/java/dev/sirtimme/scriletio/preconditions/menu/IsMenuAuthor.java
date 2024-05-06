@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 
 public class IsMenuAuthor implements IPrecondition<StringSelectInteractionEvent> {
 	@Override
-	public boolean check(final StringSelectInteractionEvent event) {
+	public boolean isValid(final StringSelectInteractionEvent event) {
 		final var authorId = event.getComponentId().split(":")[0];
 		if (!event.getUser().getId().equals(authorId)) {
 			event.reply("You are not the author of the initial message").setEphemeral(true).queue();

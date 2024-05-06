@@ -13,7 +13,7 @@ public class IsNotRegistered implements IPrecondition<SlashCommandInteractionEve
 	}
 
 	@Override
-	public boolean check(final SlashCommandInteractionEvent event) {
+	public boolean isValid(final SlashCommandInteractionEvent event) {
 		final var user = repository.get(event.getUser().getIdLong());
 		if (user != null) {
 			event.reply("You are already registered").queue();

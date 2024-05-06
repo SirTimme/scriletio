@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 public class IsAdmin implements IPrecondition<SlashCommandInteractionEvent> {
 	@Override
-	public boolean check(final SlashCommandInteractionEvent event) {
+	public boolean isValid(final SlashCommandInteractionEvent event) {
 		if (event.getGuild() == null) {
 			event.reply("Admin commands can only be executed within a guild!").queue();
 			return false;

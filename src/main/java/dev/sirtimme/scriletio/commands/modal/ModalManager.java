@@ -26,7 +26,7 @@ public class ModalManager {
 		final var entityManager = entityManagerFactory.createEntityManager();
 		final var modal = function.apply(entityManager);
 
-		if (!modal.checkPreconditions(event)) {
+		if (modal.hasInvalidPreconditions(event)) {
 			return;
 		}
 
