@@ -6,7 +6,7 @@ import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class IsRegistered implements IPrecondition<SlashCommandInteractionEvent> {
-	final IRepository<User> repository;
+	private final IRepository<User> repository;
 
 	public IsRegistered(final IRepository<User> repository) {
 		this.repository = repository;
