@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.modal.update;
+package dev.sirtimme.scriletio.commands.modal;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.error.ParsingException;

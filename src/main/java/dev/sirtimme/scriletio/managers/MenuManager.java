@@ -1,8 +1,8 @@
-package dev.sirtimme.scriletio.commands.menu;
+package dev.sirtimme.scriletio.managers;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.commands.menu.delete.DeleteMenu;
-import dev.sirtimme.scriletio.commands.menu.update.UpdateMenu;
+import dev.sirtimme.scriletio.commands.menu.DeleteMenu;
+import dev.sirtimme.scriletio.commands.menu.UpdateMenu;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

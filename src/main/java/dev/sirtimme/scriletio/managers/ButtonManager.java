@@ -1,8 +1,8 @@
-package dev.sirtimme.scriletio.commands.button;
+package dev.sirtimme.scriletio.managers;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.commands.button.register.RegisterAcceptButton;
-import dev.sirtimme.scriletio.commands.button.register.RegisterCancelButton;
+import dev.sirtimme.scriletio.commands.button.RegisterAcceptButton;
+import dev.sirtimme.scriletio.commands.button.RegisterCancelButton;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

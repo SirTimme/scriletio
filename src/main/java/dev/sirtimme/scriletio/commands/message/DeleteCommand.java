@@ -1,6 +1,6 @@
-package dev.sirtimme.scriletio.commands.message.delete;
+package dev.sirtimme.scriletio.commands.message;
 
-import dev.sirtimme.scriletio.concurrent.DeleteJobManager;
+import dev.sirtimme.scriletio.managers.DeleteJobManager;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;

@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.button.register;
+package dev.sirtimme.scriletio.commands.button;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.models.User;

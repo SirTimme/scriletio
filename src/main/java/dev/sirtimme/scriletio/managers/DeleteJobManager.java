@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.concurrent;
+package dev.sirtimme.scriletio.managers;
 
 import net.dv8tion.jda.api.entities.Message;
 

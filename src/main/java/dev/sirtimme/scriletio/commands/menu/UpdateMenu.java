@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.menu.update;
+package dev.sirtimme.scriletio.commands.menu;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;

@@ -1,7 +1,7 @@
-package dev.sirtimme.scriletio.commands.slash.update;
+package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
-import dev.sirtimme.scriletio.commands.slash.CommandManager;
+import dev.sirtimme.scriletio.managers.CommandManager;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.IsOwner;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
