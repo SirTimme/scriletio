@@ -16,37 +16,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
-public class CommandManager {
+public class SlashCommandManager {
 	private final EntityManagerFactory entityManagerFactory;
-	private final HashMap<String, Function<EntityManager, ISlashCommand>> commands;
+	private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
 
-	public CommandManager(final EntityManagerFactory entityManagerFactory) {
+	public SlashCommandManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
-
-		this.commands = new HashMap<>();
-		this.commands.put("update", entityManager -> new UpdateCommand(this));
-		this.commands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
-		this.commands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
-		this.commands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
+		this.slashCommands = new HashMap<>();
+		this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
+		this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
+		this.slashCommands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
+		this.slashCommands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
 	}
 
 	public void handleCommand(final SlashCommandInteractionEvent event) {
-		final var function = commands.get(event.getName());
 		final var entityManager = entityManagerFactory.createEntityManager();
-		final var command = function.apply(entityManager);
+		final var slashCommand = slashCommands.get(event.getName()).apply(entityManager);
 
-		if (command.hasInvalidPreconditions(event)) {
+		if (slashCommand.hasInvalidPreconditions(event)) {
 			return;
 		}
 
 		entityManager.getTransaction().begin();
-		command.execute(event);
+		slashCommand.execute(event);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
 
 	public List<CommandData> getCommandData() {
-		return commands
+		return slashCommands
 				.values()
 				.stream()
 				.map(function -> function.apply(null).getCommandData())

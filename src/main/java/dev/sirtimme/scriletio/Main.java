@@ -1,11 +1,7 @@
 package dev.sirtimme.scriletio;
 
-import dev.sirtimme.scriletio.managers.ButtonManager;
-import dev.sirtimme.scriletio.managers.MenuManager;
-import dev.sirtimme.scriletio.managers.MessageManager;
-import dev.sirtimme.scriletio.managers.ModalManager;
-import dev.sirtimme.scriletio.managers.CommandManager;
 import dev.sirtimme.scriletio.events.EventHandler;
+import dev.sirtimme.scriletio.managers.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
@@ -26,11 +22,11 @@ public class Main {
 	private static EventHandler buildEventhandler() {
 		final var entityManagerFactory = buildEntityManagerFactory();
 
-		final var commandManager = new CommandManager(entityManagerFactory);
-		final var buttonManager = new ButtonManager(entityManagerFactory);
-		final var messageManager = new MessageManager(entityManagerFactory);
-		final var menuManager = new MenuManager(entityManagerFactory);
-		final var modalManager = new ModalManager(entityManagerFactory);
+		final var commandManager = new SlashCommandManager(entityManagerFactory);
+		final var buttonManager = new ButtonCommandManager(entityManagerFactory);
+		final var messageManager = new MessageCommandManager(entityManagerFactory);
+		final var menuManager = new MenuCommandManager(entityManagerFactory);
+		final var modalManager = new ModalCommandManager(entityManagerFactory);
 
 		return new EventHandler(
 				commandManager,

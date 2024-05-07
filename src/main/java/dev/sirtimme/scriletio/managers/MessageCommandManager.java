@@ -7,31 +7,39 @@ import jakarta.persistence.EntityManagerFactory;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MessageManager {
+public class MessageCommandManager {
 	private final EntityManagerFactory entityManagerFactory;
 	private final DeleteJobManager deleteJobManager;
 
-	public MessageManager(final EntityManagerFactory entityManagerFactory) {
+	public MessageCommandManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 		this.deleteJobManager = new DeleteJobManager();
 	}
 
 	public void handleMessageReceive(final MessageReceivedEvent event) {
 		final var entityManager = entityManagerFactory.createEntityManager();
-		final var command = new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+		final var messageCommand = new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+
+		if (messageCommand.hasInvalidPreconditions(event)) {
+			return;
+		}
 
 		entityManager.getTransaction().begin();
-		command.execute(event);
+		messageCommand.execute(event);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
 
 	public void handleMessageDelete(final MessageDeleteEvent event) {
 		final var entityManager = entityManagerFactory.createEntityManager();
-		final var command = new DeleteCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+		final var messageCommand = new DeleteCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+
+		if (messageCommand.hasInvalidPreconditions(event)) {
+			return;
+		}
 
 		entityManager.getTransaction().begin();
-		command.execute(event);
+		messageCommand.execute(event);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}

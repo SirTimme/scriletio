@@ -11,29 +11,28 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class MenuManager {
+public class MenuCommandManager {
 	private final EntityManagerFactory entityManagerFactory;
-	private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menus;
+	private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menuCommands;
 
-	public MenuManager(final EntityManagerFactory entityManagerFactory) {
+	public MenuCommandManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
-		this.menus = new HashMap<>();
-		this.menus.put("update", entityManager -> new UpdateMenu());
-		this.menus.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
+		this.menuCommands = new HashMap<>();
+		this.menuCommands.put("update", entityManager -> new UpdateMenu());
+		this.menuCommands.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
 	}
 
 	public void handleCommand(final StringSelectInteractionEvent event) {
-		final var menuName = event.getComponentId().split(":")[1];
-		final var function = menus.get(menuName);
+		final var commandName = event.getComponentId().split(":")[1];
 		final var entityManager = entityManagerFactory.createEntityManager();
-		final var menu = function.apply(entityManager);
+		final var menuCommand = menuCommands.get(commandName).apply(entityManager);
 
-		if (menu.hasInvalidPreconditions(event)) {
+		if (menuCommand.hasInvalidPreconditions(event)) {
 			return;
 		}
 
 		entityManager.getTransaction().begin();
-		menu.execute(event);
+		menuCommand.execute(event);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}

@@ -1,10 +1,6 @@
 package dev.sirtimme.scriletio.events;
 
-import dev.sirtimme.scriletio.managers.ButtonManager;
-import dev.sirtimme.scriletio.managers.MenuManager;
-import dev.sirtimme.scriletio.managers.MessageManager;
-import dev.sirtimme.scriletio.managers.ModalManager;
-import dev.sirtimme.scriletio.managers.CommandManager;
+import dev.sirtimme.scriletio.managers.*;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -15,53 +11,53 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandler extends ListenerAdapter {
-	private final CommandManager commandManager;
-	private final ButtonManager buttonManager;
-	private final MessageManager messageManager;
-	private final MenuManager menuManager;
-	private final ModalManager modalManager;
+	private final SlashCommandManager slashCommandManager;
+	private final ButtonCommandManager buttonCommandManager;
+	private final MessageCommandManager messageCommandManager;
+	private final MenuCommandManager menuCommandManager;
+	private final ModalCommandManager modalCommandManager;
 
 	public EventHandler(
-			final CommandManager commandManager,
-			final ButtonManager buttonManager,
-			final MessageManager messageManager,
-			final MenuManager menuManager,
-			final ModalManager modalManager
+			final SlashCommandManager slashCommandManager,
+			final ButtonCommandManager buttonCommandManager,
+			final MessageCommandManager messageCommandManager,
+			final MenuCommandManager menuCommandManager,
+			final ModalCommandManager modalCommandManager
 	) {
-		this.commandManager = commandManager;
-		this.buttonManager = buttonManager;
-		this.messageManager = messageManager;
-		this.menuManager = menuManager;
-		this.modalManager = modalManager;
+		this.slashCommandManager = slashCommandManager;
+		this.buttonCommandManager = buttonCommandManager;
+		this.messageCommandManager = messageCommandManager;
+		this.menuCommandManager = menuCommandManager;
+		this.modalCommandManager = modalCommandManager;
 	}
 
 	@Override
 	public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
-		commandManager.handleCommand(event);
+		slashCommandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onButtonInteraction(@NotNull final ButtonInteractionEvent event) {
-		buttonManager.handleCommand(event);
-	}
-
-	@Override
-	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-		messageManager.handleMessageReceive(event);
-	}
-
-	@Override
-	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
-		messageManager.handleMessageDelete(event);
+		buttonCommandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onModalInteraction(@NotNull final ModalInteractionEvent event) {
-		modalManager.handleCommand(event);
+		modalCommandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onStringSelectInteraction(@NotNull final StringSelectInteractionEvent event) {
-		menuManager.handleCommand(event);
+		menuCommandManager.handleCommand(event);
+	}
+
+	@Override
+	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
+		messageCommandManager.handleMessageReceive(event);
+	}
+
+	@Override
+	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
+		messageCommandManager.handleMessageDelete(event);
 	}
 }

@@ -8,6 +8,8 @@ import java.util.List;
 public interface ICommand<T extends GenericEvent> {
 	void execute(final T event);
 
+	List<IPrecondition<T>> getPreconditions();
+
 	default boolean hasInvalidPreconditions(final T event) {
 		for (final var precondition : getPreconditions()) {
 			if (!precondition.isValid(event)) {
@@ -16,6 +18,4 @@ public interface ICommand<T extends GenericEvent> {
 		}
 		return false;
 	}
-
-	List<IPrecondition<T>> getPreconditions();
 }

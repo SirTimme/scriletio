@@ -11,30 +11,29 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class ButtonManager {
-	private final HashMap<String, Function<EntityManager, ICommand<ButtonInteractionEvent>>> buttons;
+public class ButtonCommandManager {
+	private final HashMap<String, Function<EntityManager, ICommand<ButtonInteractionEvent>>> buttonCommands;
 	private final EntityManagerFactory entityManagerFactory;
 
-	public ButtonManager(final EntityManagerFactory entityManagerFactory) {
+	public ButtonCommandManager(final EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 
-		this.buttons = new HashMap<>();
-		this.buttons.put("registerAccept", entityManager -> new RegisterAcceptButton(new UserRepository(entityManager)));
-		this.buttons.put("registerCancel", entityManager -> new RegisterCancelButton());
+		this.buttonCommands = new HashMap<>();
+		this.buttonCommands.put("registerAccept", entityManager -> new RegisterAcceptButton(new UserRepository(entityManager)));
+		this.buttonCommands.put("registerCancel", entityManager -> new RegisterCancelButton());
 	}
 
 	public void handleCommand(final ButtonInteractionEvent event) {
-		final var buttonName = event.getComponentId().split(":")[1];
-		final var function = buttons.get(buttonName);
+		final var commandName = event.getComponentId().split(":")[1];
 		final var entityManager = entityManagerFactory.createEntityManager();
-		final var button = function.apply(entityManager);
+		final var buttonCommand = buttonCommands.get(commandName).apply(entityManager);
 
-		if (button.hasInvalidPreconditions(event)) {
+		if (buttonCommand.hasInvalidPreconditions(event)) {
 			return;
 		}
 
 		entityManager.getTransaction().begin();
-		button.execute(event);
+		buttonCommand.execute(event);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}

@@ -1,12 +1,16 @@
 package dev.sirtimme.scriletio.commands.message;
 
+import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.managers.DeleteJobManager;
 import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class ReceiveCommand {
+import java.util.List;
+
+public class ReceiveCommand implements ICommand<MessageReceivedEvent> {
 	private final DeleteJobManager deleteJobManager;
 	private final IRepository<DeleteConfig> repository;
 
@@ -15,6 +19,7 @@ public class ReceiveCommand {
 		this.repository = repository;
 	}
 
+	@Override
 	public void execute(final MessageReceivedEvent event) {
 		final var deleteConfig = repository.get(event.getChannel().getIdLong());
 		if (deleteConfig == null) {
@@ -33,5 +38,10 @@ public class ReceiveCommand {
 		final var duration = deleteConfig.getDuration();
 
 		deleteJobManager.submitJob(jobId, message, duration);
+	}
+
+	@Override
+	public List<IPrecondition<MessageReceivedEvent>> getPreconditions() {
+		return List.of();
 	}
 }
