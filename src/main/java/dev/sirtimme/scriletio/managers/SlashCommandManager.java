@@ -30,17 +30,17 @@ public class SlashCommandManager {
 	}
 
 	public void handleCommand(final SlashCommandInteractionEvent event) {
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var slashCommand = slashCommands.get(event.getName()).apply(entityManager);
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var slashCommand = slashCommands.get(event.getName()).apply(context);
 
-		if (slashCommand.hasInvalidPreconditions(event)) {
-			return;
+			if (slashCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			slashCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		slashCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 
 	public List<CommandData> getCommandData() {

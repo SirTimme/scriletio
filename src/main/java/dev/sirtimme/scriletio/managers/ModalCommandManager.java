@@ -22,16 +22,17 @@ public class ModalCommandManager {
 
 	public void handleCommand(final ModalInteractionEvent event) {
 		final var commandName = event.getModalId().split(":")[1];
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var modalCommand = modalCommands.get(commandName).apply(entityManager);
 
-		if (modalCommand.hasInvalidPreconditions(event)) {
-			return;
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var modalCommand = modalCommands.get(commandName).apply(context);
+
+			if (modalCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			modalCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		modalCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 }

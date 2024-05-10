@@ -25,16 +25,17 @@ public class ButtonCommandManager {
 
 	public void handleCommand(final ButtonInteractionEvent event) {
 		final var commandName = event.getComponentId().split(":")[1];
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var buttonCommand = buttonCommands.get(commandName).apply(entityManager);
 
-		if (buttonCommand.hasInvalidPreconditions(event)) {
-			return;
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var buttonCommand = buttonCommands.get(commandName).apply(context);
+
+			if (buttonCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			buttonCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		buttonCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 }

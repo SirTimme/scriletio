@@ -24,16 +24,17 @@ public class MenuCommandManager {
 
 	public void handleCommand(final StringSelectInteractionEvent event) {
 		final var commandName = event.getComponentId().split(":")[1];
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var menuCommand = menuCommands.get(commandName).apply(entityManager);
 
-		if (menuCommand.hasInvalidPreconditions(event)) {
-			return;
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var menuCommand = menuCommands.get(commandName).apply(context);
+
+			if (menuCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			menuCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		menuCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 }

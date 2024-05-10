@@ -17,30 +17,30 @@ public class MessageCommandManager {
 	}
 
 	public void handleMessageReceive(final MessageReceivedEvent event) {
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var messageCommand = new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var messageCommand = new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(context));
 
-		if (messageCommand.hasInvalidPreconditions(event)) {
-			return;
+			if (messageCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			messageCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		messageCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 
 	public void handleMessageDelete(final MessageDeleteEvent event) {
-		final var entityManager = entityManagerFactory.createEntityManager();
-		final var messageCommand = new DeleteCommand(deleteJobManager, new DeleteConfigRepository(entityManager));
+		try (final var context = entityManagerFactory.createEntityManager()) {
+			final var messageCommand = new DeleteCommand(deleteJobManager, new DeleteConfigRepository(context));
 
-		if (messageCommand.hasInvalidPreconditions(event)) {
-			return;
+			if (messageCommand.hasInvalidPreconditions(event)) {
+				return;
+			}
+
+			context.getTransaction().begin();
+			messageCommand.execute(event);
+			context.getTransaction().commit();
 		}
-
-		entityManager.getTransaction().begin();
-		messageCommand.execute(event);
-		entityManager.getTransaction().commit();
-		entityManager.close();
 	}
 }
