@@ -21,17 +21,20 @@ public class Main {
 
 	private static EventHandler buildEventhandler() {
 		final var entityManagerFactory = buildEntityManagerFactory();
+		final var deleteJobManager = new DeleteJobManager();
 
 		final var commandManager = new SlashCommandManager(entityManagerFactory);
 		final var buttonManager = new ButtonCommandManager(entityManagerFactory);
-		final var messageManager = new MessageCommandManager(entityManagerFactory);
+		final var messageReceiveManager = new MessageReceiveManager(entityManagerFactory, deleteJobManager);
+		final var messageDeleteManager = new MessageDeleteManager(entityManagerFactory, deleteJobManager);
 		final var menuManager = new MenuCommandManager(entityManagerFactory);
 		final var modalManager = new ModalCommandManager(entityManagerFactory);
 
 		return new EventHandler(
 				commandManager,
 				buttonManager,
-				messageManager,
+				messageReceiveManager,
+				messageDeleteManager,
 				menuManager,
 				modalManager
 		);

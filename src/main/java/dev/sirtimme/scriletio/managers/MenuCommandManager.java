@@ -11,30 +11,20 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class MenuCommandManager {
-	private final EntityManagerFactory entityManagerFactory;
+public class MenuCommandManager extends ContextManager<StringSelectInteractionEvent> {
 	private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menuCommands;
 
 	public MenuCommandManager(final EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
+		super(entityManagerFactory);
+
 		this.menuCommands = new HashMap<>();
 		this.menuCommands.put("update", entityManager -> new UpdateMenu());
 		this.menuCommands.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
 	}
 
-	public void handleCommand(final StringSelectInteractionEvent event) {
+	@Override
+	protected ICommand<StringSelectInteractionEvent> getCommand(final StringSelectInteractionEvent event, final EntityManager context) {
 		final var commandName = event.getComponentId().split(":")[1];
-
-		try (final var context = entityManagerFactory.createEntityManager()) {
-			final var menuCommand = menuCommands.get(commandName).apply(context);
-
-			if (menuCommand.hasInvalidPreconditions(event)) {
-				return;
-			}
-
-			context.getTransaction().begin();
-			menuCommand.execute(event);
-			context.getTransaction().commit();
-		}
+		return menuCommands.get(commandName).apply(context);
 	}
 }

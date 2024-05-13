@@ -13,20 +13,23 @@ import org.jetbrains.annotations.NotNull;
 public class EventHandler extends ListenerAdapter {
 	private final SlashCommandManager slashCommandManager;
 	private final ButtonCommandManager buttonCommandManager;
-	private final MessageCommandManager messageCommandManager;
+	private final MessageReceiveManager messageReceiveManager;
+	private final MessageDeleteManager messageDeleteManager;
 	private final MenuCommandManager menuCommandManager;
 	private final ModalCommandManager modalCommandManager;
 
 	public EventHandler(
 			final SlashCommandManager slashCommandManager,
 			final ButtonCommandManager buttonCommandManager,
-			final MessageCommandManager messageCommandManager,
+			final MessageReceiveManager messageReceiveManager,
+			final MessageDeleteManager messageDeleteManager,
 			final MenuCommandManager menuCommandManager,
 			final ModalCommandManager modalCommandManager
 	) {
 		this.slashCommandManager = slashCommandManager;
 		this.buttonCommandManager = buttonCommandManager;
-		this.messageCommandManager = messageCommandManager;
+		this.messageReceiveManager = messageReceiveManager;
+		this.messageDeleteManager = messageDeleteManager;
 		this.menuCommandManager = menuCommandManager;
 		this.modalCommandManager = modalCommandManager;
 	}
@@ -53,11 +56,11 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-		messageCommandManager.handleMessageReceive(event);
+		messageReceiveManager.handleCommand(event);
 	}
 
 	@Override
 	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
-		messageCommandManager.handleMessageDelete(event);
+		messageDeleteManager.handleCommand(event);
 	}
 }

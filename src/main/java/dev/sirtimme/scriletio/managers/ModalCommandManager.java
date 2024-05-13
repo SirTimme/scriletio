@@ -10,29 +10,19 @@ import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class ModalCommandManager {
-	private final EntityManagerFactory entityManagerFactory;
+public class ModalCommandManager extends ContextManager<ModalInteractionEvent> {
 	private final HashMap<String, Function<EntityManager, ICommand<ModalInteractionEvent>>> modalCommands;
 
 	public ModalCommandManager(final EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
+		super(entityManagerFactory);
+
 		this.modalCommands = new HashMap<>();
 		this.modalCommands.put("update", entityManager -> new UpdateModal(new DeleteConfigRepository(entityManager)));
 	}
 
-	public void handleCommand(final ModalInteractionEvent event) {
+	@Override
+	protected ICommand<ModalInteractionEvent> getCommand(final ModalInteractionEvent event, final EntityManager context) {
 		final var commandName = event.getModalId().split(":")[1];
-
-		try (final var context = entityManagerFactory.createEntityManager()) {
-			final var modalCommand = modalCommands.get(commandName).apply(context);
-
-			if (modalCommand.hasInvalidPreconditions(event)) {
-				return;
-			}
-
-			context.getTransaction().begin();
-			modalCommand.execute(event);
-			context.getTransaction().commit();
-		}
+		return modalCommands.get(commandName).apply(context);
 	}
 }

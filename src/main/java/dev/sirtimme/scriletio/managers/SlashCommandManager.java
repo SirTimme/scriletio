@@ -1,5 +1,6 @@
 package dev.sirtimme.scriletio.managers;
 
+import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.commands.slash.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.DeleteCommand;
@@ -16,12 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
-public class SlashCommandManager {
-	private final EntityManagerFactory entityManagerFactory;
+public class SlashCommandManager extends ContextManager<SlashCommandInteractionEvent> {
 	private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
 
 	public SlashCommandManager(final EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
+		super(entityManagerFactory);
+
 		this.slashCommands = new HashMap<>();
 		this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
 		this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
@@ -29,18 +30,9 @@ public class SlashCommandManager {
 		this.slashCommands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
 	}
 
-	public void handleCommand(final SlashCommandInteractionEvent event) {
-		try (final var context = entityManagerFactory.createEntityManager()) {
-			final var slashCommand = slashCommands.get(event.getName()).apply(context);
-
-			if (slashCommand.hasInvalidPreconditions(event)) {
-				return;
-			}
-
-			context.getTransaction().begin();
-			slashCommand.execute(event);
-			context.getTransaction().commit();
-		}
+	@Override
+	protected ICommand<SlashCommandInteractionEvent> getCommand(final SlashCommandInteractionEvent event, final EntityManager context) {
+		return slashCommands.get(event.getName()).apply(context);
 	}
 
 	public List<CommandData> getCommandData() {
