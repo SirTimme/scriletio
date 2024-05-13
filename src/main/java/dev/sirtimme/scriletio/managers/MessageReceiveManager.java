@@ -12,6 +12,7 @@ public class MessageReceiveManager extends ContextManager<MessageReceivedEvent> 
 
 	public MessageReceiveManager(final EntityManagerFactory entityManagerFactory, final DeleteJobManager deleteJobManager) {
 		super(entityManagerFactory);
+
 		this.deleteJobManager = deleteJobManager;
 	}
 

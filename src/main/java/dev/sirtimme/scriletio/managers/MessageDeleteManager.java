@@ -12,6 +12,7 @@ public class MessageDeleteManager extends ContextManager<MessageDeleteEvent> {
 
 	public MessageDeleteManager(final EntityManagerFactory entityManagerFactory, final DeleteJobManager deleteJobManager) {
 		super(entityManagerFactory);
+
 		this.deleteJobManager = deleteJobManager;
 	}
 
