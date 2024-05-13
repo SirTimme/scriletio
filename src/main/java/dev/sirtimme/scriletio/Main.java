@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ public class Main {
 	public static void main(String[] args) {
 		final var eventHandler = buildEventhandler();
 
-		JDABuilder.createLight(System.getenv("TOKEN"))
+		JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
 				  .addEventListeners(eventHandler)
 				  .setActivity(Activity.playing("Silentium"))
 				  .build();
