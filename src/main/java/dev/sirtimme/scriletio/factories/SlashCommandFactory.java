@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.managers;
+package dev.sirtimme.scriletio.factories;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.commands.ISlashCommand;
@@ -9,7 +9,6 @@ import dev.sirtimme.scriletio.commands.slash.UpdateCommand;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -17,12 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
-public class SlashCommandManager extends ContextManager<SlashCommandInteractionEvent> {
+public class SlashCommandFactory implements ICommandFactory<SlashCommandInteractionEvent> {
 	private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
 
-	public SlashCommandManager(final EntityManagerFactory entityManagerFactory) {
-		super(entityManagerFactory);
-
+	public SlashCommandFactory() {
 		this.slashCommands = new HashMap<>();
 		this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
 		this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
@@ -31,7 +28,7 @@ public class SlashCommandManager extends ContextManager<SlashCommandInteractionE
 	}
 
 	@Override
-	protected ICommand<SlashCommandInteractionEvent> getCommand(final SlashCommandInteractionEvent event, final EntityManager context) {
+	public ICommand<SlashCommandInteractionEvent> createCommand(final SlashCommandInteractionEvent event, final EntityManager context) {
 		return slashCommands.get(event.getName()).apply(context);
 	}
 

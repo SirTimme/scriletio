@@ -11,25 +11,25 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandler extends ListenerAdapter {
-	private final SlashCommandManager slashCommandManager;
-	private final ButtonCommandManager buttonCommandManager;
-	private final MessageReceiveManager messageReceiveManager;
-	private final MessageDeleteManager messageDeleteManager;
-	private final MenuCommandManager menuCommandManager;
-	private final ModalCommandManager modalCommandManager;
+	private final ICommandManager<SlashCommandInteractionEvent> slashCommandManager;
+	private final ICommandManager<ButtonInteractionEvent> buttonCommandManager;
+	private final ICommandManager<MessageReceivedEvent> receiveMessageCommandManager;
+	private final ICommandManager<MessageDeleteEvent> deleteMessageCommandManager;
+	private final ICommandManager<StringSelectInteractionEvent> menuCommandManager;
+	private final ICommandManager<ModalInteractionEvent> modalCommandManager;
 
 	public EventHandler(
-			final SlashCommandManager slashCommandManager,
-			final ButtonCommandManager buttonCommandManager,
-			final MessageReceiveManager messageReceiveManager,
-			final MessageDeleteManager messageDeleteManager,
-			final MenuCommandManager menuCommandManager,
-			final ModalCommandManager modalCommandManager
+			final ICommandManager<SlashCommandInteractionEvent> slashCommandManager,
+			final ICommandManager<ButtonInteractionEvent> buttonCommandManager,
+			final ICommandManager<MessageReceivedEvent> receiveMessageCommandManager,
+			final ICommandManager<MessageDeleteEvent> deleteMessageCommandManager,
+			final ICommandManager<StringSelectInteractionEvent> menuCommandManager,
+			final ICommandManager<ModalInteractionEvent> modalCommandManager
 	) {
 		this.slashCommandManager = slashCommandManager;
 		this.buttonCommandManager = buttonCommandManager;
-		this.messageReceiveManager = messageReceiveManager;
-		this.messageDeleteManager = messageDeleteManager;
+		this.receiveMessageCommandManager = receiveMessageCommandManager;
+		this.deleteMessageCommandManager = deleteMessageCommandManager;
 		this.menuCommandManager = menuCommandManager;
 		this.modalCommandManager = modalCommandManager;
 	}
@@ -56,11 +56,11 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
-		messageReceiveManager.handleCommand(event);
+		receiveMessageCommandManager.handleCommand(event);
 	}
 
 	@Override
 	public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
-		messageDeleteManager.handleCommand(event);
+		deleteMessageCommandManager.handleCommand(event);
 	}
 }

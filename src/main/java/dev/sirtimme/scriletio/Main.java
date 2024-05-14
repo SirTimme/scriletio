@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio;
 
 import dev.sirtimme.scriletio.events.EventHandler;
+import dev.sirtimme.scriletio.factories.*;
 import dev.sirtimme.scriletio.managers.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -24,20 +25,20 @@ public class Main {
 		final var entityManagerFactory = buildEntityManagerFactory();
 		final var deleteJobManager = new DeleteJobManager();
 
-		final var commandManager = new SlashCommandManager(entityManagerFactory);
-		final var buttonManager = new ButtonCommandManager(entityManagerFactory);
-		final var messageReceiveManager = new MessageReceiveManager(entityManagerFactory, deleteJobManager);
-		final var messageDeleteManager = new MessageDeleteManager(entityManagerFactory, deleteJobManager);
-		final var menuManager = new MenuCommandManager(entityManagerFactory);
-		final var modalManager = new ModalCommandManager(entityManagerFactory);
+		final var slashCommandManager = new CommandManager<>(entityManagerFactory, new SlashCommandFactory());
+		final var buttonCommandManager = new CommandManager<>(entityManagerFactory, new ButtonCommandFactory());
+		final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new ReceiveMessageCommandFactory(deleteJobManager));
+		final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new DeleteMessageCommandFactory(deleteJobManager));
+		final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
+		final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
 
 		return new EventHandler(
-				commandManager,
-				buttonManager,
+				slashCommandManager,
+				buttonCommandManager,
 				messageReceiveManager,
 				messageDeleteManager,
-				menuManager,
-				modalManager
+				menuCommandManager,
+				modalCommandManager
 		);
 	}
 

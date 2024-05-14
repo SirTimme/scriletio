@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
-import dev.sirtimme.scriletio.managers.SlashCommandManager;
+import dev.sirtimme.scriletio.factories.SlashCommandFactory;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.IsOwner;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -13,9 +13,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class UpdateCommand implements ISlashCommand {
-	private final SlashCommandManager manager;
+	private final SlashCommandFactory manager;
 
-	public UpdateCommand(final SlashCommandManager manager) {
+	public UpdateCommand(final SlashCommandFactory manager) {
 		this.manager = manager;
 	}
 

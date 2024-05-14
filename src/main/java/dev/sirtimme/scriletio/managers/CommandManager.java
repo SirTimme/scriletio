@@ -1,20 +1,22 @@
 package dev.sirtimme.scriletio.managers;
 
-import dev.sirtimme.scriletio.commands.ICommand;
-import jakarta.persistence.EntityManager;
+import dev.sirtimme.scriletio.factories.ICommandFactory;
 import jakarta.persistence.EntityManagerFactory;
 import net.dv8tion.jda.api.events.GenericEvent;
 
-public abstract class ContextManager<T extends GenericEvent> {
+public class CommandManager<T extends GenericEvent> implements ICommandManager<T> {
 	private final EntityManagerFactory entityManagerFactory;
+	private final ICommandFactory<T> commandFactory;
 
-	protected ContextManager(final EntityManagerFactory entityManagerFactory) {
+	public CommandManager(final EntityManagerFactory entityManagerFactory, final ICommandFactory<T> commandFactory) {
 		this.entityManagerFactory = entityManagerFactory;
+		this.commandFactory = commandFactory;
 	}
 
+	@Override
 	public void handleCommand(final T event) {
 		final var context = entityManagerFactory.createEntityManager();
-		final var command = getCommand(event, context);
+		final var command = commandFactory.createCommand(event, context);
 
 		if (command.hasInvalidPreconditions(event)) {
 			return;
@@ -30,6 +32,4 @@ public abstract class ContextManager<T extends GenericEvent> {
 			context.close();
 		}
 	}
-
-	protected abstract ICommand<T> getCommand(final T event, final EntityManager context);
 }
