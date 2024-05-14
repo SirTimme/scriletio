@@ -1,11 +1,13 @@
 package dev.sirtimme.scriletio;
 
 import dev.sirtimme.scriletio.events.EventHandler;
+import dev.sirtimme.scriletio.factories.*;
 import dev.sirtimme.scriletio.managers.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.HashMap;
 
@@ -13,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		final var eventHandler = buildEventhandler();
 
-		JDABuilder.createLight(System.getenv("TOKEN"))
+		JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
 				  .addEventListeners(eventHandler)
 				  .setActivity(Activity.playing("Silentium"))
 				  .build();
@@ -21,19 +23,22 @@ public class Main {
 
 	private static EventHandler buildEventhandler() {
 		final var entityManagerFactory = buildEntityManagerFactory();
+		final var deleteJobManager = new DeleteJobManager();
 
-		final var commandManager = new SlashCommandManager(entityManagerFactory);
-		final var buttonManager = new ButtonCommandManager(entityManagerFactory);
-		final var messageManager = new MessageCommandManager(entityManagerFactory);
-		final var menuManager = new MenuCommandManager(entityManagerFactory);
-		final var modalManager = new ModalCommandManager(entityManagerFactory);
+		final var slashCommandManager = new CommandManager<>(entityManagerFactory, new SlashCommandFactory());
+		final var buttonCommandManager = new CommandManager<>(entityManagerFactory, new ButtonCommandFactory());
+		final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new ReceiveMessageCommandFactory(deleteJobManager));
+		final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new DeleteMessageCommandFactory(deleteJobManager));
+		final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
+		final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
 
 		return new EventHandler(
-				commandManager,
-				buttonManager,
-				messageManager,
-				menuManager,
-				modalManager
+				slashCommandManager,
+				buttonCommandManager,
+				messageReceiveManager,
+				messageDeleteManager,
+				menuCommandManager,
+				modalCommandManager
 		);
 	}
 

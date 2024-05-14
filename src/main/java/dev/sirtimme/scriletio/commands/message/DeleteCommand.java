@@ -20,15 +20,12 @@ public class DeleteCommand implements ICommand<MessageDeleteEvent> {
 
 	@Override
 	public void execute(final MessageDeleteEvent event) {
-		final var channelId = event.getChannel().getIdLong();
-		final var deleteConfig = repository.get(channelId);
+		final var deleteConfig = repository.get(event.getChannel().getIdLong());
 		if (deleteConfig == null) {
 			return;
 		}
 
-		final var jobId = event.getMessageIdLong();
-
-		deleteJobManager.cancelJob(jobId);
+		deleteJobManager.cancelJob(event.getMessageIdLong());
 	}
 
 	@Override
