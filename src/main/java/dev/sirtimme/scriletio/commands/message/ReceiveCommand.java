@@ -33,11 +33,7 @@ public class ReceiveCommand implements ICommand<MessageReceivedEvent> {
 			deleteJobManager.cancelJob(jobId);
 		}
 
-		final var jobId = event.getMessageIdLong();
-		final var message = event.getMessage();
-		final var duration = deleteConfig.getDuration();
-
-		deleteJobManager.submitJob(jobId, message, duration);
+		deleteJobManager.submitJob(event, deleteConfig.getDuration());
 	}
 
 	@Override
