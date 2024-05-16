@@ -1,9 +1,0 @@
-[versions]
-hibernate = "6.4.4.Final"
-
-[libraries]
-logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.3" }
-jda = { group = "net.dv8tion", name = "JDA", version = "5.0.0-beta.20" }
-postgres = { group = "org.postgresql", name = "postgresql", version = "42.7.3" }
-hibernate-core = { group = "org.hibernate", name = "hibernate-core", version.ref = "hibernate" }
-hibernate-hikaricp = { group = "org.hibernate", name = "hibernate-hikaricp", version.ref = "hibernate" }
