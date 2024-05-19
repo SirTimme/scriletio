@@ -15,8 +15,8 @@ public class ButtonCommandFactory implements ICommandFactory<ButtonInteractionEv
 
     public ButtonCommandFactory() {
         this.buttonCommands = new HashMap<>();
-        this.buttonCommands.put("registerAccept", entityManager -> new RegisterAcceptButton(new UserRepository(entityManager)));
-        this.buttonCommands.put("registerCancel", entityManager -> new RegisterCancelButton());
+        this.buttonCommands.put("registerAccept", context -> new RegisterAcceptButton(new UserRepository(context)));
+        this.buttonCommands.put("registerCancel", context -> new RegisterCancelButton());
     }
 
     @Override

@@ -15,8 +15,8 @@ public class MenuCommandFactory implements ICommandFactory<StringSelectInteracti
 
     public MenuCommandFactory() {
         this.menuCommands = new HashMap<>();
-        this.menuCommands.put("update", entityManager -> new UpdateMenu());
-        this.menuCommands.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
+        this.menuCommands.put("update", context -> new UpdateMenu());
+        this.menuCommands.put("delete", context -> new DeleteMenu(new UserRepository(context)));
     }
 
     @Override
