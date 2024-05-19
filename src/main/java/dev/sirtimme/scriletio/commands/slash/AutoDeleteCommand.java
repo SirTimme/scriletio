@@ -23,172 +23,154 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.util.List;
 
+import static dev.sirtimme.scriletio.time.TimeUtils.createReadableDuration;
+
 public class AutoDeleteCommand implements ISlashCommand {
-	private final IRepository<User> userRepository;
-	private final IRepository<DeleteConfig> deleteConfigRepository;
+    private final IRepository<User> userRepository;
+    private final IRepository<DeleteConfig> deleteConfigRepository;
 
-	public AutoDeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
-		this.userRepository = userRepository;
-		this.deleteConfigRepository = deleteConfigRepository;
-	}
+    public AutoDeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
+        this.userRepository = userRepository;
+        this.deleteConfigRepository = deleteConfigRepository;
+    }
 
-	@Override
-	public void execute(final SlashCommandInteractionEvent event) {
-		final var subCommand = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
-		switch (subCommand) {
-			case ADD -> handleAddCommand(event);
-			case GET -> handleGetCommand(event);
-			case UPDATE -> handleUpdateCommand(event);
-			case DELETE -> handleDeleteCommand(event);
-		}
-	}
+    @Override
+    public void execute(final SlashCommandInteractionEvent event) {
+        final var subCommand = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
+        switch (subCommand) {
+            case ADD -> handleAddCommand(event);
+            case GET -> handleGetCommand(event);
+            case UPDATE -> handleUpdateCommand(event);
+            case DELETE -> handleDeleteCommand(event);
+        }
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		final var channelOptionData = new OptionData(OptionType.CHANNEL, "channel", "The channel to delete the messages in", true)
-				.setChannelTypes(ChannelType.TEXT);
+    @Override
+    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsRegistered(userRepository),
+            new IsAdmin()
+        );
+    }
 
-		final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
-		final var deleteChannelData = new OptionData(OptionType.CHANNEL, "channel", "Directly specify a channel to delete a config for", false)
-				.setChannelTypes(ChannelType.TEXT);
+    private void handleAddCommand(final SlashCommandInteractionEvent event) {
+        final var durationOption = event.getOption("duration").getAsString();
+        var duration = 0L;
+        try {
+            duration = new Parser().parse(durationOption);
+        } catch (ParsingException exception) {
+            event.reply(Formatter.format(durationOption, exception)).queue();
+            return;
+        }
 
-		final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
-		final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
-		final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config").addOptions(deleteChannelData);
-		final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
+        if (duration == 0) {
+            event.reply("Please specify a duration of at least 1 minute").queue();
+            return;
+        }
 
-		return Commands.slash("autodelete", "Manage auto delete configs")
-					   .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
-	}
+        final var channelOption = event.getOption("channel").getAsChannel();
+        final var config = deleteConfigRepository.get(channelOption.getIdLong());
+        if (config != null) {
+            event.reply("There is already a delete config for that channel!").queue();
+            return;
+        }
 
-	@Override
-	public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsRegistered(userRepository),
-				new IsAdmin()
-		);
-	}
+        final var user = userRepository.get(event.getUser().getIdLong());
 
-	private void handleAddCommand(final SlashCommandInteractionEvent event) {
-		final var user = userRepository.get(event.getUser().getIdLong());
-		if (user.getConfigs().size() == 25) {
-			event.reply("Due to discords limitations, you cannot have more than **25** auto delete configs").queue();
-			return;
-		}
+        user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channelOption.getIdLong(), duration));
 
-		final var durationOption = event.getOption("duration").getAsString();
-		var duration = 0L;
-		try {
-			duration = new Parser().parse(durationOption);
-		} catch (ParsingException exception) {
-			event.reply(Formatter.format(durationOption, exception)).queue();
-			return;
-		}
+        event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
+    }
 
-		if (duration == 0) {
-			event.reply("Please specify a duration of at least 1 minute").queue();
-			return;
-		}
+    private void handleGetCommand(final SlashCommandInteractionEvent event) {
+        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+        if (deleteConfigs.isEmpty()) {
+            event.reply("**" + event.getGuild().getName() + "** has no saved configs").queue();
+            return;
+        }
 
-		final var channelOption = event.getOption("channel").getAsChannel();
-		final var config = deleteConfigRepository.get(channelOption.getIdLong());
-		if (config != null) {
-			event.reply("There is already a delete config for that channel!").queue();
-			return;
-		}
+        event.reply(Formatter.response(deleteConfigs)).queue();
+    }
 
-		user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channelOption.getIdLong(), duration));
+    private void handleUpdateCommand(final SlashCommandInteractionEvent event) {
+        final var selectMenu = buildConfigSelectMenu(event, "update");
+        if (selectMenu == null) {
+            return;
+        }
 
-		event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
-	}
+        event.reply("Please select the config you want to update").addActionRow(selectMenu).queue();
+    }
 
-	private void handleGetCommand(final SlashCommandInteractionEvent event) {
-		final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+    private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
+        final var channelOption = event.getOption("channel");
+        if (channelOption == null) {
+            final var selectMenu = buildConfigSelectMenu(event, "delete");
+            if (selectMenu == null) {
+                return;
+            }
 
-		if (deleteConfigs.isEmpty()) {
-			event.reply("**" + event.getGuild().getName() + "** has no saved configs").queue();
-			return;
-		}
+            event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
+            return;
+        }
 
-		final var sb = new StringBuilder();
-		sb.append("**Saved configs for ").append(event.getGuild().getName()).append(":**\n\n");
+        final var selectedChannel = channelOption.getAsChannel();
+        final var deleteConfig = deleteConfigRepository.get(selectedChannel.getIdLong());
 
-		for (var config : deleteConfigs) {
-			sb.append("- <#").append(config.getChannelId()).append("> ").append(createReadableDuration(config.getDuration())).append("\n");
-		}
+        if (deleteConfig != null) {
+            final var author = deleteConfig.getUser();
 
-		event.reply(sb.toString()).queue();
-	}
+            author.removeConfig(selectedChannel.getIdLong());
 
-	private void handleUpdateCommand(final SlashCommandInteractionEvent event) {
-		final var selectMenu = buildConfigSelectMenu(event, "update");
-		if (selectMenu == null) {
-			return;
-		}
+            event.reply("Config for channel " + selectedChannel.getAsMention() + " has been deleted").queue();
+        }
+    }
 
-		event.reply("Please select the config you want to update").addActionRow(selectMenu).queue();
-	}
+    private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
+        final var userId = event.getUser().getIdLong();
+        final var user = userRepository.get(userId);
+        final var userConfigs = user.getConfigs();
 
-	private void handleDeleteCommand(final SlashCommandInteractionEvent event) {
-		final var channelOption = event.getOption("channel");
-		if (channelOption == null) {
-			final var selectMenu = buildConfigSelectMenu(event, "delete");
-			if (selectMenu == null) {
-				return;
-			}
+        if (userConfigs.isEmpty()) {
+            event.reply("You don't have any configs saved").queue();
+            return null;
+        }
 
-			event.reply("Please select the config you want to delete").addActionRow(selectMenu).queue();
-			return;
-		}
+        final var menuBuilder = StringSelectMenu.create(userId + ":" + menuId).setPlaceholder("Saved configs");
 
-		final var selectedChannel = channelOption.getAsChannel();
-		final var deleteConfig = deleteConfigRepository.get(selectedChannel.getIdLong());
+        for (final var config : userConfigs) {
+            final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
+            final var label = "#" + channel.getName();
+            final var value = String.valueOf(config.getChannelId());
+            final var description = createReadableDuration(config.getDuration());
 
-		if (deleteConfig != null) {
-			final var author = deleteConfig.getUser();
+            menuBuilder.addOption(label, value, description, Emoji.fromUnicode("U+1F4D1"));
+        }
 
-			author.removeConfig(selectedChannel.getIdLong());
+        return menuBuilder.build();
+    }
 
-			event.reply("Config for channel " + selectedChannel.getAsMention() + " has been deleted").queue();
-		}
-	}
+    @Override
+    public CommandData getCommandData() {
+        final var channelOptionData = new OptionData(OptionType.CHANNEL, "channel", "The channel to delete the messages in", true)
+            .setChannelTypes(ChannelType.TEXT);
 
-	private StringSelectMenu buildConfigSelectMenu(final SlashCommandInteractionEvent event, final String menuId) {
-		final var userId = event.getUser().getIdLong();
-		final var user = userRepository.get(userId);
-		final var userConfigs = user.getConfigs();
+        final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
+        final var deleteChannelData = new OptionData(OptionType.NUMBER, "id", "Delete a channel by ID", false);
 
-		if (userConfigs.isEmpty()) {
-			event.reply("You don't have any configs saved").queue();
-			return null;
-		}
+        final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
+        final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
+        final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config").addOptions(deleteChannelData);
+        final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
 
-		final var menuBuilder = StringSelectMenu.create(userId + ":" + menuId).setPlaceholder("Saved configs");
+        return Commands.slash("autodelete", "Manage auto delete configs")
+                       .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
+    }
 
-		for (final var config : userConfigs) {
-			final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
-			final var label = "#" + channel.getName();
-			final var value = String.valueOf(config.getChannelId());
-			final var description = createReadableDuration(config.getDuration());
 
-			menuBuilder.addOption(label, value, description, Emoji.fromUnicode("U+1F4D1"));
-		}
-
-		return menuBuilder.build();
-	}
-
-	private String createReadableDuration(final long minutes) {
-		final var days = minutes / (24 * 60);
-		final var hours = (minutes % (24 * 60)) / 60;
-		final var remaining = minutes % 60;
-
-		return "Duration: " + days + " days, " + hours + " hours, " + remaining + " minutes";
-	}
-
-	private enum DeleteSubCommand {
-		ADD,
-		GET,
-		UPDATE,
-		DELETE,
-	}
+    private enum DeleteSubCommand {
+        ADD,
+        GET,
+        UPDATE,
+        DELETE,
+    }
 }

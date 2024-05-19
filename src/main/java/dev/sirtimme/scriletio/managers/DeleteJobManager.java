@@ -1,40 +1,44 @@
 package dev.sirtimme.scriletio.managers;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class DeleteJobManager {
-	private final ConcurrentMap<Long, ScheduledFuture<?>> pendingJobs;
-	private final ScheduledExecutorService executorService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeleteJobManager.class);
+    private final ConcurrentMap<Long, ScheduledFuture<?>> pendingJobs;
 
-	public DeleteJobManager() {
-		this.pendingJobs = new ConcurrentHashMap<>();
-		this.executorService = Executors.newScheduledThreadPool(5);
-	}
+    public DeleteJobManager() {
+        this.pendingJobs = new ConcurrentHashMap<>();
+    }
 
-	public void cancelJob(final long jobId) {
-		final var deleteJob = pendingJobs.get(jobId);
+    public void cancelJob(final long jobId) {
+        final var deleteJob = pendingJobs.get(jobId);
 
-		if (deleteJob != null) {
-			deleteJob.cancel(true);
-			pendingJobs.remove(jobId);
-		}
-	}
+        if (deleteJob != null) {
+            deleteJob.cancel(true);
+            pendingJobs.remove(jobId);
+        }
+    }
 
-	public void submitJob(final MessageReceivedEvent event, final long duration) {
-		final var jobId = event.getMessageIdLong();
-		final var message = event.getMessage();
+    public void submitJob(final MessageReceivedEvent event, final long minutes) {
+        final var jobId = event.getMessageIdLong();
 
-		final var deleteJob = new Runnable() {
-			@Override
-			public void run() {
-				message.delete().queue();
-				pendingJobs.remove(jobId);
-			}
-		};
+        final var scheduledJob = event
+            .getMessage()
+            .delete()
+            .queueAfter(
+                minutes,
+                TimeUnit.MINUTES,
+                null,
+                error -> LOGGER.error("Message deletion failed: {}", error.getMessage())
+            );
 
-		final var scheduledJob = executorService.schedule(deleteJob, duration, TimeUnit.MINUTES);
-		pendingJobs.put(jobId, scheduledJob);
-	}
+        pendingJobs.put(jobId, scheduledJob);
+    }
 }
