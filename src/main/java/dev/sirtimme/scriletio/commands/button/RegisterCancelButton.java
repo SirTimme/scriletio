@@ -9,15 +9,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class RegisterCancelButton implements ICommand<ButtonInteractionEvent> {
-	@Override
-	public void execute(final ButtonInteractionEvent event) {
-		event.editMessage("Registration has been cancelled").setComponents(Collections.emptyList()).queue();
-	}
+    @Override
+    public void execute(final ButtonInteractionEvent event) {
+        event.editMessage("Registration has been cancelled").setComponents(Collections.emptyList()).queue();
+    }
 
-	@Override
-	public List<IPrecondition<ButtonInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsButtonAuthor()
-		);
-	}
+    @Override
+    public List<IPrecondition<ButtonInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsButtonAuthor()
+        );
+    }
 }

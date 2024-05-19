@@ -11,17 +11,17 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public class MenuCommandFactory implements ICommandFactory<StringSelectInteractionEvent> {
-	private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menuCommands;
+    private final HashMap<String, Function<EntityManager, ICommand<StringSelectInteractionEvent>>> menuCommands;
 
-	public MenuCommandFactory() {
-		this.menuCommands = new HashMap<>();
-		this.menuCommands.put("update", entityManager -> new UpdateMenu());
-		this.menuCommands.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
-	}
+    public MenuCommandFactory() {
+        this.menuCommands = new HashMap<>();
+        this.menuCommands.put("update", entityManager -> new UpdateMenu());
+        this.menuCommands.put("delete", entityManager -> new DeleteMenu(new UserRepository(entityManager)));
+    }
 
-	@Override
-	public ICommand<StringSelectInteractionEvent> createCommand(final StringSelectInteractionEvent event, final EntityManager context) {
-		final var commandName = event.getComponentId().split(":")[1];
-		return menuCommands.get(commandName).apply(context);
-	}
+    @Override
+    public ICommand<StringSelectInteractionEvent> createCommand(final StringSelectInteractionEvent event, final EntityManager context) {
+        final var commandName = event.getComponentId().split(":")[1];
+        return menuCommands.get(commandName).apply(context);
+    }
 }

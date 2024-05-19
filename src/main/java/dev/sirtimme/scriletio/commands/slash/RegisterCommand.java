@@ -14,30 +14,30 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.List;
 
 public class RegisterCommand implements ISlashCommand {
-	private final IRepository<User> repository;
+    private final IRepository<User> repository;
 
-	public RegisterCommand(final IRepository<User> repository) {
-		this.repository = repository;
-	}
+    public RegisterCommand(final IRepository<User> repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public void execute(final SlashCommandInteractionEvent event) {
-		final var userId = event.getUser().getIdLong();
-		final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
-		final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
+    @Override
+    public void execute(final SlashCommandInteractionEvent event) {
+        final var userId = event.getUser().getIdLong();
+        final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
+        final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
 
-		event.reply(Formatter.format()).addActionRow(btnAccept, btnCancel).queue();
-	}
+        event.reply(Formatter.format()).addActionRow(btnAccept, btnCancel).queue();
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		return Commands.slash("register", "Register yourself to use Scriletios services");
-	}
+    @Override
+    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsNotRegistered(repository)
+        );
+    }
 
-	@Override
-	public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsNotRegistered(repository)
-		);
-	}
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash("register", "Register yourself to use Scriletios services");
+    }
 }

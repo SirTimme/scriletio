@@ -11,27 +11,27 @@ import java.util.Collections;
 import java.util.List;
 
 public class DeleteMenu implements ICommand<StringSelectInteractionEvent> {
-	private final IRepository<User> repository;
+    private final IRepository<User> repository;
 
-	public DeleteMenu(final IRepository<User> repository) {
-		this.repository = repository;
-	}
+    public DeleteMenu(final IRepository<User> repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public void execute(final StringSelectInteractionEvent event) {
-		final var userId = event.getUser().getIdLong();
-		final var user = repository.get(userId);
-		final var channelId = event.getValues().getFirst();
+    @Override
+    public void execute(final StringSelectInteractionEvent event) {
+        final var userId = event.getUser().getIdLong();
+        final var user = repository.get(userId);
+        final var channelId = event.getValues().getFirst();
 
-		user.removeConfig(Long.parseLong(channelId));
+        user.removeConfig(Long.parseLong(channelId));
 
-		event.editMessage("Config for channel <#" + channelId + "> was successfully deleted").setComponents(Collections.emptyList()).queue();
-	}
+        event.editMessage("Config for channel <#" + channelId + "> was successfully deleted").setComponents(Collections.emptyList()).queue();
+    }
 
-	@Override
-	public List<IPrecondition<StringSelectInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsMenuAuthor()
-		);
-	}
+    @Override
+    public List<IPrecondition<StringSelectInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsMenuAuthor()
+        );
+    }
 }

@@ -8,14 +8,14 @@ import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class ReceiveMessageCommandFactory implements ICommandFactory<MessageReceivedEvent> {
-	private final DeleteJobManager deleteJobManager;
+    private final DeleteJobManager deleteJobManager;
 
-	public ReceiveMessageCommandFactory(final DeleteJobManager deleteJobManager) {
-		this.deleteJobManager = deleteJobManager;
-	}
+    public ReceiveMessageCommandFactory(final DeleteJobManager deleteJobManager) {
+        this.deleteJobManager = deleteJobManager;
+    }
 
-	@Override
-	public ICommand<MessageReceivedEvent> createCommand(final MessageReceivedEvent event, final EntityManager context) {
-		return new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(context));
-	}
+    @Override
+    public ICommand<MessageReceivedEvent> createCommand(final MessageReceivedEvent event, final EntityManager context) {
+        return new ReceiveCommand(deleteJobManager, new DeleteConfigRepository(context));
+    }
 }

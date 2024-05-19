@@ -14,42 +14,42 @@ import java.util.Collections;
 import java.util.List;
 
 public class UpdateModal implements ICommand<ModalInteractionEvent> {
-	private final IRepository<DeleteConfig> repository;
+    private final IRepository<DeleteConfig> repository;
 
-	public UpdateModal(final IRepository<DeleteConfig> repository) {
-		this.repository = repository;
-	}
+    public UpdateModal(final IRepository<DeleteConfig> repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public void execute(final ModalInteractionEvent event) {
-		final var durationString = event.getValues().getFirst().getAsString();
-		var newDuration = 0L;
-		try {
-			newDuration = new Parser().parse(durationString);
-		} catch (ParsingException exception) {
-			event.editMessage(Formatter.format(durationString, exception)).setComponents(Collections.emptyList()).queue();
-			return;
-		}
+    @Override
+    public void execute(final ModalInteractionEvent event) {
+        final var durationString = event.getValues().getFirst().getAsString();
+        var newDuration = 0L;
+        try {
+            newDuration = new Parser().parse(durationString);
+        } catch (ParsingException exception) {
+            event.editMessage(Formatter.format(durationString, exception)).setComponents(Collections.emptyList()).queue();
+            return;
+        }
 
-		if (newDuration == 0) {
-			event.reply("Please specify a duration of at least 1 minute").queue();
-			return;
-		}
+        if (newDuration == 0) {
+            event.reply("Please specify a duration of at least 1 minute").queue();
+            return;
+        }
 
-		final var channelId = event.getModalId().split(":")[2];
-		final var config = repository.get(Long.parseLong(channelId));
+        final var channelId = event.getModalId().split(":")[2];
+        final var config = repository.get(Long.parseLong(channelId));
 
-		config.setDuration(newDuration);
+        config.setDuration(newDuration);
 
-		event.editMessage("Config for channel <#" + config.getChannelId() + "> was updated successfully. The new duration is **" + newDuration + "** minutes")
-			 .setComponents(Collections.emptyList())
-			 .queue();
-	}
+        event.editMessage("Config for channel <#" + config.getChannelId() + "> was updated successfully. The new duration is **" + newDuration + "** minutes")
+             .setComponents(Collections.emptyList())
+             .queue();
+    }
 
-	@Override
-	public List<IPrecondition<ModalInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsModalAuthor()
-		);
-	}
+    @Override
+    public List<IPrecondition<ModalInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsModalAuthor()
+        );
+    }
 }

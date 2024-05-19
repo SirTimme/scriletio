@@ -11,26 +11,26 @@ import java.util.Collections;
 import java.util.List;
 
 public class RegisterAcceptButton implements ICommand<ButtonInteractionEvent> {
-	private final IRepository<User> repository;
+    private final IRepository<User> repository;
 
-	public RegisterAcceptButton(final IRepository<User> repository) {
-		this.repository = repository;
-	}
+    public RegisterAcceptButton(final IRepository<User> repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public void execute(final ButtonInteractionEvent event) {
-		final var userId = event.getUser().getIdLong();
-		final var user = new User(userId, List.of());
+    @Override
+    public void execute(final ButtonInteractionEvent event) {
+        final var userId = event.getUser().getIdLong();
+        final var user = new User(userId, List.of());
 
-		repository.add(user);
+        repository.add(user);
 
-		event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();
-	}
+        event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();
+    }
 
-	@Override
-	public List<IPrecondition<ButtonInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsButtonAuthor()
-		);
-	}
+    @Override
+    public List<IPrecondition<ButtonInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsButtonAuthor()
+        );
+    }
 }

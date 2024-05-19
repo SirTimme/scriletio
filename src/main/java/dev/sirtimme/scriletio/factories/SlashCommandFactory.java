@@ -17,26 +17,26 @@ import java.util.List;
 import java.util.function.Function;
 
 public class SlashCommandFactory implements ICommandFactory<SlashCommandInteractionEvent> {
-	private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
+    private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
 
-	public SlashCommandFactory() {
-		this.slashCommands = new HashMap<>();
-		this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
-		this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
-		this.slashCommands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
-		this.slashCommands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
-	}
+    public SlashCommandFactory() {
+        this.slashCommands = new HashMap<>();
+        this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
+        this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
+        this.slashCommands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
+        this.slashCommands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
+    }
 
-	@Override
-	public ICommand<SlashCommandInteractionEvent> createCommand(final SlashCommandInteractionEvent event, final EntityManager context) {
-		return slashCommands.get(event.getName()).apply(context);
-	}
+    @Override
+    public ICommand<SlashCommandInteractionEvent> createCommand(final SlashCommandInteractionEvent event, final EntityManager context) {
+        return slashCommands.get(event.getName()).apply(context);
+    }
 
-	public List<CommandData> getCommandData() {
-		return slashCommands
-				.values()
-				.stream()
-				.map(function -> function.apply(null).getCommandData())
-				.toList();
-	}
+    public List<CommandData> getCommandData() {
+        return slashCommands
+            .values()
+            .stream()
+            .map(function -> function.apply(null).getCommandData())
+            .toList();
+    }
 }

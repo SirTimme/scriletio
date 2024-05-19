@@ -13,31 +13,31 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class DeleteCommand implements ISlashCommand {
-	private final IRepository<User> repository;
+    private final IRepository<User> repository;
 
-	public DeleteCommand(final IRepository<User> repository) {
-		this.repository = repository;
-	}
+    public DeleteCommand(final IRepository<User> repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public void execute(final SlashCommandInteractionEvent event) {
-		final var user = repository.get(event.getUser().getIdLong());
+    @Override
+    public void execute(final SlashCommandInteractionEvent event) {
+        final var user = repository.get(event.getUser().getIdLong());
 
-		repository.delete(user);
+        repository.delete(user);
 
-		event.reply("All of your stored data is gone").queue();
-	}
+        event.reply("All of your stored data is gone").queue();
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		return Commands.slash("delete", "Deletes all of your stored data")
-					   .setDescriptionLocalization(DiscordLocale.GERMAN, "Löscht all deine gespeicherten Daten");
-	}
+    @Override
+    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsRegistered(repository)
+        );
+    }
 
-	@Override
-	public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsRegistered(repository)
-		);
-	}
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash("delete", "Deletes all of your stored data")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Löscht all deine gespeicherten Daten");
+    }
 }

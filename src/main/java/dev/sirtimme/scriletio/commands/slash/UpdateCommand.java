@@ -13,34 +13,34 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class UpdateCommand implements ISlashCommand {
-	private final SlashCommandFactory manager;
+    private final SlashCommandFactory manager;
 
-	public UpdateCommand(final SlashCommandFactory manager) {
-		this.manager = manager;
-	}
+    public UpdateCommand(final SlashCommandFactory manager) {
+        this.manager = manager;
+    }
 
-	@Override
-	public void execute(final SlashCommandInteractionEvent event) {
-		event.getJDA()
-			 .updateCommands()
-			 .addCommands(manager.getCommandData())
-			 .queue();
+    @Override
+    public void execute(final SlashCommandInteractionEvent event) {
+        event.getJDA()
+             .updateCommands()
+             .addCommands(manager.getCommandData())
+             .queue();
 
-		event.reply("Update of slash commands were successful!").queue();
-	}
+        event.reply("Update of slash commands were successful!").queue();
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		return Commands.slash("update", "Refreshes all slash commands")
-					   .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
-					   .setGuildOnly(true)
-					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
-	}
+    @Override
+    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+        return List.of(
+            new IsOwner()
+        );
+    }
 
-	@Override
-	public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-		return List.of(
-				new IsOwner()
-		);
-	}
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash("update", "Refreshes all slash commands")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
+                       .setGuildOnly(true)
+                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+    }
 }
