@@ -31,6 +31,7 @@ public class DeleteTaskManager {
         final var millisecondsRemaining = deleteTask.getDeletedAt().getTime() - System.currentTimeMillis();
         final var minutes = TimeUnit.MILLISECONDS.toMinutes(millisecondsRemaining);
 
+        // TODO permission checking
         final var scheduledTask = message
             .delete()
             .queueAfter(
