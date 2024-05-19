@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio;
 import dev.sirtimme.scriletio.events.EventHandler;
 import dev.sirtimme.scriletio.factories.*;
 import dev.sirtimme.scriletio.managers.CommandManager;
-import dev.sirtimme.scriletio.managers.DeleteJobManager;
+import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
@@ -24,14 +24,15 @@ public class Main {
 
     private static EventHandler buildEventhandler() {
         final var entityManagerFactory = buildEntityManagerFactory();
-        final var deleteJobManager = new DeleteJobManager();
+        final var deleteTaskManager = new DeleteTaskManager();
 
         final var slashCommandManager = new CommandManager<>(entityManagerFactory, new SlashCommandFactory());
         final var buttonCommandManager = new CommandManager<>(entityManagerFactory, new ButtonCommandFactory());
-        final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new ReceiveMessageCommandFactory(deleteJobManager));
-        final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new DeleteMessageCommandFactory(deleteJobManager));
+        final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new ReceiveMessageCommandFactory(deleteTaskManager));
+        final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new DeleteMessageCommandFactory(deleteTaskManager));
         final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
         final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
+        final var guildReadyCommandManager = new CommandManager<>(entityManagerFactory, new GuildReadyCommandFactory(deleteTaskManager));
 
         return new EventHandler(
             slashCommandManager,
@@ -39,7 +40,8 @@ public class Main {
             messageReceiveManager,
             messageDeleteManager,
             menuCommandManager,
-            modalCommandManager
+            modalCommandManager,
+            guildReadyCommandManager
         );
     }
 

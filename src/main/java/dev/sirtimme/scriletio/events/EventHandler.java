@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.events;
 
 import dev.sirtimme.scriletio.managers.ICommandManager;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -17,6 +18,7 @@ public class EventHandler extends ListenerAdapter {
     private final ICommandManager<MessageDeleteEvent> deleteMessageCommandManager;
     private final ICommandManager<StringSelectInteractionEvent> menuCommandManager;
     private final ICommandManager<ModalInteractionEvent> modalCommandManager;
+    private final ICommandManager<GuildReadyEvent> guildReadyCommandManager;
 
     public EventHandler(
         final ICommandManager<SlashCommandInteractionEvent> slashCommandManager,
@@ -24,7 +26,8 @@ public class EventHandler extends ListenerAdapter {
         final ICommandManager<MessageReceivedEvent> receiveMessageCommandManager,
         final ICommandManager<MessageDeleteEvent> deleteMessageCommandManager,
         final ICommandManager<StringSelectInteractionEvent> menuCommandManager,
-        final ICommandManager<ModalInteractionEvent> modalCommandManager
+        final ICommandManager<ModalInteractionEvent> modalCommandManager,
+        final ICommandManager<GuildReadyEvent> guildReadyCommandManager
     ) {
         this.slashCommandManager = slashCommandManager;
         this.buttonCommandManager = buttonCommandManager;
@@ -32,6 +35,7 @@ public class EventHandler extends ListenerAdapter {
         this.deleteMessageCommandManager = deleteMessageCommandManager;
         this.menuCommandManager = menuCommandManager;
         this.modalCommandManager = modalCommandManager;
+        this.guildReadyCommandManager = guildReadyCommandManager;
     }
 
     @Override
@@ -62,5 +66,10 @@ public class EventHandler extends ListenerAdapter {
     @Override
     public void onMessageDelete(@NotNull final MessageDeleteEvent event) {
         deleteMessageCommandManager.handleCommand(event);
+    }
+
+    @Override
+    public void onGuildReady(@NotNull final GuildReadyEvent event) {
+        guildReadyCommandManager.handleCommand(event);
     }
 }

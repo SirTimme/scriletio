@@ -77,7 +77,12 @@ public class AutoDeleteCommand implements ISlashCommand {
 
         final var user = userRepository.get(event.getUser().getIdLong());
 
-        user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channelOption.getIdLong(), duration));
+        user.addConfig(new DeleteConfig(
+            user,
+            event.getGuild().getIdLong(),
+            channelOption.getIdLong(),
+            duration
+        ));
 
         event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
     }
