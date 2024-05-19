@@ -6,7 +6,7 @@ import org.hibernate.annotations.NaturalId;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "delete_tasks", indexes = @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"))
+@Table(name = "delete_tasks", indexes = @Index(name = "idx_task_channel_id", columnList = "channel_id"))
 @NamedQuery(name = "DeleteTask_findByChannelId", query = "FROM DeleteTask WHERE channelId = :channelId")
 public class DeleteTask {
     @Id
