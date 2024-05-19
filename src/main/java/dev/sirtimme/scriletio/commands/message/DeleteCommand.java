@@ -15,7 +15,11 @@ public class DeleteCommand implements ICommand<MessageDeleteEvent> {
     private final IRepository<DeleteConfig> configRepository;
     private final IRepository<DeleteTask> taskRepository;
 
-    public DeleteCommand(final DeleteTaskManager deleteTaskManager, final IRepository<DeleteConfig> configRepository, final IRepository<DeleteTask> taskRepository) {
+    public DeleteCommand(
+        final DeleteTaskManager deleteTaskManager,
+        final IRepository<DeleteConfig> configRepository,
+        final IRepository<DeleteTask> taskRepository
+    ) {
         this.deleteTaskManager = deleteTaskManager;
         this.configRepository = configRepository;
         this.taskRepository = taskRepository;
