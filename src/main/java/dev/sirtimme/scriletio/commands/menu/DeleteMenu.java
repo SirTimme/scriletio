@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.menu;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.menu.IsMenuAuthor;
 import dev.sirtimme.scriletio.repositories.IRepository;
@@ -11,19 +11,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class DeleteMenu implements ICommand<StringSelectInteractionEvent> {
-    private final IRepository<User> repository;
+    private final IRepository<DeleteConfig> configRepository;
 
-    public DeleteMenu(final IRepository<User> repository) {
-        this.repository = repository;
+    public DeleteMenu(final IRepository<DeleteConfig> configRepository) {
+        this.configRepository = configRepository;
     }
 
     @Override
     public void execute(final StringSelectInteractionEvent event) {
-        final var userId = event.getUser().getIdLong();
-        final var user = repository.get(userId);
         final var channelId = event.getValues().getFirst();
+        final var deleteConfig = configRepository.get(Long.parseLong(channelId));
 
-        user.removeConfig(Long.parseLong(channelId));
+        configRepository.delete(deleteConfig);
 
         event.editMessage("Config for channel <#" + channelId + "> was successfully deleted").setComponents(Collections.emptyList()).queue();
     }

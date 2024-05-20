@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.factories;
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.commands.menu.DeleteMenu;
 import dev.sirtimme.scriletio.commands.menu.UpdateMenu;
-import dev.sirtimme.scriletio.repositories.UserRepository;
+import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
@@ -16,7 +16,7 @@ public class MenuCommandFactory implements ICommandFactory<StringSelectInteracti
     public MenuCommandFactory() {
         this.menuCommands = new HashMap<>();
         this.menuCommands.put("update", context -> new UpdateMenu());
-        this.menuCommands.put("delete", context -> new DeleteMenu(new UserRepository(context)));
+        this.menuCommands.put("delete", context -> new DeleteMenu(new DeleteConfigRepository(context)));
     }
 
     @Override

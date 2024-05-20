@@ -8,7 +8,7 @@
     <persistence-unit name="scriletio">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>dev.sirtimme.scriletio.models.User</class>
+        <class>dev.sirtimme.scriletio.models.Agreement</class>
         <class>dev.sirtimme.scriletio.models.DeleteConfig</class>
         <class>dev.sirtimme.scriletio.models.DeleteTask</class>
 

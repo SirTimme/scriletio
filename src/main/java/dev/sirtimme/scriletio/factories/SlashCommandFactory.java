@@ -6,8 +6,8 @@ import dev.sirtimme.scriletio.commands.slash.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.DeleteCommand;
 import dev.sirtimme.scriletio.commands.slash.RegisterCommand;
 import dev.sirtimme.scriletio.commands.slash.UpdateCommand;
+import dev.sirtimme.scriletio.repositories.AgreementRepository;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
-import dev.sirtimme.scriletio.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -22,9 +22,9 @@ public class SlashCommandFactory implements ICommandFactory<SlashCommandInteract
     public SlashCommandFactory() {
         this.slashCommands = new HashMap<>();
         this.slashCommands.put("update", context -> new UpdateCommand(this));
-        this.slashCommands.put("autodelete", context -> new AutoDeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
-        this.slashCommands.put("register", context -> new RegisterCommand(new UserRepository(context)));
-        this.slashCommands.put("delete", context -> new DeleteCommand(new UserRepository(context)));
+        this.slashCommands.put("autodelete", context -> new AutoDeleteCommand(new AgreementRepository(context), new DeleteConfigRepository(context)));
+        this.slashCommands.put("register", context -> new RegisterCommand(new AgreementRepository(context)));
+        this.slashCommands.put("delete", context -> new DeleteCommand(new AgreementRepository(context)));
     }
 
     @Override

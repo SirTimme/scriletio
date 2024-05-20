@@ -11,8 +11,8 @@ public class DeleteConfig {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    private User user;
+    @Column(name = "author_id", nullable = false)
+    private long authorId;
 
     @Column(name = "guild_id", nullable = false)
     private long guildId;
@@ -28,8 +28,8 @@ public class DeleteConfig {
     public DeleteConfig() {
     }
 
-    public DeleteConfig(final User user, final long guildId, final long channelId, final long duration) {
-        this.user = user;
+    public DeleteConfig(final long authorId, final long guildId, final long channelId, final long duration) {
+        this.authorId = authorId;
         this.guildId = guildId;
         this.channelId = channelId;
         this.duration = duration;
@@ -45,10 +45,6 @@ public class DeleteConfig {
 
     public long getChannelId() {
         return this.channelId;
-    }
-
-    public User getUser() {
-        return this.user;
     }
 
     public long getId() {
