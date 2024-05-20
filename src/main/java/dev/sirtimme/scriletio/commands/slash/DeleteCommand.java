@@ -13,17 +13,17 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class DeleteCommand implements ISlashCommand {
-    private final IRepository<Agreement> repository;
+    private final IRepository<Agreement> agreementRepository;
 
-    public DeleteCommand(final IRepository<Agreement> repository) {
-        this.repository = repository;
+    public DeleteCommand(final IRepository<Agreement> agreementRepository) {
+        this.agreementRepository = agreementRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        final var user = repository.get(event.getUser().getIdLong());
+        final var user = agreementRepository.get(event.getUser().getIdLong());
 
-        repository.delete(user);
+        agreementRepository.delete(user);
 
         event.reply("All of your stored data is gone").queue();
     }
@@ -31,7 +31,7 @@ public class DeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsRegistered(repository)
+            new IsRegistered(agreementRepository)
         );
     }
 
