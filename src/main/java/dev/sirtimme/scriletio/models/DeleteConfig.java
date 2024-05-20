@@ -6,7 +6,8 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Table(name = "delete_configs", indexes = {
     @Index(name = "idx_config_channel_id", unique = true, columnList = "channel_id"),
-    @Index(name = "idx_config_guild_id", columnList = "guild_id")
+    @Index(name = "idx_config_guild_id", columnList = "guild_id"),
+    @Index(name = "idx_config_author_id", columnList = "author_id")
 })
 public class DeleteConfig {
     @Id
