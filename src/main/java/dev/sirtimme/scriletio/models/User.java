@@ -45,8 +45,4 @@ public class User {
     public List<DeleteConfig> getConfigs() {
         return this.configs;
     }
-
-    public long getUserId() {
-        return this.userId;
-    }
 }

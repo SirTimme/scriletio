@@ -77,7 +77,12 @@ public class AutoDeleteCommand implements ISlashCommand {
 
         final var user = userRepository.get(event.getUser().getIdLong());
 
-        user.addConfig(new DeleteConfig(user, event.getGuild().getIdLong(), channelOption.getIdLong(), duration));
+        user.addConfig(new DeleteConfig(
+            user,
+            event.getGuild().getIdLong(),
+            channelOption.getIdLong(),
+            duration
+        ));
 
         event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
     }
@@ -155,17 +160,15 @@ public class AutoDeleteCommand implements ISlashCommand {
             .setChannelTypes(ChannelType.TEXT);
 
         final var durationOptionData = new OptionData(OptionType.STRING, "duration", "Delete messages after specified duration", true);
-        final var deleteChannelData = new OptionData(OptionType.NUMBER, "id", "Delete a channel by ID", false);
 
         final var addCommandData = new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
         final var getCommandData = new SubcommandData("get", "Displays all of your create auto delete configs");
-        final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config").addOptions(deleteChannelData);
+        final var deleteCommandData = new SubcommandData("delete", "Deletes an existing auto delete config");
         final var updateCommandData = new SubcommandData("update", "Updates an existing auto delete config");
 
         return Commands.slash("autodelete", "Manage auto delete configs")
                        .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
     }
-
 
     private enum DeleteSubCommand {
         ADD,

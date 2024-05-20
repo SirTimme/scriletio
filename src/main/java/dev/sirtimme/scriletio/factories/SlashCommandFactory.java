@@ -21,10 +21,10 @@ public class SlashCommandFactory implements ICommandFactory<SlashCommandInteract
 
     public SlashCommandFactory() {
         this.slashCommands = new HashMap<>();
-        this.slashCommands.put("update", entityManager -> new UpdateCommand(this));
-        this.slashCommands.put("autodelete", entityManager -> new AutoDeleteCommand(new UserRepository(entityManager), new DeleteConfigRepository(entityManager)));
-        this.slashCommands.put("register", entityManager -> new RegisterCommand(new UserRepository(entityManager)));
-        this.slashCommands.put("delete", entityManager -> new DeleteCommand(new UserRepository(entityManager)));
+        this.slashCommands.put("update", context -> new UpdateCommand(this));
+        this.slashCommands.put("autodelete", context -> new AutoDeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
+        this.slashCommands.put("register", context -> new RegisterCommand(new UserRepository(context)));
+        this.slashCommands.put("delete", context -> new DeleteCommand(new UserRepository(context)));
     }
 
     @Override

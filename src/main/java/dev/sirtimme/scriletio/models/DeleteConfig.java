@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "delete_configs", indexes = { @Index(name = "idx_channel_id", unique = true, columnList = "channel_id"), @Index(name = "idx_guild_id", columnList = "guild_id") })
+@Table(name = "delete_configs", indexes = { @Index(name = "idx_config_channel_id", unique = true, columnList = "channel_id"), @Index(name = "idx_config_guild_id", columnList = "guild_id") })
 @NamedQuery(name = "DeleteConfig_findByGuildId", query = "FROM DeleteConfig WHERE guildId = :guildId")
 public class DeleteConfig {
     @Id
