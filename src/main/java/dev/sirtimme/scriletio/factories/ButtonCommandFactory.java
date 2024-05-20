@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.factories;
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.commands.button.RegisterAcceptButton;
 import dev.sirtimme.scriletio.commands.button.RegisterCancelButton;
-import dev.sirtimme.scriletio.repositories.UserRepository;
+import dev.sirtimme.scriletio.repositories.AgreementRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
@@ -15,7 +15,7 @@ public class ButtonCommandFactory implements ICommandFactory<ButtonInteractionEv
 
     public ButtonCommandFactory() {
         this.buttonCommands = new HashMap<>();
-        this.buttonCommands.put("registerAccept", context -> new RegisterAcceptButton(new UserRepository(context)));
+        this.buttonCommands.put("registerAccept", context -> new RegisterAcceptButton(new AgreementRepository(context)));
         this.buttonCommands.put("registerCancel", context -> new RegisterCancelButton());
     }
 

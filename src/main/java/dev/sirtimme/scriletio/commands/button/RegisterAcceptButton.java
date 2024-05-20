@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.button;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.models.Agreement;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.button.IsButtonAuthor;
 import dev.sirtimme.scriletio.repositories.IRepository;
@@ -11,18 +11,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class RegisterAcceptButton implements ICommand<ButtonInteractionEvent> {
-    private final IRepository<User> repository;
+    private final IRepository<Agreement> agreementRepository;
 
-    public RegisterAcceptButton(final IRepository<User> repository) {
-        this.repository = repository;
+    public RegisterAcceptButton(final IRepository<Agreement> agreementRepository) {
+        this.agreementRepository = agreementRepository;
     }
 
     @Override
     public void execute(final ButtonInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-        final var user = new User(userId, List.of());
 
-        repository.add(user);
+        agreementRepository.add(new Agreement(userId));
 
         event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();
     }

@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
-import dev.sirtimme.scriletio.models.User;
+import dev.sirtimme.scriletio.models.Agreement;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.IsRegistered;
 import dev.sirtimme.scriletio.repositories.IRepository;
@@ -13,9 +13,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class DeleteCommand implements ISlashCommand {
-    private final IRepository<User> repository;
+    private final IRepository<Agreement> repository;
 
-    public DeleteCommand(final IRepository<User> repository) {
+    public DeleteCommand(final IRepository<Agreement> repository) {
         this.repository = repository;
     }
 
