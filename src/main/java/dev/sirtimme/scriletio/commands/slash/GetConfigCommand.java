@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.slash.subcommands;
+package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.format.Formatter;
