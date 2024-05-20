@@ -27,9 +27,18 @@ public class DeleteConfigRepository implements IRepository<DeleteConfig> {
     public List<DeleteConfig> findAll(final long id) {
         return context
             .unwrap(Session.class)
-            .createNamedQuery("DeleteConfig_findByGuildId", DeleteConfig.class)
+            .createSelectionQuery("FROM DeleteConfig WHERE guildId = :guildId", DeleteConfig.class)
             .setParameter("guildId", id)
             .list();
+    }
+
+    @Override
+    public void deleteAll(final long id) {
+        context
+            .unwrap(Session.class)
+            .createMutationQuery("DELETE FROM DeleteConfig WHERE authorId = :authorId")
+            .setParameter("authorId", id)
+            .executeUpdate();
     }
 
     @Override

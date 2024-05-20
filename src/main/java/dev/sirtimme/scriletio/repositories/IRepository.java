@@ -9,5 +9,7 @@ public interface IRepository<T> {
 
     List<T> findAll(final long id);
 
+    void deleteAll(final long id);
+
     void delete(final T entity);
 }

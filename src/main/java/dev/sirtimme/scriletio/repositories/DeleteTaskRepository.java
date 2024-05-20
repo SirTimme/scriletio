@@ -30,9 +30,14 @@ public class DeleteTaskRepository implements IRepository<DeleteTask> {
     public List<DeleteTask> findAll(final long id) {
         return context
             .unwrap(Session.class)
-            .createNamedQuery("DeleteTask_findByChannelId", DeleteTask.class)
+            .createSelectionQuery("FROM DeleteTask WHERE channelId = :channelId", DeleteTask.class)
             .setParameter("channelId", id)
             .list();
+    }
+
+    @Override
+    public void deleteAll(final long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

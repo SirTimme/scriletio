@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "delete_tasks", indexes = @Index(name = "idx_task_channel_id", columnList = "channel_id"))
-@NamedQuery(name = "DeleteTask_findByChannelId", query = "FROM DeleteTask WHERE channelId = :channelId")
 public class DeleteTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
