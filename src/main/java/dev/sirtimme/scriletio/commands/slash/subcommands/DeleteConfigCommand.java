@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.slash.admin;
+package dev.sirtimme.scriletio.commands.slash.subcommands;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.models.DeleteConfig;
@@ -15,17 +15,17 @@ import java.util.List;
 
 import static dev.sirtimme.scriletio.time.TimeUtils.createReadableDuration;
 
-public class UpdateConfigCommand implements ICommand<SlashCommandInteractionEvent> {
+public class DeleteConfigCommand implements ICommand<SlashCommandInteractionEvent> {
     private final IRepository<DeleteConfig> deleteConfigRepository;
 
-    public UpdateConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository) {
+    public DeleteConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository) {
         this.deleteConfigRepository = deleteConfigRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
-        final var updateMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "update").setPlaceholder("Saved configs");
+        final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "delete").setPlaceholder("Saved configs");
 
         for (final var config : deleteConfigs) {
             final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
@@ -33,10 +33,10 @@ public class UpdateConfigCommand implements ICommand<SlashCommandInteractionEven
             final var value = String.valueOf(config.getChannelId());
             final var description = createReadableDuration(config.getDuration());
 
-            updateMenuBuilder.addOption(channelName, value, description, Emoji.fromUnicode("U+1F4D1"));
+            deleteMenuBuilder.addOption(channelName, value, description, Emoji.fromUnicode("U+1F4D1"));
         }
 
-        event.reply("Please select the config you want to update").addActionRow(updateMenuBuilder.build()).queue();
+        event.reply("Please select the config you want to delete").addActionRow(deleteMenuBuilder.build()).queue();
     }
 
     @Override
@@ -47,6 +47,6 @@ public class UpdateConfigCommand implements ICommand<SlashCommandInteractionEven
     }
 
     public static SubcommandData getSubcommandData() {
-        return new SubcommandData("update", "Updates an existing auto delete config");
+        return new SubcommandData("delete", "Deletes an existing auto delete config");
     }
 }

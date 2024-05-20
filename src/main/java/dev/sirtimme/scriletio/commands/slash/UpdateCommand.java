@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.slash.owner;
+package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.factories.SlashCommandFactory;

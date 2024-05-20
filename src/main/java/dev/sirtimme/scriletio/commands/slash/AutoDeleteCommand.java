@@ -1,6 +1,10 @@
-package dev.sirtimme.scriletio.commands.slash.admin;
+package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.slash.subcommands.AddConfigCommand;
+import dev.sirtimme.scriletio.commands.slash.subcommands.DeleteConfigCommand;
+import dev.sirtimme.scriletio.commands.slash.subcommands.GetConfigCommand;
+import dev.sirtimme.scriletio.commands.slash.subcommands.UpdateConfigCommand;
 import dev.sirtimme.scriletio.models.Agreement;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
