@@ -25,6 +25,7 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
     @Override
     public void execute(final GuildReadyEvent event) {
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
+        LOGGER.debug("Found {} configs for guild with id {}", deleteConfigs.size(), event.getGuild().getIdLong());
 
         for (final var deleteConfig : deleteConfigs) {
             final var channel = event.getGuild().getChannelById(TextChannel.class, deleteConfig.getChannelId());
@@ -35,11 +36,14 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
             }
 
             for (final var deleteTask : deleteConfig.getDeleteTasks()) {
+                // TODO do this with queue...
                 channel.retrieveMessageById(deleteTask.getMessageId()).queue(
-                    message -> deleteTaskManager.submitTask(deleteTask, message),
+                    message -> {
+                        LOGGER.debug("Submitted delete task for message with {}", deleteTask.getMessageId());
+                        deleteTaskManager.submitTask(deleteTask, message);
+                    },
                     error -> {
                         LOGGER.warn("Could not retrieve message with id {}", deleteTask.getMessageId());
-                        // TODO make this work...
                         deleteConfig.getDeleteTasks().remove(deleteTask);
                     }
                 );
