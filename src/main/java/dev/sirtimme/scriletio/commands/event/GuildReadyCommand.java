@@ -36,7 +36,6 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
             }
 
             for (final var deleteTask : deleteConfig.getDeleteTasks()) {
-                // TODO do this with queue...
                 channel.retrieveMessageById(deleteTask.getMessageId()).queue(
                     message -> {
                         LOGGER.debug("Submitted delete task for message with id {}", deleteTask.getMessageId());
@@ -44,6 +43,7 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
                     },
                     error -> {
                         LOGGER.warn("Could not retrieve message with id {}", deleteTask.getMessageId());
+                        // TODO test this..
                         deleteConfig.getDeleteTasks().remove(deleteTask);
                     }
                 );
