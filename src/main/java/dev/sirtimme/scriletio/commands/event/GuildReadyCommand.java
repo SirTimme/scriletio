@@ -39,7 +39,7 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
                 // TODO do this with queue...
                 channel.retrieveMessageById(deleteTask.getMessageId()).queue(
                     message -> {
-                        LOGGER.debug("Submitted delete task for message with {}", deleteTask.getMessageId());
+                        LOGGER.debug("Submitted delete task for message with id {}", deleteTask.getMessageId());
                         deleteTaskManager.submitTask(deleteTask, message);
                     },
                     error -> {
