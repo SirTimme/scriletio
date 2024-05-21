@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.message;
+package dev.sirtimme.scriletio.commands.event;
 
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
@@ -13,11 +13,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ReceiveCommand implements ICommand<MessageReceivedEvent> {
+public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
     private final DeleteTaskManager deleteTaskManager;
     private final IRepository<DeleteConfig> configRepository;
 
-    public ReceiveCommand(final DeleteTaskManager deleteTaskManager, final IRepository<DeleteConfig> configRepository) {
+    public MessageReceiveCommand(final DeleteTaskManager deleteTaskManager, final IRepository<DeleteConfig> configRepository) {
         this.deleteTaskManager = deleteTaskManager;
         this.configRepository = configRepository;
     }
@@ -31,9 +31,12 @@ public class ReceiveCommand implements ICommand<MessageReceivedEvent> {
 
         if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
             final var msgReference = event.getMessage().getMessageReference();
-
             // since this is a pinned message notification there is always a message reference
             final var deleteTask = deleteConfig.getTask(msgReference.getMessageIdLong());
+
+            if (deleteTask == null) {
+                return;
+            }
 
             deleteTaskManager.cancelTask(deleteTask);
             deleteConfig.getDeleteTasks().remove(deleteTask);

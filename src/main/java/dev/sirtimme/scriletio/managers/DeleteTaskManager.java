@@ -21,10 +21,8 @@ public class DeleteTaskManager {
     public void cancelTask(final DeleteTask deleteTask) {
         final var deleteJob = pendingTasks.get(deleteTask.getMessageId());
 
-        if (deleteJob != null) {
-            deleteJob.cancel(true);
-            pendingTasks.remove(deleteTask.getMessageId());
-        }
+        deleteJob.cancel(true);
+        pendingTasks.remove(deleteTask.getMessageId());
     }
 
     public void submitTask(final DeleteTask deleteTask, final Message message) {
