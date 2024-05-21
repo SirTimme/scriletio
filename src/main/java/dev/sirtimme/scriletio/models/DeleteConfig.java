@@ -45,7 +45,7 @@ public class DeleteConfig {
     }
 
     public DeleteTask getTask(final long messageId) {
-        return this.deleteTasks.stream().filter(task -> task.getMessageId() == messageId).findFirst().get();
+        return this.deleteTasks.stream().filter(task -> task.getMessageId() == messageId).findFirst().orElse(null);
     }
 
     public List<DeleteTask> getDeleteTasks() {

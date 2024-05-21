@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "delete_tasks", indexes = @Index(name = "idx_task_channel_id", columnList = "channel_id"))
+@Table(name = "delete_tasks")
 public class DeleteTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
