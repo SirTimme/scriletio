@@ -24,6 +24,7 @@ public class AutoDeleteCommand implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
+        // this command only consists of subcommands
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
         final var subCommand = switch (subCommandName) {
             case ADD -> new AddConfigCommand(deleteConfigRepository);
@@ -50,7 +51,9 @@ public class AutoDeleteCommand implements ISlashCommand {
         final var deleteCommandData = DeleteConfigCommand.getSubcommandData();
         final var updateCommandData = UpdateConfigCommand.getSubcommandData();
 
-        return Commands.slash("autodelete", "Manage auto delete configs").addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData);
+        return Commands.slash("autodelete", "Manage auto delete configs")
+                       .addSubcommands(addCommandData, getCommandData, deleteCommandData, updateCommandData)
+                       .setGuildOnly(true);
     }
 
     private enum DeleteSubCommand {

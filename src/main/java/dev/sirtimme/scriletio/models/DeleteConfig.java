@@ -3,6 +3,8 @@ package dev.sirtimme.scriletio.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.List;
+
 @Entity
 @Table(name = "delete_configs", indexes = {
     @Index(name = "idx_config_channel_id", unique = true, columnList = "channel_id"),
@@ -24,6 +26,9 @@ public class DeleteConfig {
     @Column(name = "channel_id", nullable = false)
     private long channelId;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deleteConfig", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<DeleteTask> deleteTasks;
+
     @Column(name = "duration", nullable = false)
     private long duration;
 
@@ -31,11 +36,20 @@ public class DeleteConfig {
     public DeleteConfig() {
     }
 
-    public DeleteConfig(final long authorId, final long guildId, final long channelId, final long duration) {
+    public DeleteConfig(final long authorId, final long guildId, final long channelId, final List<DeleteTask> deleteTasks, final long duration) {
         this.authorId = authorId;
         this.guildId = guildId;
         this.channelId = channelId;
+        this.deleteTasks = deleteTasks;
         this.duration = duration;
+    }
+
+    public DeleteTask getTask(final long messageId) {
+        return this.deleteTasks.stream().filter(task -> task.getMessageId() == messageId).findFirst().get();
+    }
+
+    public List<DeleteTask> getDeleteTasks() {
+        return this.deleteTasks;
     }
 
     public long getDuration() {

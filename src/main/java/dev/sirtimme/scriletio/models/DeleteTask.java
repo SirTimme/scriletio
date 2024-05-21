@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "delete_tasks", indexes = @Index(name = "idx_task_channel_id", columnList = "channel_id"))
@@ -12,8 +13,8 @@ public class DeleteTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "channel_id", nullable = false)
-    private long channelId;
+    @ManyToOne
+    private DeleteConfig deleteConfig;
 
     @NaturalId
     @Column(name = "message_id", nullable = false)
@@ -26,8 +27,8 @@ public class DeleteTask {
     public DeleteTask() {
     }
 
-    public DeleteTask(final long channelId, final long messageId, final Timestamp deletedAt) {
-        this.channelId = channelId;
+    public DeleteTask(final DeleteConfig deleteConfig, final long messageId, final Timestamp deletedAt) {
+        this.deleteConfig = deleteConfig;
         this.messageId = messageId;
         this.deletedAt = deletedAt;
     }
@@ -38,5 +39,23 @@ public class DeleteTask {
 
     public Timestamp getDeletedAt() {
         return this.deletedAt;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof final DeleteTask that)) {
+            return false;
+        }
+
+        return id == that.id && messageId == that.messageId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, messageId);
     }
 }
