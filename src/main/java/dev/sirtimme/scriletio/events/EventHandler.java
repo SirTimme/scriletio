@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.events;
 
 import dev.sirtimme.scriletio.managers.ICommandManager;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -19,6 +20,7 @@ public class EventHandler extends ListenerAdapter {
     private final ICommandManager<StringSelectInteractionEvent> menuCommandManager;
     private final ICommandManager<ModalInteractionEvent> modalCommandManager;
     private final ICommandManager<GuildReadyEvent> guildReadyCommandManager;
+    private final ICommandManager<ChannelDeleteEvent> channelDeleteCommandManager;
 
     public EventHandler(
         final ICommandManager<SlashCommandInteractionEvent> slashCommandManager,
@@ -27,7 +29,8 @@ public class EventHandler extends ListenerAdapter {
         final ICommandManager<MessageDeleteEvent> deleteMessageCommandManager,
         final ICommandManager<StringSelectInteractionEvent> menuCommandManager,
         final ICommandManager<ModalInteractionEvent> modalCommandManager,
-        final ICommandManager<GuildReadyEvent> guildReadyCommandManager
+        final ICommandManager<GuildReadyEvent> guildReadyCommandManager,
+        final ICommandManager<ChannelDeleteEvent> channelDeleteCommandManager
     ) {
         this.slashCommandManager = slashCommandManager;
         this.buttonCommandManager = buttonCommandManager;
@@ -36,6 +39,7 @@ public class EventHandler extends ListenerAdapter {
         this.menuCommandManager = menuCommandManager;
         this.modalCommandManager = modalCommandManager;
         this.guildReadyCommandManager = guildReadyCommandManager;
+        this.channelDeleteCommandManager = channelDeleteCommandManager;
     }
 
     @Override
@@ -71,5 +75,10 @@ public class EventHandler extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull final GuildReadyEvent event) {
         guildReadyCommandManager.handleCommand(event);
+    }
+
+    @Override
+    public void onChannelDelete(@NotNull final ChannelDeleteEvent event) {
+        channelDeleteCommandManager.handleCommand(event);
     }
 }

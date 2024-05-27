@@ -3,8 +3,11 @@ package dev.sirtimme.scriletio.managers;
 import dev.sirtimme.scriletio.factories.ICommandFactory;
 import jakarta.persistence.EntityManagerFactory;
 import net.dv8tion.jda.api.events.GenericEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandManager<T extends GenericEvent> implements ICommandManager<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandManager.class);
     private final EntityManagerFactory entityManagerFactory;
     private final ICommandFactory<T> commandFactory;
 
@@ -27,6 +30,7 @@ public class CommandManager<T extends GenericEvent> implements ICommandManager<T
             command.execute(event);
             context.getTransaction().commit();
         } catch (Exception error) {
+            LOGGER.error(error.getMessage());
             context.getTransaction().rollback();
         } finally {
             context.close();

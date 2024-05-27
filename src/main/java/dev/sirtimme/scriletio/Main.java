@@ -31,6 +31,7 @@ public class Main {
         final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
         final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
         final var guildReadyCommandManager = new CommandManager<>(entityManagerFactory, new GuildReadyCommandFactory(deleteTaskManager));
+        final var channelDeleteCommandManager = new CommandManager<>(entityManagerFactory, new ChannelDeleteCommandFactory());
 
         return new EventHandler(
             slashCommandManager,
@@ -39,7 +40,8 @@ public class Main {
             messageDeleteManager,
             menuCommandManager,
             modalCommandManager,
-            guildReadyCommandManager
+            guildReadyCommandManager,
+            channelDeleteCommandManager
         );
     }
 

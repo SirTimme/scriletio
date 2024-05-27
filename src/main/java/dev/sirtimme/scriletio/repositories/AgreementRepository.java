@@ -32,6 +32,11 @@ public class AgreementRepository implements IRepository<Agreement> {
     }
 
     @Override
+    public void deleteAll(final long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void delete(final Agreement entity) {
         context.remove(entity);
     }

@@ -4,7 +4,7 @@ import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.preconditions.slash.HasAtLeast1Config;
+import dev.sirtimme.scriletio.preconditions.slash.HasSavedConfigs;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -20,6 +20,7 @@ public class GetConfigCommand implements ICommand<SlashCommandInteractionEvent> 
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
+        // command can only be executed within a guild
         final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
 
         event.reply(Formatter.response(deleteConfigs)).queue();
@@ -28,7 +29,7 @@ public class GetConfigCommand implements ICommand<SlashCommandInteractionEvent> 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasAtLeast1Config(deleteConfigRepository)
+            new HasSavedConfigs(deleteConfigRepository)
         );
     }
 

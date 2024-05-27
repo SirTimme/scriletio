@@ -1,10 +1,9 @@
 package dev.sirtimme.scriletio.factories;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.commands.message.ReceiveCommand;
+import dev.sirtimme.scriletio.commands.event.MessageReceiveCommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
-import dev.sirtimme.scriletio.repositories.DeleteTaskRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -17,6 +16,6 @@ public class ReceiveMessageCommandFactory implements ICommandFactory<MessageRece
 
     @Override
     public ICommand<MessageReceivedEvent> createCommand(final MessageReceivedEvent event, final EntityManager context) {
-        return new ReceiveCommand(deleteTaskManager, new DeleteConfigRepository(context), new DeleteTaskRepository(context));
+        return new MessageReceiveCommand(deleteTaskManager, new DeleteConfigRepository(context));
     }
 }

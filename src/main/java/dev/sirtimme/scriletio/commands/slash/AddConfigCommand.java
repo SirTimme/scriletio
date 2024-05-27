@@ -6,7 +6,6 @@ import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.preconditions.slash.HasLessThan25Configs;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,8 +24,18 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
+        // command can only be executed within a guild
+        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+
+        if (deleteConfigs.size() == 25) {
+            event.reply("Each guild can only have up to 25 configs, please delete an old one to create a new one").queue();
+            return;
+        }
+
+        // command option is required
         final var durationOption = event.getOption("duration").getAsString();
         var duration = 0L;
+
         try {
             duration = new Parser().parse(durationOption);
         } catch (ParsingException exception) {
@@ -39,8 +48,10 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
             return;
         }
 
+        // command option is required
         final var channelOption = event.getOption("channel").getAsChannel();
         final var config = deleteConfigRepository.get(channelOption.getIdLong());
+
         if (config != null) {
             event.reply("There is already a delete config for that channel!").queue();
             return;
@@ -50,6 +61,7 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
             event.getUser().getIdLong(),
             event.getGuild().getIdLong(),
             channelOption.getIdLong(),
+            List.of(),
             duration
         );
 
@@ -60,9 +72,7 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of(
-            new HasLessThan25Configs(deleteConfigRepository)
-        );
+        return List.of();
     }
 
     public static SubcommandData getSubcommandData() {
