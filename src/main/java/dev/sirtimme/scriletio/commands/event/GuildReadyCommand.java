@@ -7,6 +7,7 @@ import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +36,21 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
                 continue;
             }
 
-            for (final var deleteTask : deleteConfig.getDeleteTasks()) {
-                channel.retrieveMessageById(deleteTask.getMessageId()).queue(
-                    message -> {
-                        LOGGER.debug("Submitted delete task for message with id {}", deleteTask.getMessageId());
-                        deleteTaskManager.submitTask(deleteTask, message);
-                    },
-                    error -> {
-                        LOGGER.warn("Could not retrieve message with id {}", deleteTask.getMessageId());
-                        // TODO test this..
-                        deleteConfig.getDeleteTasks().remove(deleteTask);
-                    }
-                );
+            LOGGER.debug("Found {} delete tasks for channel {}", deleteConfig.getDeleteTasks().size(), deleteConfig.getChannelId());
+
+            for (final var iterator = deleteConfig.getDeleteTasks().iterator(); iterator.hasNext(); ) {
+                final var deleteTask = iterator.next();
+
+                try {
+                    final var message = channel.retrieveMessageById(deleteTask.getMessageId()).complete();
+                    LOGGER.debug("Submitted delete task for message with id {}", deleteTask.getMessageId());
+
+                    deleteTaskManager.submitTask(deleteTask, message);
+                } catch (ErrorResponseException error) {
+                    LOGGER.error("Could not retrieve message with id {}", deleteTask.getMessageId());
+
+                    iterator.remove();
+                }
             }
         }
     }

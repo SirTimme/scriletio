@@ -2,6 +2,8 @@ package dev.sirtimme.scriletio.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -26,7 +28,8 @@ public class DeleteConfig {
     @Column(name = "channel_id", nullable = false)
     private long channelId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deleteConfig", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "deleteConfig", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<DeleteTask> deleteTasks;
 
     @Column(name = "duration", nullable = false)

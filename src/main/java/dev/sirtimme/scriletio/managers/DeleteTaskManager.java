@@ -21,6 +21,11 @@ public class DeleteTaskManager {
     public void cancelTask(final DeleteTask deleteTask) {
         final var deleteJob = pendingTasks.get(deleteTask.getMessageId());
 
+        if (deleteJob == null) {
+            LOGGER.warn("Tried to cancel delete task for message id {} which was null", deleteTask.getMessageId());
+            return;
+        }
+
         deleteJob.cancel(true);
         pendingTasks.remove(deleteTask.getMessageId());
     }
@@ -29,7 +34,6 @@ public class DeleteTaskManager {
         final var millisecondsRemaining = deleteTask.getDeletedAt().getTime() - System.currentTimeMillis();
         final var minutes = TimeUnit.MILLISECONDS.toMinutes(millisecondsRemaining);
 
-        // TODO permission checking
         final var scheduledTask = message
             .delete()
             .queueAfter(
