@@ -22,7 +22,7 @@ public class DeleteTaskManager {
         final var deleteJob = pendingTasks.get(deleteTask.getMessageId());
 
         if (deleteJob == null) {
-            LOGGER.warn("Tried to cancel delete task for message id {} which was null", deleteTask.getMessageId());
+            LOGGER.warn("Tried to cancel the deletion of message with id {} but the stored task was null", deleteTask.getMessageId());
             return;
         }
 
@@ -40,7 +40,7 @@ public class DeleteTaskManager {
                 minutes,
                 TimeUnit.MINUTES,
                 success -> pendingTasks.remove(message.getIdLong()),
-                error -> LOGGER.error("Message deletion failed: {}", error.getMessage())
+                error -> LOGGER.error("Deletion of message with id {} failed: {}", message.getIdLong(), error.getMessage())
             );
 
         pendingTasks.put(message.getIdLong(), scheduledTask);
