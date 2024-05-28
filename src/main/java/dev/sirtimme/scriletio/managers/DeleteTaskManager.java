@@ -22,7 +22,7 @@ public class DeleteTaskManager {
         final var deleteJob = pendingTasks.get(deleteTask.getMessageId());
 
         if (deleteJob == null) {
-            LOGGER.warn("Tried to cancel the deletion of message with id {} but the stored task was null", deleteTask.getMessageId());
+            LOGGER.warn("Could not cancel task with id {}: The stored task was null", deleteTask.getMessageId());
             return;
         }
 
