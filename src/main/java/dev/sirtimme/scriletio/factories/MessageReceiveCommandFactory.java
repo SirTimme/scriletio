@@ -7,10 +7,10 @@ import dev.sirtimme.scriletio.repositories.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class ReceiveMessageCommandFactory implements ICommandFactory<MessageReceivedEvent> {
+public class MessageReceiveCommandFactory implements ICommandFactory<MessageReceivedEvent> {
     private final DeleteTaskManager deleteTaskManager;
 
-    public ReceiveMessageCommandFactory(final DeleteTaskManager deleteTaskManager) {
+    public MessageReceiveCommandFactory(final DeleteTaskManager deleteTaskManager) {
         this.deleteTaskManager = deleteTaskManager;
     }
 

@@ -26,17 +26,18 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
     @Override
     public void execute(final GuildReadyEvent event) {
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
+
         LOGGER.debug("Found {} configs for guild with id {}", deleteConfigs.size(), event.getGuild().getIdLong());
 
         for (final var deleteConfig : deleteConfigs) {
             final var channel = event.getGuild().getChannelById(TextChannel.class, deleteConfig.getChannelId());
 
             if (channel == null) {
-                LOGGER.warn("Could not retrieve channel with id {}", deleteConfig.getChannelId());
+                LOGGER.warn("Could not retrieve channel with id {}: Result was null", deleteConfig.getChannelId());
                 continue;
             }
 
-            LOGGER.debug("Found {} delete tasks for channel {}", deleteConfig.getDeleteTasks().size(), deleteConfig.getChannelId());
+            LOGGER.debug("Found {} delete tasks for channel with id {}", deleteConfig.getDeleteTasks().size(), deleteConfig.getChannelId());
 
             for (final var iterator = deleteConfig.getDeleteTasks().iterator(); iterator.hasNext(); ) {
                 final var deleteTask = iterator.next();
@@ -47,7 +48,7 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
 
                     deleteTaskManager.submitTask(deleteTask, message);
                 } catch (ErrorResponseException error) {
-                    LOGGER.error("Could not retrieve message with id {}", deleteTask.getMessageId());
+                    LOGGER.warn("Could not retrieve message with id {}: {}", deleteTask.getMessageId(), error.getErrorResponse());
 
                     iterator.remove();
                 }
