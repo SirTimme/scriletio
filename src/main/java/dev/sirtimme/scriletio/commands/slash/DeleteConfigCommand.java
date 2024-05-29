@@ -35,7 +35,7 @@ public class DeleteConfigCommand implements ICommand<SlashCommandInteractionEven
             final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
 
             if (channel == null) {
-                LOGGER.warn("Could not retrieve channel with id {}", config.getChannelId());
+                LOGGER.warn("Could not retrieve channel with id {}: Result was null", config.getChannelId());
                 continue;
             }
 

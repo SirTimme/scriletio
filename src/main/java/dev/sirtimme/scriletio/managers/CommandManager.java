@@ -30,7 +30,7 @@ public class CommandManager<T extends GenericEvent> implements ICommandManager<T
             command.execute(event);
             context.getTransaction().commit();
         } catch (Exception error) {
-            LOGGER.error(error.getMessage());
+            LOGGER.error("Execution of command {} failed: {}", command, error.getMessage());
             context.getTransaction().rollback();
         } finally {
             context.close();

@@ -8,12 +8,15 @@ import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiveCommand.class);
     private final DeleteTaskManager deleteTaskManager;
     private final IRepository<DeleteConfig> configRepository;
 
@@ -35,6 +38,7 @@ public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
             final var deleteTask = deleteConfig.getTask(msgReference.getMessageIdLong());
 
             if (deleteTask == null) {
+                LOGGER.warn("Could not retrieve delete task with id {}: DB returned null", msgReference.getMessageIdLong());
                 return;
             }
 

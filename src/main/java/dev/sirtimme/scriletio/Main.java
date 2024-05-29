@@ -26,8 +26,8 @@ public class Main {
 
         final var slashCommandManager = new CommandManager<>(entityManagerFactory, new SlashCommandFactory());
         final var buttonCommandManager = new CommandManager<>(entityManagerFactory, new ButtonCommandFactory());
-        final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new ReceiveMessageCommandFactory(deleteTaskManager));
-        final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new DeleteMessageCommandFactory(deleteTaskManager));
+        final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new MessageReceiveCommandFactory(deleteTaskManager));
+        final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new MessageDeleteCommandFactory(deleteTaskManager));
         final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
         final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
         final var guildReadyCommandManager = new CommandManager<>(entityManagerFactory, new GuildReadyCommandFactory(deleteTaskManager));
