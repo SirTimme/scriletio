@@ -16,10 +16,12 @@ public class HasSavedConfigs implements IPrecondition<SlashCommandInteractionEve
     public boolean isValid(final SlashCommandInteractionEvent event) {
         // command can only be executed within a guild
         final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+
         if (deleteConfigs.isEmpty()) {
             event.reply("**" + event.getGuild().getName() + "** has no configs saved").queue();
             return false;
         }
+
         return true;
     }
 }

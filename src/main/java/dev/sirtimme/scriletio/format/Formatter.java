@@ -39,16 +39,12 @@ public class Formatter {
 
     public static String response(final List<DeleteConfig> deleteConfigs) {
         final var sb = new StringBuilder();
-        sb.append("📂 Saved configs\n\n");
+
         for (final var deleteConfig : deleteConfigs) {
-            sb.append("**ID: ")
-              .append(deleteConfig.getId())
-              .append("** | Channel: <#")
-              .append(deleteConfig.getChannelId())
-              .append(">\n")
-              .append(TimeUtils.createReadableDuration(deleteConfig.getDuration()))
-              .append("\n\n");
+            sb.append("Channel: <#").append(deleteConfig.getChannelId()).append("}>").append("\n")
+              .append(TimeUtils.createReadableDuration(deleteConfig.getDuration())).append("\n\n");
         }
+
         return sb.toString();
     }
 }
