@@ -41,10 +41,8 @@ public class Formatter {
         final var sb = new StringBuilder();
 
         for (final var deleteConfig : deleteConfigs) {
-            sb.append(STR."Channel: <#\{deleteConfig.getChannelId()}>")
-              .append("\n")
-              .append(TimeUtils.createReadableDuration(deleteConfig.getDuration()))
-              .append("\n\n");
+            sb.append("Channel: <#").append(deleteConfig.getChannelId()).append("}>").append("\n")
+              .append(TimeUtils.createReadableDuration(deleteConfig.getDuration())).append("\n\n");
         }
 
         return sb.toString();

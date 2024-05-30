@@ -18,7 +18,7 @@ public class HasSavedConfigs implements IPrecondition<SlashCommandInteractionEve
         final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
 
         if (deleteConfigs.isEmpty()) {
-            event.reply(STR."**\{event.getGuild().getName()}** has no configs saved").queue();
+            event.reply("**" + event.getGuild().getName() + "** has no configs saved").queue();
             return false;
         }
 
