@@ -1,4 +1,4 @@
-FROM gradle:8.6.0-jdk21-alpine as build
+FROM gradle:8.7.0-jdk21 as build
 ENV HOME=/home/gradle/src
 RUN mkdir -p $HOME
 WORKDIR $HOME
