@@ -43,7 +43,7 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
         }
 
         if (!event.getGuild().getSelfMember().hasPermission(channelOption, Permission.MESSAGE_MANAGE)) {
-            event.reply("I'm missing the **" + Permission.MESSAGE_MANAGE.getName() + "** permission in channel" + channelOption.getAsMention() + "!").queue();
+            event.reply("I'm missing the **" + Permission.MESSAGE_MANAGE.getName() + "** permission in channel " + channelOption.getAsMention() + "!").queue();
             return;
         }
 
