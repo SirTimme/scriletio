@@ -7,6 +7,7 @@ import dev.sirtimme.scriletio.models.DeleteConfig;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.repositories.IRepository;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -25,17 +26,31 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // command can only be executed within a guild
-        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+        final var guildId = event.getGuild().getIdLong();
 
-        if (deleteConfigs.size() == 25) {
-            event.reply("Each guild can only have up to 25 configs, please delete an old one to create a new one").queue();
+        if (deleteConfigRepository.findAll(guildId).size() == 25) {
+            event.reply("Each guild can only have up to 25 configs").queue();
+            return;
+        }
+
+        // command option is required
+        final var channelOption = event.getOption("channel").getAsChannel();
+        final var channelId = channelOption.getIdLong();
+
+        if (deleteConfigRepository.get(channelId) != null) {
+            event.reply("There is already a delete config for that channel!").queue();
+            return;
+        }
+
+        if (!event.getGuild().getSelfMember().hasPermission(channelOption, Permission.MESSAGE_MANAGE)) {
+            event.reply("I'm missing the **" + Permission.MESSAGE_MANAGE.getName() + "** permission in channel " + channelOption.getAsMention() + "!").queue();
             return;
         }
 
         // command option is required
         final var durationOption = event.getOption("duration").getAsString();
-        var duration = 0L;
 
+        var duration = 0L;
         try {
             duration = new Parser().parse(durationOption);
         } catch (ParsingException exception) {
@@ -48,26 +63,17 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
             return;
         }
 
-        // command option is required
-        final var channelOption = event.getOption("channel").getAsChannel();
-        final var config = deleteConfigRepository.get(channelOption.getIdLong());
-
-        if (config != null) {
-            event.reply("There is already a delete config for that channel!").queue();
-            return;
-        }
-
         final var deleteConfig = new DeleteConfig(
             event.getUser().getIdLong(),
-            event.getGuild().getIdLong(),
-            channelOption.getIdLong(),
+            guildId,
+            channelId,
             List.of(),
             duration
         );
 
         deleteConfigRepository.add(deleteConfig);
 
-        event.reply("Successfully created an auto delete config for **" + channelOption.getAsMention() + "**").queue();
+        event.reply("Successfully created an auto delete config for " + channelOption.getAsMention()).queue();
     }
 
     @Override
