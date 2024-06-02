@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.models;
+package dev.sirtimme.scriletio.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;

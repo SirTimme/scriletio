@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ICommand;
-import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.HasSavedConfigs;
 import dev.sirtimme.scriletio.repositories.IRepository;

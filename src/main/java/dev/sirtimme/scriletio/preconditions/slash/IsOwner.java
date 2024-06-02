@@ -10,6 +10,7 @@ public class IsOwner implements IPrecondition<SlashCommandInteractionEvent> {
             event.reply("This command can only be executed by the owner").setEphemeral(true).queue();
             return false;
         }
+
         return true;
     }
 }

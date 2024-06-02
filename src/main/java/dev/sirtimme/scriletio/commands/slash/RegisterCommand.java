@@ -2,7 +2,7 @@ package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.format.Formatter;
-import dev.sirtimme.scriletio.models.Agreement;
+import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.IsNotRegistered;
 import dev.sirtimme.scriletio.repositories.IRepository;
@@ -14,10 +14,10 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.List;
 
 public class RegisterCommand implements ISlashCommand {
-    private final IRepository<Agreement> repository;
+    private final IRepository<User> userRepository;
 
-    public RegisterCommand(final IRepository<Agreement> repository) {
-        this.repository = repository;
+    public RegisterCommand(final IRepository<User> userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RegisterCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsNotRegistered(repository)
+            new IsNotRegistered(userRepository)
         );
     }
 

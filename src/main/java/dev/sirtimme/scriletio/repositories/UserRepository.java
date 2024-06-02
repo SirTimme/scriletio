@@ -1,33 +1,33 @@
 package dev.sirtimme.scriletio.repositories;
 
-import dev.sirtimme.scriletio.models.Agreement;
+import dev.sirtimme.scriletio.entities.User;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 
 import java.util.List;
 
-public class AgreementRepository implements IRepository<Agreement> {
+public class UserRepository implements IRepository<User> {
     private final EntityManager context;
 
-    public AgreementRepository(final EntityManager context) {
+    public UserRepository(final EntityManager context) {
         this.context = context;
     }
 
     @Override
-    public void add(final Agreement entity) {
+    public void add(final User entity) {
         context.persist(entity);
     }
 
     @Override
-    public Agreement get(final long id) {
+    public User get(final long id) {
         return context
             .unwrap(Session.class)
-            .bySimpleNaturalId(Agreement.class)
+            .bySimpleNaturalId(User.class)
             .load(id);
     }
 
     @Override
-    public List<Agreement> findAll(final long id) {
+    public List<User> findAll(final long id) {
         throw new UnsupportedOperationException();
     }
 
@@ -37,7 +37,7 @@ public class AgreementRepository implements IRepository<Agreement> {
     }
 
     @Override
-    public void delete(final Agreement entity) {
+    public void delete(final User entity) {
         context.remove(entity);
     }
 }
