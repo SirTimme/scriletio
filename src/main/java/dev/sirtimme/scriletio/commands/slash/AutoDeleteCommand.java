@@ -27,11 +27,15 @@ public class AutoDeleteCommand implements ISlashCommand {
         // this command only consists of subcommands
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
         final var subCommand = switch (subCommandName) {
-            case ADD -> new AddConfigCommand(deleteConfigRepository);
+            case ADD -> new AddConfigCommand(deleteConfigRepository, userRepository);
             case GET -> new GetConfigCommand(deleteConfigRepository);
             case UPDATE -> new UpdateConfigCommand(deleteConfigRepository);
             case DELETE -> new DeleteConfigCommand(deleteConfigRepository);
         };
+
+        if (subCommand.hasInvalidPreconditions(event)) {
+            return;
+        }
 
         subCommand.execute(event);
     }
@@ -39,7 +43,6 @@ public class AutoDeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsRegistered(userRepository),
             new IsAdmin()
         );
     }

@@ -1,11 +1,13 @@
 package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
+import dev.sirtimme.scriletio.preconditions.slash.IsRegistered;
 import dev.sirtimme.scriletio.repositories.IRepository;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
@@ -18,9 +20,11 @@ import java.util.List;
 
 public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> {
     private final IRepository<DeleteConfig> deleteConfigRepository;
+    private final IRepository<User> userRepository;
 
-    public AddConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository) {
+    public AddConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository, final IRepository<User> userRepository) {
         this.deleteConfigRepository = deleteConfigRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -78,7 +82,9 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of();
+        return List.of(
+            new IsRegistered(userRepository)
+        );
     }
 
     public static SubcommandData getSubcommandData() {
