@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.format;
 
 import dev.sirtimme.scriletio.error.ParsingException;
-import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.time.TimeUtils;
 
 import java.util.List;

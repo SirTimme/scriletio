@@ -40,7 +40,6 @@ public class UpdateCommand implements ISlashCommand {
     public CommandData getCommandData() {
         return Commands.slash("update", "Refreshes all slash commands")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
-                       .setGuildOnly(true)
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 }

@@ -3,7 +3,7 @@ package dev.sirtimme.scriletio.commands.modal;
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;
-import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.parse.Parser;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.modal.IsModalAuthor;

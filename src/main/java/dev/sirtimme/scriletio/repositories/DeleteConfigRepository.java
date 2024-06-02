@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.repositories;
 
-import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 

@@ -1,11 +1,11 @@
-package dev.sirtimme.scriletio.models;
+package dev.sirtimme.scriletio.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "agreements", indexes = @Index(name = "idx_user_id", unique = true, columnList = "user_id"))
-public class Agreement {
+@Table(name = "users", indexes = @Index(name = "idx_user_id", unique = true, columnList = "user_id"))
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,10 +15,10 @@ public class Agreement {
     private long userId;
 
     // needed for Hibernate
-    public Agreement() {
+    public User() {
     }
 
-    public Agreement(final long userId) {
+    public User(final long userId) {
         this.userId = userId;
     }
 }

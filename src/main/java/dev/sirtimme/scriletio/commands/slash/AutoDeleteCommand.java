@@ -1,8 +1,8 @@
 package dev.sirtimme.scriletio.commands.slash;
 
 import dev.sirtimme.scriletio.commands.ISlashCommand;
-import dev.sirtimme.scriletio.models.Agreement;
-import dev.sirtimme.scriletio.models.DeleteConfig;
+import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.IsAdmin;
 import dev.sirtimme.scriletio.preconditions.slash.IsRegistered;
@@ -14,11 +14,11 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.List;
 
 public class AutoDeleteCommand implements ISlashCommand {
-    private final IRepository<Agreement> agreementRepository;
+    private final IRepository<User> userRepository;
     private final IRepository<DeleteConfig> deleteConfigRepository;
 
-    public AutoDeleteCommand(final IRepository<Agreement> agreementRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
-        this.agreementRepository = agreementRepository;
+    public AutoDeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
+        this.userRepository = userRepository;
         this.deleteConfigRepository = deleteConfigRepository;
     }
 
@@ -27,11 +27,15 @@ public class AutoDeleteCommand implements ISlashCommand {
         // this command only consists of subcommands
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
         final var subCommand = switch (subCommandName) {
-            case ADD -> new AddConfigCommand(deleteConfigRepository);
+            case ADD -> new AddConfigCommand(deleteConfigRepository, userRepository);
             case GET -> new GetConfigCommand(deleteConfigRepository);
             case UPDATE -> new UpdateConfigCommand(deleteConfigRepository);
             case DELETE -> new DeleteConfigCommand(deleteConfigRepository);
         };
+
+        if (subCommand.hasInvalidPreconditions(event)) {
+            return;
+        }
 
         subCommand.execute(event);
     }
@@ -39,7 +43,6 @@ public class AutoDeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsRegistered(agreementRepository),
             new IsAdmin()
         );
     }

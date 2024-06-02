@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.managers;
 
-import dev.sirtimme.scriletio.models.DeleteTask;
+import dev.sirtimme.scriletio.entities.DeleteTask;
 import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
