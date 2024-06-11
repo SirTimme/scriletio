@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
 import dev.sirtimme.scriletio.preconditions.slash.HasSavedConfigs;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static dev.sirtimme.scriletio.time.TimeUtils.createReadableDuration;
 
-public class UpdateConfigCommand implements ICommand<SlashCommandInteractionEvent> {
+public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
     private final IRepository<DeleteConfig> deleteConfigRepository;
 
@@ -56,7 +56,8 @@ public class UpdateConfigCommand implements ICommand<SlashCommandInteractionEven
         );
     }
 
-    public static SubcommandData getSubcommandData() {
+    @Override
+    public SubcommandData getSubcommandData() {
         return new SubcommandData("update", "Updates an existing auto delete config");
     }
 }

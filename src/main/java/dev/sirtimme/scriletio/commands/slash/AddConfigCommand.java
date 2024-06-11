@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.error.ParsingException;
 import dev.sirtimme.scriletio.format.Formatter;
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
 
-public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> {
+public class AddConfigCommand implements ISubCommand {
     private final IRepository<DeleteConfig> deleteConfigRepository;
     private final IRepository<User> userRepository;
 
@@ -87,7 +87,8 @@ public class AddConfigCommand implements ICommand<SlashCommandInteractionEvent> 
         );
     }
 
-    public static SubcommandData getSubcommandData() {
+    @Override
+    public SubcommandData getSubcommandData() {
         final var channelOptionData = new OptionData(
             OptionType.CHANNEL,
             "channel",
