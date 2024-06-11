@@ -3,11 +3,8 @@ package dev.sirtimme.scriletio.commands.event;
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.repositories.IRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
-
-import java.util.List;
 
 public class MessageDeleteCommand implements ICommand<MessageDeleteEvent> {
     private final DeleteTaskManager deleteTaskManager;
@@ -34,10 +31,5 @@ public class MessageDeleteCommand implements ICommand<MessageDeleteEvent> {
 
         deleteTaskManager.cancelTask(deleteTask);
         deleteConfig.getDeleteTasks().remove(deleteTask);
-    }
-
-    @Override
-    public List<IPrecondition<MessageDeleteEvent>> getPreconditions() {
-        return List.of();
     }
 }

@@ -1,9 +1,16 @@
 package dev.sirtimme.scriletio;
 
-import dev.sirtimme.scriletio.events.EventHandler;
-import dev.sirtimme.scriletio.factories.*;
-import dev.sirtimme.scriletio.managers.CommandManager;
+import dev.sirtimme.scriletio.factory.event.ChannelDeleteEventCommandFactory;
+import dev.sirtimme.scriletio.factory.event.GuildReadyEventCommandFactory;
+import dev.sirtimme.scriletio.factory.event.MessageDeleteEventCommandFactory;
+import dev.sirtimme.scriletio.factory.event.MessageReceiveEventCommandFactory;
+import dev.sirtimme.scriletio.managers.EventCommandManager;
+import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
+import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
+import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
+import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
+import dev.sirtimme.scriletio.managers.InteractionCommandManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
@@ -24,14 +31,17 @@ public class Main {
         final var entityManagerFactory = buildEntityManagerFactory();
         final var deleteTaskManager = new DeleteTaskManager();
 
-        final var slashCommandManager = new CommandManager<>(entityManagerFactory, new SlashCommandFactory());
-        final var buttonCommandManager = new CommandManager<>(entityManagerFactory, new ButtonCommandFactory());
-        final var messageReceiveManager = new CommandManager<>(entityManagerFactory, new MessageReceiveCommandFactory(deleteTaskManager));
-        final var messageDeleteManager = new CommandManager<>(entityManagerFactory, new MessageDeleteCommandFactory(deleteTaskManager));
-        final var menuCommandManager = new CommandManager<>(entityManagerFactory, new MenuCommandFactory());
-        final var modalCommandManager = new CommandManager<>(entityManagerFactory, new ModalCommandFactory());
-        final var guildReadyCommandManager = new CommandManager<>(entityManagerFactory, new GuildReadyCommandFactory(deleteTaskManager));
-        final var channelDeleteCommandManager = new CommandManager<>(entityManagerFactory, new ChannelDeleteCommandFactory());
+        // interaction events
+        final var slashCommandManager = new InteractionCommandManager<>(entityManagerFactory, new SlashEventCommandFactory());
+        final var buttonCommandManager = new InteractionCommandManager<>(entityManagerFactory, new ButtonEventCommandFactory());
+        final var menuCommandManager = new InteractionCommandManager<>(entityManagerFactory, new MenuEventCommandFactory());
+        final var commandAutoCompleteCommandManager = new InteractionCommandManager<>(entityManagerFactory, new CommandAutoCompleteEventCommandFactory());
+
+        // normal events
+        final var messageReceiveManager = new EventCommandManager<>(entityManagerFactory, new MessageReceiveEventCommandFactory(deleteTaskManager));
+        final var messageDeleteManager = new EventCommandManager<>(entityManagerFactory, new MessageDeleteEventCommandFactory(deleteTaskManager));
+        final var guildReadyCommandManager = new EventCommandManager<>(entityManagerFactory, new GuildReadyEventCommandFactory(deleteTaskManager));
+        final var channelDeleteCommandManager = new EventCommandManager<>(entityManagerFactory, new ChannelDeleteEventCommandFactory());
 
         return new EventHandler(
             slashCommandManager,
@@ -39,9 +49,9 @@ public class Main {
             messageReceiveManager,
             messageDeleteManager,
             menuCommandManager,
-            modalCommandManager,
             guildReadyCommandManager,
-            channelDeleteCommandManager
+            channelDeleteCommandManager,
+            commandAutoCompleteCommandManager
         );
     }
 

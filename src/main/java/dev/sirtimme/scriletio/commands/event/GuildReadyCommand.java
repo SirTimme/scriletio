@@ -3,15 +3,12 @@ package dev.sirtimme.scriletio.commands.event;
 import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.repositories.IRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuildReadyCommand.class);
@@ -54,10 +51,5 @@ public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
                 }
             }
         }
-    }
-
-    @Override
-    public List<IPrecondition<GuildReadyEvent>> getPreconditions() {
-        return List.of();
     }
 }

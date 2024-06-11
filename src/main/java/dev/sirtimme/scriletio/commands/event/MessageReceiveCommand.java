@@ -4,13 +4,11 @@ import dev.sirtimme.scriletio.commands.ICommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.DeleteTask;
-import dev.sirtimme.scriletio.preconditions.IPrecondition;
-import dev.sirtimme.scriletio.repositories.IRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
@@ -25,6 +23,7 @@ public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
     @Override
     public void execute(final MessageReceivedEvent event) {
         final var deleteConfig = configRepository.get(event.getChannel().getIdLong());
+
         if (deleteConfig == null) {
             return;
         }
@@ -34,6 +33,7 @@ public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
             // since this is a pinned message notification there is always a message reference
             final var deleteTask = deleteConfig.getTask(msgReference.getMessageIdLong());
 
+            // pinned messages could be older than the bot tracks
             if (deleteTask == null) {
                 return;
             }
@@ -47,10 +47,5 @@ public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
 
         deleteTaskManager.submitTask(deleteTask, event.getMessage());
         deleteConfig.getDeleteTasks().add(deleteTask);
-    }
-
-    @Override
-    public List<IPrecondition<MessageReceivedEvent>> getPreconditions() {
-        return List.of();
     }
 }

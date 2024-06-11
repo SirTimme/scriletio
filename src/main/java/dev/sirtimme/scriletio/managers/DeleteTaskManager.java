@@ -21,8 +21,8 @@ public class DeleteTaskManager {
     public void cancelTask(final DeleteTask deleteTask) {
         final var deleteJob = pendingTasks.get(deleteTask.getMessageId());
 
+        // method gets executed when successfully deleted a message so the job is no longer stored
         if (deleteJob == null) {
-            LOGGER.warn("Could not cancel task with id {}: The stored task was null", deleteTask.getMessageId());
             return;
         }
 
