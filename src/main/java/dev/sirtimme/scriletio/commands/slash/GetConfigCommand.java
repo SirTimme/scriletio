@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.commands.slash;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.format.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.preconditions.IPrecondition;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
 
-public class GetConfigCommand implements ICommand<SlashCommandInteractionEvent> {
+public class GetConfigCommand implements ISubCommand {
     private final IRepository<DeleteConfig> deleteConfigRepository;
 
     public GetConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository) {
@@ -33,7 +33,8 @@ public class GetConfigCommand implements ICommand<SlashCommandInteractionEvent> 
         );
     }
 
-    public static SubcommandData getSubcommandData() {
+    @Override
+    public SubcommandData getSubcommandData() {
         return new SubcommandData("get", "Displays all of your create auto delete configs");
     }
 }
