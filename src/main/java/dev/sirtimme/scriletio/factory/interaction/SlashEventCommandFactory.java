@@ -24,7 +24,7 @@ public class SlashEventCommandFactory implements IInteractionCommandFactory<Slas
         this.slashCommands.put("update", context -> new UpdateCommand(this));
         this.slashCommands.put("autodelete", context -> new AutoDeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
         this.slashCommands.put("register", context -> new RegisterCommand(new UserRepository(context)));
-        this.slashCommands.put("delete", context -> new DeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
+        this.slashCommands.put("delete", context -> new DeleteCommand(new UserRepository(context)));
     }
 
     @Override

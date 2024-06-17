@@ -1,8 +1,11 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
 import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.component.button.AcceptDeletionButton;
 import dev.sirtimme.scriletio.commands.interaction.component.button.AcceptRegistrationButton;
+import dev.sirtimme.scriletio.commands.interaction.component.button.CancelDeletionButton;
 import dev.sirtimme.scriletio.commands.interaction.component.button.CancelRegistrationButton;
+import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import dev.sirtimme.scriletio.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -17,6 +20,8 @@ public class ButtonEventCommandFactory implements IInteractionCommandFactory<But
         this.buttonCommands = new HashMap<>();
         this.buttonCommands.put("registerAccept", context -> new AcceptRegistrationButton(new UserRepository(context)));
         this.buttonCommands.put("registerCancel", context -> new CancelRegistrationButton());
+        this.buttonCommands.put("deleteAccept", context -> new AcceptDeletionButton(new UserRepository(context), new DeleteConfigRepository(context)));
+        this.buttonCommands.put("deleteCancel", context -> new CancelDeletionButton());
     }
 
     @Override
