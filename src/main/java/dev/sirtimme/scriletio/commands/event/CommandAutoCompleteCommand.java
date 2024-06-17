@@ -2,7 +2,7 @@ package dev.sirtimme.scriletio.commands.event;
 
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.Pair;
-import dev.sirtimme.scriletio.commands.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;

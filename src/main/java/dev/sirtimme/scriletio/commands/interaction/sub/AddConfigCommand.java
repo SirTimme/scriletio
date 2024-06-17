@@ -1,6 +1,5 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
-import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.ParsingException;

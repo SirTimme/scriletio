@@ -1,6 +1,5 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.IsOwner;

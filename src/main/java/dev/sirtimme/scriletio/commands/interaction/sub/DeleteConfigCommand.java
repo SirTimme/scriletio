@@ -1,6 +1,5 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
-import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.HasSavedConfigs;

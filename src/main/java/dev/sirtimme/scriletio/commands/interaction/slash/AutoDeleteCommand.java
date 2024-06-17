@@ -1,7 +1,6 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
-import dev.sirtimme.scriletio.commands.ISubCommand;
+import dev.sirtimme.scriletio.commands.interaction.sub.ISubCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.AddConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.DeleteConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.GetConfigCommand;

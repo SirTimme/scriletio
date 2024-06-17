@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
-import dev.sirtimme.scriletio.commands.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
 import dev.sirtimme.scriletio.commands.interaction.component.button.AcceptRegistrationButton;
 import dev.sirtimme.scriletio.commands.interaction.component.button.CancelRegistrationButton;
 import dev.sirtimme.scriletio.repository.UserRepository;

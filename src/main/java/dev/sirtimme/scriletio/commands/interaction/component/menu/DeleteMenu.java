@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.commands.interaction.component.menu;
 
-import dev.sirtimme.scriletio.commands.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.component.menu.IsMenuAuthor;

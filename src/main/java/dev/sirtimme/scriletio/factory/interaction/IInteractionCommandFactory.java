@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
-import dev.sirtimme.scriletio.commands.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 

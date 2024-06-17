@@ -1,6 +1,5 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.scriletio.commands.ISlashCommand;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
