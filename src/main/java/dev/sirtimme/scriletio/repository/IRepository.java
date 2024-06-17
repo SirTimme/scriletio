@@ -1,15 +1,11 @@
 package dev.sirtimme.scriletio.repository;
 
-import java.util.List;
+import dev.sirtimme.scriletio.entities.IEntity;
 
-public interface IRepository<T> {
+public interface IRepository<T extends IEntity> {
     void add(final T entity);
 
     T get(final long id);
-
-    List<T> findAll(final long id);
-
-    void deleteAll(final long id);
 
     void delete(final T entity);
 }

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "delete_tasks")
-public class DeleteTask {
+public class DeleteTask implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

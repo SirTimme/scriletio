@@ -4,8 +4,6 @@ import dev.sirtimme.scriletio.entities.User;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 
-import java.util.List;
-
 public class UserRepository implements IRepository<User> {
     private final EntityManager context;
 
@@ -24,16 +22,6 @@ public class UserRepository implements IRepository<User> {
             .unwrap(Session.class)
             .bySimpleNaturalId(User.class)
             .load(id);
-    }
-
-    @Override
-    public List<User> findAll(final long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteAll(final long id) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

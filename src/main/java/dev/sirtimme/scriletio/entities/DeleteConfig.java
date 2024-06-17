@@ -13,7 +13,7 @@ import java.util.List;
     @Index(name = "idx_config_guild_id", columnList = "guild_id"),
     @Index(name = "idx_config_author_id", columnList = "author_id")
 })
-public class DeleteConfig {
+public class DeleteConfig implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

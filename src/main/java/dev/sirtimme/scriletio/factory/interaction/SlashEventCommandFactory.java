@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
-import dev.sirtimme.scriletio.commands.IInteractionCommand;
-import dev.sirtimme.scriletio.commands.ISlashCommand;
+import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
+import dev.sirtimme.scriletio.commands.interaction.slash.ISlashCommand;
 import dev.sirtimme.scriletio.commands.interaction.slash.AutoDeleteCommand;
 import dev.sirtimme.scriletio.commands.interaction.slash.DeleteCommand;
 import dev.sirtimme.scriletio.commands.interaction.slash.RegisterCommand;
