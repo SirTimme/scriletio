@@ -1,20 +1,20 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.scriletio.commands.ISubCommand;
+import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.HasSavedConfigs;
-import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
 
 public class GetConfigCommand implements ISubCommand {
-    private final IRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
 
-    public GetConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository) {
+    public GetConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
         this.deleteConfigRepository = deleteConfigRepository;
     }
 

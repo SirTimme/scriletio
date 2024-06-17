@@ -10,6 +10,7 @@ import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.IsAdmin;
+import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
 public class AutoDeleteCommand implements ISlashCommand {
     private final HashMap<DeleteSubCommand, Supplier<ISubCommand>> subCommands;
 
-    public AutoDeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> deleteConfigRepository) {
+    public AutoDeleteCommand(final IRepository<User> userRepository, final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
         this.subCommands = new HashMap<>();
         this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(deleteConfigRepository, userRepository));
         this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(deleteConfigRepository));

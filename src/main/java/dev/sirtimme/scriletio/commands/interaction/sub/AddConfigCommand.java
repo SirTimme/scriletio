@@ -2,6 +2,7 @@ package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.scriletio.commands.ISubCommand;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
@@ -19,10 +20,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 
 public class AddConfigCommand implements ISubCommand {
-    private final IRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
     private final IRepository<User> userRepository;
 
-    public AddConfigCommand(final IRepository<DeleteConfig> deleteConfigRepository, final IRepository<User> userRepository) {
+    public AddConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository, final IRepository<User> userRepository) {
         this.deleteConfigRepository = deleteConfigRepository;
         this.userRepository = userRepository;
     }

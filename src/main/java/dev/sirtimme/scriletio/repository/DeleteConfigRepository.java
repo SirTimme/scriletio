@@ -6,7 +6,7 @@ import org.hibernate.Session;
 
 import java.util.List;
 
-public class DeleteConfigRepository implements IRepository<DeleteConfig> {
+public class DeleteConfigRepository implements IQueryableRepository<DeleteConfig> {
     private final EntityManager context;
 
     public DeleteConfigRepository(final EntityManager context) {

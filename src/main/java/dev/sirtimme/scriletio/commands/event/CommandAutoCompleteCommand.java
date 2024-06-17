@@ -1,10 +1,10 @@
 package dev.sirtimme.scriletio.commands.event;
 
+import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.Pair;
 import dev.sirtimme.scriletio.commands.IInteractionCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import java.util.List;
 
 public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAutoCompleteInteractionEvent> {
-    private final IRepository<DeleteConfig> configRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public CommandAutoCompleteCommand(final IRepository<DeleteConfig> configRepository) {
+    public CommandAutoCompleteCommand(final IQueryableRepository<DeleteConfig> configRepository) {
         this.configRepository = configRepository;
     }
 

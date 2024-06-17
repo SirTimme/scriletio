@@ -5,6 +5,7 @@ import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
+import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -15,9 +16,9 @@ import java.util.List;
 
 public class DeleteCommand implements ISlashCommand {
     private final IRepository<User> userRepository;
-    private final IRepository<DeleteConfig> configRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public DeleteCommand(final IRepository<User> userRepository, final IRepository<DeleteConfig> configRepository) {
+    public DeleteCommand(final IRepository<User> userRepository, final IQueryableRepository<DeleteConfig> configRepository) {
         this.userRepository = userRepository;
         this.configRepository = configRepository;
     }
