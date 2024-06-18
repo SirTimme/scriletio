@@ -15,10 +15,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 
 public class UpdateConfigCommand implements ISubCommand {
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+        this.configRepository = configRepository;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UpdateConfigCommand implements ISubCommand {
             return;
         }
 
-        final var deleteConfig = deleteConfigRepository.get(channelId);
+        final var deleteConfig = configRepository.get(channelId);
         deleteConfig.setDuration(newDuration);
 
         event.reply("Config for channel <#" + channelId + "> successfully updated. The new duration is **" + newDuration + "** minutes").queue();
@@ -54,7 +54,7 @@ public class UpdateConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(deleteConfigRepository)
+            new HasSavedConfigs(configRepository)
         );
     }
 

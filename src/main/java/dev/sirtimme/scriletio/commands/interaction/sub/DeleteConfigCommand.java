@@ -18,17 +18,17 @@ import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 
 public class DeleteConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteConfigCommand.class);
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public DeleteConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public DeleteConfigCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+        this.configRepository = configRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // command can only be executed within a guild
         // noinspection DataFlowIssue
-        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+        final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
         final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "delete").setPlaceholder("Saved configs");
 
         for (final var config : deleteConfigs) {
@@ -52,7 +52,7 @@ public class DeleteConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(deleteConfigRepository)
+            new HasSavedConfigs(configRepository)
         );
     }
 

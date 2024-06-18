@@ -22,12 +22,12 @@ import java.util.function.Supplier;
 public class AutoDeleteCommand implements ISlashCommand {
     private final HashMap<DeleteSubCommand, Supplier<ISubCommand>> subCommands;
 
-    public AutoDeleteCommand(final IRepository<User> userRepository, final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
+    public AutoDeleteCommand(final IRepository<User> userRepository, final IQueryableRepository<DeleteConfig> configRepository) {
         this.subCommands = new HashMap<>();
-        this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(deleteConfigRepository, userRepository));
-        this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(deleteConfigRepository));
-        this.subCommands.put(DeleteSubCommand.UPDATE, () -> new UpdateConfigCommand(deleteConfigRepository));
-        this.subCommands.put(DeleteSubCommand.DELETE, () -> new DeleteConfigCommand(deleteConfigRepository));
+        this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(configRepository, userRepository));
+        this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(configRepository));
+        this.subCommands.put(DeleteSubCommand.UPDATE, () -> new UpdateConfigCommand(configRepository));
+        this.subCommands.put(DeleteSubCommand.DELETE, () -> new DeleteConfigCommand(configRepository));
     }
 
     @Override
