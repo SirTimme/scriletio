@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.event;
+package dev.sirtimme.scriletio.commands.interaction.autocomplete;
 
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.Pair;
