@@ -33,6 +33,7 @@ public class AutoDeleteCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // this command only consists of subcommands
+        // noinspection DataFlowIssue
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
         final var subCommand = subCommands.get(subCommandName).get();
 

@@ -24,6 +24,7 @@ public class UpdateConfigCommand implements ISubCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // command option 'duration' is required
+        // noinspection DataFlowIssue
         final var durationOption = event.getOption("duration").getAsString();
         final long newDuration;
         try {
@@ -34,6 +35,7 @@ public class UpdateConfigCommand implements ISubCommand {
         }
 
         // command option 'channel' is required
+        // noinspection DataFlowIssue
         final var channelOption = event.getOption("channel").getAsString();
         final long channelId;
         try {

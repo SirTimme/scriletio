@@ -20,6 +20,7 @@ public class GetConfigCommand implements ISubCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // command can only be executed within a guild
+        // noinspection DataFlowIssue
         final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
 
         event.reply(Formatter.response(deleteConfigs)).queue();

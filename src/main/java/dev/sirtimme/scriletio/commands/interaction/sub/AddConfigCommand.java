@@ -30,6 +30,7 @@ public class AddConfigCommand implements ISubCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // command can only be executed within a guild
+        // noinspection DataFlowIssue
         final var guildId = event.getGuild().getIdLong();
 
         if (deleteConfigRepository.findAll(guildId).size() == 25) {
@@ -37,7 +38,8 @@ public class AddConfigCommand implements ISubCommand {
             return;
         }
 
-        // command option is required
+        // command option 'channel' is required
+        // noinspection DataFlowIssue
         final var channelOption = event.getOption("channel").getAsChannel();
         final var channelId = channelOption.getIdLong();
 
@@ -51,7 +53,8 @@ public class AddConfigCommand implements ISubCommand {
             return;
         }
 
-        // command option is required
+        // command option 'duration' is required
+        // noinspection DataFlowIssue
         final var durationOption = event.getOption("duration").getAsString();
 
         var duration = 0L;

@@ -20,13 +20,13 @@ public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAu
 
     @Override
     public void execute(final CommandAutoCompleteInteractionEvent event) {
-        // the corresponding command can only be executed within a guild
-        final var guildId = event.getGuild().getIdLong();
-        final var deleteConfigs = configRepository.findAll(guildId);
+        // the command can only be executed within a guild
+        // noinspection DataFlowIssue
+        final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
         final var choices = deleteConfigs
             .stream()
-            .map(config -> new Pair<>("# " + event.getGuild().getChannelById(TextChannel.class, config.getChannelId()).getName(), config.getChannelId()))
+            .map(config -> createChannelPair(event, config))
             .filter(pair -> pair.first().contains(event.getFocusedOption().getValue()))
             .map(pair -> new Command.Choice(pair.first(), pair.second()))
             .toList();
@@ -37,5 +37,12 @@ public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAu
     @Override
     public List<IPrecondition<CommandAutoCompleteInteractionEvent>> getPreconditions() {
         return List.of();
+    }
+
+    private Pair<String, Long> createChannelPair(final CommandAutoCompleteInteractionEvent event, final DeleteConfig config) {
+        final var channelId = config.getChannelId();
+        // only valid channel ids are saved
+        // noinspection DataFlowIssue
+        return new Pair<>("# " + event.getGuild().getChannelById(TextChannel.class, channelId).getName(), channelId);
     }
 }

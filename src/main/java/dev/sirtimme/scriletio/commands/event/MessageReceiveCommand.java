@@ -31,6 +31,7 @@ public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
         if (event.getMessage().getType() == MessageType.CHANNEL_PINNED_ADD) {
             final var msgReference = event.getMessage().getMessageReference();
             // since this is a pinned message notification there is always a message reference
+            // noinspection DataFlowIssue
             final var deleteTask = deleteConfig.getTask(msgReference.getMessageIdLong());
 
             // pinned messages could be older than the bot tracks
