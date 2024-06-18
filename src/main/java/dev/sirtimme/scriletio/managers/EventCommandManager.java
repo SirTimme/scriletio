@@ -19,7 +19,7 @@ public class EventCommandManager<T extends GenericEvent> implements ICommandMana
     @Override
     public void handleCommand(final T event) {
         final var context = entityManagerFactory.createEntityManager();
-        final var command = commandFactory.createCommand(event, context);
+        final var command = commandFactory.createCommand(context);
 
         try {
             context.getTransaction().begin();
