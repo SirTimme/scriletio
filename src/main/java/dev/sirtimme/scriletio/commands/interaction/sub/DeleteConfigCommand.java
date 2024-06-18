@@ -1,9 +1,12 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
 import dev.sirtimme.scriletio.precondition.interaction.slash.HasSavedConfigs;
+import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -19,9 +22,11 @@ import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 public class DeleteConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteConfigCommand.class);
     private final IQueryableRepository<DeleteConfig> configRepository;
+    private final IRepository<User> userRepository;
 
-    public DeleteConfigCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+    public DeleteConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
         this.configRepository = configRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,7 +57,8 @@ public class DeleteConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(configRepository)
+            new HasSavedConfigs(configRepository),
+            new IsRegistered(userRepository)
         );
     }
 

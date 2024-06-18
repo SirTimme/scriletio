@@ -8,9 +8,9 @@ import dev.sirtimme.scriletio.commands.interaction.sub.UpdateConfigCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsAdmin;
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.repository.IRepository;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -26,12 +26,19 @@ public class AutoDeleteCommand implements ISlashCommand {
         this.subCommands = new HashMap<>();
         this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(configRepository, userRepository));
         this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(configRepository));
-        this.subCommands.put(DeleteSubCommand.UPDATE, () -> new UpdateConfigCommand(configRepository));
-        this.subCommands.put(DeleteSubCommand.DELETE, () -> new DeleteConfigCommand(configRepository));
+        this.subCommands.put(DeleteSubCommand.UPDATE, () -> new UpdateConfigCommand(configRepository, userRepository));
+        this.subCommands.put(DeleteSubCommand.DELETE, () -> new DeleteConfigCommand(configRepository, userRepository));
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
+        // command can only be executed within a guild
+        // noinspection DataFlowIssue
+        if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+            event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
+            return;
+        }
+
         // this command only consists of subcommands
         // noinspection DataFlowIssue
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
@@ -46,9 +53,7 @@ public class AutoDeleteCommand implements ISlashCommand {
 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of(
-            new IsAdmin()
-        );
+        return List.of();
     }
 
     @Override

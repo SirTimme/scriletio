@@ -1,7 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
@@ -16,9 +19,11 @@ import java.util.List;
 
 public class UpdateConfigCommand implements ISubCommand {
     private final IQueryableRepository<DeleteConfig> configRepository;
+    private final IRepository<User> userRepository;
 
-    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
         this.configRepository = configRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -54,7 +59,8 @@ public class UpdateConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(configRepository)
+            new HasSavedConfigs(configRepository),
+            new IsRegistered(userRepository)
         );
     }
 

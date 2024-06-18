@@ -2,7 +2,6 @@ package dev.sirtimme.scriletio.commands.interaction.slash;
 
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsOwner;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -20,6 +19,11 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
+        if (!event.getUser().getId().equals(System.getenv("OWNER_ID"))) {
+            event.reply("This command can only be executed by the owner").setEphemeral(true).queue();
+            return;
+        }
+
         event.getJDA()
              .updateCommands()
              .addCommands(manager.getCommandData())
@@ -30,9 +34,7 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of(
-            new IsOwner()
-        );
+        return List.of();
     }
 
     @Override
