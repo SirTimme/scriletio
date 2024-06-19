@@ -15,7 +15,7 @@ public class GuildReadyEventCommandFactory implements IEventCommandFactory<Guild
     }
 
     @Override
-    public ICommand<GuildReadyEvent> createCommand(final GuildReadyEvent event, final EntityManager context) {
+    public ICommand<GuildReadyEvent> createCommand(final EntityManager context) {
         return new GuildReadyCommand(deleteTaskManager, new DeleteConfigRepository(context));
     }
 }

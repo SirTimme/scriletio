@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 
 public class HasSavedConfigs implements IPrecondition<SlashCommandInteractionEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HasSavedConfigs.class);
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public HasSavedConfigs(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public HasSavedConfigs(final IQueryableRepository<DeleteConfig> configRepository) {
+        this.configRepository = configRepository;
     }
 
     @Override
     public boolean isValid(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
-        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+        // noinspection DataFlowIssue command can only be executed within a guild
+        final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
         LOGGER.debug("Found {} configs for guild with id {}", deleteConfigs.size(), event.getGuild().getIdLong());
 

@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 
 public class ChannelDeleteEventCommandFactory implements IEventCommandFactory<ChannelDeleteEvent> {
     @Override
-    public ICommand<ChannelDeleteEvent> createCommand(final ChannelDeleteEvent event, final EntityManager context) {
+    public ICommand<ChannelDeleteEvent> createCommand(final EntityManager context) {
         return new ChannelDeleteCommand(new DeleteConfigRepository(context));
     }
 }

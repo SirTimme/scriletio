@@ -15,7 +15,7 @@ public class MessageReceiveEventCommandFactory implements IEventCommandFactory<M
     }
 
     @Override
-    public ICommand<MessageReceivedEvent> createCommand(final MessageReceivedEvent event, final EntityManager context) {
+    public ICommand<MessageReceivedEvent> createCommand(final EntityManager context) {
         return new MessageReceiveCommand(deleteTaskManager, new DeleteConfigRepository(context));
     }
 }

@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
 import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
-import dev.sirtimme.scriletio.commands.event.CommandAutoCompleteCommand;
+import dev.sirtimme.scriletio.commands.interaction.autocomplete.CommandAutoCompleteCommand;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;

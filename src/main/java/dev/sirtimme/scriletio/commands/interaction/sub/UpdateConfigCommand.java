@@ -1,7 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
 import dev.sirtimme.scriletio.repository.IQueryableRepository;
+import dev.sirtimme.scriletio.repository.IRepository;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
@@ -15,15 +18,17 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 
 public class UpdateConfigCommand implements ISubCommand {
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
+    private final IRepository<User> userRepository;
 
-    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
+        this.configRepository = configRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // command option 'duration' is required
+        // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
         final long newDuration;
         try {
@@ -33,7 +38,7 @@ public class UpdateConfigCommand implements ISubCommand {
             return;
         }
 
-        // command option 'channel' is required
+        // noinspection DataFlowIssue command option 'channel' is required
         final var channelOption = event.getOption("channel").getAsString();
         final long channelId;
         try {
@@ -43,7 +48,7 @@ public class UpdateConfigCommand implements ISubCommand {
             return;
         }
 
-        final var deleteConfig = deleteConfigRepository.get(channelId);
+        final var deleteConfig = configRepository.get(channelId);
         deleteConfig.setDuration(newDuration);
 
         event.reply("Config for channel <#" + channelId + "> successfully updated. The new duration is **" + newDuration + "** minutes").queue();
@@ -52,7 +57,8 @@ public class UpdateConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(deleteConfigRepository)
+            new HasSavedConfigs(configRepository),
+            new IsRegistered(userRepository)
         );
     }
 

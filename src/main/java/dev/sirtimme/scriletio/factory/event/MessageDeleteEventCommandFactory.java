@@ -15,7 +15,7 @@ public class MessageDeleteEventCommandFactory implements IEventCommandFactory<Me
     }
 
     @Override
-    public ICommand<MessageDeleteEvent> createCommand(final MessageDeleteEvent event, final EntityManager context) {
+    public ICommand<MessageDeleteEvent> createCommand(final EntityManager context) {
         return new MessageDeleteCommand(deleteTaskManager, new DeleteConfigRepository(context));
     }
 }

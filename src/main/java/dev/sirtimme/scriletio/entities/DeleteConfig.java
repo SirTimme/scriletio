@@ -66,8 +66,4 @@ public class DeleteConfig implements IEntity {
     public long getChannelId() {
         return this.channelId;
     }
-
-    public long getId() {
-        return this.id;
-    }
 }

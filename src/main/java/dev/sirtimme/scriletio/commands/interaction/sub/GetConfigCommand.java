@@ -11,16 +11,16 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 
 public class GetConfigCommand implements ISubCommand {
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
 
-    public GetConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public GetConfigCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+        this.configRepository = configRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
-        final var deleteConfigs = deleteConfigRepository.findAll(event.getGuild().getIdLong());
+        // noinspection DataFlowIssue command can only be executed within a guild
+        final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
         event.reply(Formatter.response(deleteConfigs)).queue();
     }
@@ -28,7 +28,7 @@ public class GetConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(deleteConfigRepository)
+            new HasSavedConfigs(configRepository)
         );
     }
 

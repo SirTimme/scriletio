@@ -19,29 +19,29 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 
 public class AddConfigCommand implements ISubCommand {
-    private final IQueryableRepository<DeleteConfig> deleteConfigRepository;
+    private final IQueryableRepository<DeleteConfig> configRepository;
     private final IRepository<User> userRepository;
 
-    public AddConfigCommand(final IQueryableRepository<DeleteConfig> deleteConfigRepository, final IRepository<User> userRepository) {
-        this.deleteConfigRepository = deleteConfigRepository;
+    public AddConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
+        this.configRepository = configRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
+        // noinspection DataFlowIssue command can only be executed within a guild
         final var guildId = event.getGuild().getIdLong();
 
-        if (deleteConfigRepository.findAll(guildId).size() == 25) {
+        if (configRepository.findAll(guildId).size() == 25) {
             event.reply("Each guild can only have up to 25 configs").queue();
             return;
         }
 
-        // command option is required
+        // noinspection DataFlowIssue command option 'channel' is required
         final var channelOption = event.getOption("channel").getAsChannel();
         final var channelId = channelOption.getIdLong();
 
-        if (deleteConfigRepository.get(channelId) != null) {
+        if (configRepository.get(channelId) != null) {
             event.reply("There is already a delete config for that channel!").queue();
             return;
         }
@@ -51,7 +51,7 @@ public class AddConfigCommand implements ISubCommand {
             return;
         }
 
-        // command option is required
+        // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
 
         var duration = 0L;
@@ -75,7 +75,7 @@ public class AddConfigCommand implements ISubCommand {
             duration
         );
 
-        deleteConfigRepository.add(deleteConfig);
+        configRepository.add(deleteConfig);
 
         event.reply("Successfully created an auto delete config for " + channelOption.getAsMention()).queue();
     }

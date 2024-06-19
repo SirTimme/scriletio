@@ -3,7 +3,6 @@ package dev.sirtimme.scriletio.commands.interaction.slash;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsNotRegistered;
 import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -22,6 +21,13 @@ public class RegisterCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
+        final var user = userRepository.get(userId);
+
+        if (user != null) {
+            event.reply("You are already registered").queue();
+            return;
+        }
+
         final var btnAccept = Button.success(userId + ":registerAccept", "Accept");
         final var btnCancel = Button.danger(userId + ":registerCancel", "Cancel");
 
@@ -30,9 +36,7 @@ public class RegisterCommand implements ISlashCommand {
 
     @Override
     public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of(
-            new IsNotRegistered(userRepository)
-        );
+        return List.of();
     }
 
     @Override
