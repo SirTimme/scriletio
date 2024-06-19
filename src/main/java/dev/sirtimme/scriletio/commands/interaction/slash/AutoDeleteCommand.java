@@ -32,15 +32,13 @@ public class AutoDeleteCommand implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
-        // noinspection DataFlowIssue
+        // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
             event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
             return;
         }
 
-        // this command only consists of subcommands
-        // noinspection DataFlowIssue
+        // noinspection DataFlowIssue this command only consists of subcommands
         final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
         final var subCommand = subCommands.get(subCommandName).get();
 

@@ -16,12 +16,19 @@ public class Parser {
         var lexer = new Lexer(content);
         tokens = lexer.lex();
         var totalDuration = 0L;
+
         while (index < tokens.size()) {
             var currentToken = tokens.get(index);
+
+            if (index == 0 && !(currentToken instanceof Token.Digit)) {
+                throw new ParsingException("The duration format must start with a digit!", index);
+            }
+
             if (currentToken instanceof Token.Digit digit) {
                 var duration = getDuration(digit);
                 totalDuration += duration.toMinutes();
             }
+
             index++;
         }
 

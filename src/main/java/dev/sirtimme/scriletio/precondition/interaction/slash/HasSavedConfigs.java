@@ -17,8 +17,7 @@ public class HasSavedConfigs implements IPrecondition<SlashCommandInteractionEve
 
     @Override
     public boolean isValid(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
-        // noinspection DataFlowIssue
+        // noinspection DataFlowIssue command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
         LOGGER.debug("Found {} configs for guild with id {}", deleteConfigs.size(), event.getGuild().getIdLong());

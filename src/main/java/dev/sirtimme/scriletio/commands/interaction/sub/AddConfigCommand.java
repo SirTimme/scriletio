@@ -51,8 +51,7 @@ public class AddConfigCommand implements ISubCommand {
             return;
         }
 
-        // command option 'duration' is required
-        // noinspection DataFlowIssue
+        // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
 
         var duration = 0L;

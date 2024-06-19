@@ -31,8 +31,7 @@ public class DeleteConfigCommand implements ISubCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // command can only be executed within a guild
-        // noinspection DataFlowIssue
+        // noinspection DataFlowIssue command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
         final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "delete").setPlaceholder("Saved configs");
 
