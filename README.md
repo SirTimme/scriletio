@@ -26,7 +26,7 @@
 ### /register
 
 > [!NOTE]
-> | Parameters | Type | Required |
+> | Parameter | Type | Required |
 > | -- | -- | -- |
 > | - | - | - |
 
@@ -37,7 +37,7 @@ Example:
 ### /autodelete add
 
 > [!NOTE]
-> | Parameters | Type | Required |
+> | Parameter | Type | Required |
 > | -- | -- | -- |
 > | channel | Textchannel | true |
 > | duration | String | true |
