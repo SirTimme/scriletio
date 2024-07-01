@@ -21,7 +21,7 @@
 | Command                                             | Task                                            |
 |-----------------------------------------------------|-------------------------------------------------|
 | [/register](#register)                              | Registers yourself in the database              |
-| [/autodelete add channel duration](#autodelete-add) | Adds a autodelete config your specified channel |
+| [/autodelete add channel duration](#autodelete-add) | Adds an autodelete config for the specified channel |
 
 ### /register
 
