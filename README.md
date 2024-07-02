@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white" alt="gradle badge"/>
 </div>
 
-<h3 align="center">Scriletio enables you to delete messages<br/> in your discord server after a configured duration.</h3><br>
+<h3 align="center">Scriletio is a discord bot that automatically <br/> deletes your messages after a configured duration.</h3><br>
 
 ## Table of contents
 
@@ -21,10 +21,11 @@
 | Command                                             | Task                                            |
 |-----------------------------------------------------|-------------------------------------------------|
 | [/register](#register)                              | Registers yourself in the database              |
-| [/autodelete add channel duration](#autodelete-add) | Adds an autodelete config for the specified channel |
+| [/autodelete add channel duration](#autodelete-add-channel-duration) | Adds an autodelete config for the specified channel |
+
+---
 
 ### /register
-
 > [!NOTE]
 > | Parameter | Type | Required |
 > | -- | -- | -- |
@@ -34,7 +35,9 @@ Example:
 
 ![register command](src/main/resources/assets/register_command.png)
 
-### /autodelete add
+---
+
+### /autodelete add channel duration
 
 > [!NOTE]
 > | Parameter | Type | Required |
