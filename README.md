@@ -18,14 +18,16 @@
 
 ### Overview
 
-| Command                                             | Task                                            |
-|-----------------------------------------------------|-------------------------------------------------|
-| [/register](#register)                              | Registers yourself in the database              |
-| [/autodelete add channel duration](#autodelete-add-channel-duration) | Adds an autodelete config for the specified channel |
+| Command                                                                    | Task                                                           |
+|----------------------------------------------------------------------------|----------------------------------------------------------------|
+| [/register](#register)                                                     | Registers yourself in the database                             |
+| [/autodelete add \<channel> \<duration>](#autodelete-add-channel-duration) | Adds an autodelete config for the specified channel            |
+| [/autodelete get](#autodelete-get)                                         | Displays an overview for all autodelete configs in this server |
 
 ---
 
 ### /register
+
 > [!NOTE]
 > | Parameter | Type | Required |
 > | -- | -- | -- |
@@ -37,7 +39,7 @@ Example:
 
 ---
 
-### /autodelete add channel duration
+### /autodelete add \<channel> \<duration>
 
 > [!NOTE]
 > | Parameter | Type | Required |
@@ -48,6 +50,21 @@ Example:
 Example:
 
 ![autodelete add command](src/main/resources/assets/autodelete_add_command.png)
+
+### /autodelete get
+
+> [!NOTE]
+> | Parameter | Type | Required |
+> | -- | -- | -- |
+> | - | - | - |
+
+Example:
+
+![img.png](src/main/resources/assets/autodelete_get_command.png)
+
+---
+
+### /autodelete update \<config>
 
 ## Self-hosting
 
