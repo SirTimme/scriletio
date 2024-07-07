@@ -18,11 +18,13 @@
 
 ### Overview
 
-| Command                                                                    | Task                                                           |
-|----------------------------------------------------------------------------|----------------------------------------------------------------|
-| [/register](#register)                                                     | Registers yourself in the database                             |
-| [/autodelete add \<channel> \<duration>](#autodelete-add-channel-duration) | Adds an autodelete config for the specified channel            |
-| [/autodelete get](#autodelete-get)                                         | Displays an overview for all autodelete configs in this server |
+| Command                                                                          | Task                                                           |
+|----------------------------------------------------------------------------------|----------------------------------------------------------------|
+| [/register](#register)                                                           | Registers yourself in the database                             |
+| [/autodelete add \<channel> \<duration>](#autodelete-add-channel-duration)       | Adds an autodelete config for the specified channel            |
+| [/autodelete get](#autodelete-get)                                               | Displays an overview for all autodelete configs in this server |
+| [/autodelete update \<channel> \<duration>](#autodelete-update-channel-duration) | Updates an existing config with the specified duration         |
+| [/autodelete delete](#autodelete-delete)                                         | Deletes an existing autodelete config                          |
 
 ---
 
@@ -60,11 +62,31 @@ Example:
 
 Example:
 
-![img.png](src/main/resources/assets/autodelete_get_command.png)
+![autodelete get command](src/main/resources/assets/autodelete_get_command.png)
 
 ---
 
-### /autodelete update \<config>
+### /autodelete update \<channel> \<duration>
+
+> [!NOTE]
+> | Parameter | Type | Required |
+> | -- | -- | -- |
+> | channel | Textchannel | true |
+> | duration | String | true |
+
+Example:
+
+![autodelete update command](src/main/resources/assets/autodelete_update_command.png)
+
+> [!IMPORTANT]
+> The choices for **channel** are dynamically resolved based on your saved autodelete configs.
+> You need to use one of the provided choices to update an autodelete config!
+>
+> ![autodelete update channel choices](src/main/resources/assets/autodelete_update_channel_choices.png)
+
+---
+
+### /autodelete delete
 
 ## Self-hosting
 
