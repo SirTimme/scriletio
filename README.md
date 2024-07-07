@@ -53,6 +53,8 @@ Example:
 
 ![autodelete add command](src/main/resources/assets/autodelete_add_command.png)
 
+---
+
 ### /autodelete get
 
 > [!NOTE]
