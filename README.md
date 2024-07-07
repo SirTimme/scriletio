@@ -81,7 +81,7 @@ Example:
 ![autodelete update command](src/main/resources/assets/autodelete_update_command.png)
 
 > [!IMPORTANT]
-> The choices for **channel** are dynamically resolved based on your saved autodelete configs.
+> The choices for **channel** are dynamically resolved based on your saved autodelete configs.\
 > You need to use one of the provided choices to update an autodelete config!
 >
 > ![autodelete update channel choices](src/main/resources/assets/autodelete_update_channel_choices.png)
