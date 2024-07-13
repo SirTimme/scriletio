@@ -1,6 +1,6 @@
 plugins {
-    java
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("scriletio.open-telemetry")
 }
 
 group = "dev.sirtimme"
@@ -18,15 +18,6 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.3")
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-hikaricp:6.4.4.Final")
-
-    // OpenTelemetry
-    implementation(platform("io.opentelemetry:opentelemetry-bom-alpha:1.40.0-alpha"))
-    implementation(platform("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:2.5.0-alpha"))
-
-    implementation("io.opentelemetry:opentelemetry-sdk")
-    implementation("io.opentelemetry:opentelemetry-exporter-otlp")
-    implementation("io.opentelemetry.semconv:opentelemetry-semconv")
-    implementation("io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0")
 }
 
 tasks.jar {
