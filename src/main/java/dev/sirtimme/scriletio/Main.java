@@ -11,6 +11,13 @@ import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.managers.InteractionCommandManager;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
+import io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.logs.SdkLoggerProvider;
+import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;
+import io.opentelemetry.sdk.resources.Resource;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
@@ -20,6 +27,9 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
+        final var openTelemetrySdk = initializeOpenTelemetry();
+        OpenTelemetryAppender.install(openTelemetrySdk);
+
         final var eventHandler = buildEventhandler();
 
         JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
@@ -63,5 +73,33 @@ public class Main {
         }};
 
         return Persistence.createEntityManagerFactory("scriletio", properties);
+    }
+
+    private static OpenTelemetry initializeOpenTelemetry() {
+        final var sdk =
+            OpenTelemetrySdk.builder()
+                            .setLoggerProvider(
+                                SdkLoggerProvider.builder()
+                                                 .setResource(
+                                                     Resource.getDefault().toBuilder()
+                                                             .put("service.name", "scriletio")
+                                                             .build()
+                                                 )
+                                                 .addLogRecordProcessor(
+                                                     BatchLogRecordProcessor.builder(
+                                                                                OtlpGrpcLogRecordExporter.builder()
+                                                                                                         .setEndpoint("http://collector:4317")
+                                                                                                         .build()
+                                                                            )
+                                                                            .build()
+                                                 )
+                                                 .build()
+                            )
+                            .build();
+
+        // Add hook to close SDK, which flushes logs
+        Runtime.getRuntime().addShutdownHook(new Thread(sdk::close));
+
+        return sdk;
     }
 }
