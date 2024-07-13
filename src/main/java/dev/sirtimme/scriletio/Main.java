@@ -76,30 +76,35 @@ public class Main {
     }
 
     private static OpenTelemetry initializeOpenTelemetry() {
-        final var sdk =
-            OpenTelemetrySdk.builder()
-                            .setLoggerProvider(
-                                SdkLoggerProvider.builder()
-                                                 .setResource(
-                                                     Resource.getDefault().toBuilder()
-                                                             .put("service.name", "scriletio")
-                                                             .build()
-                                                 )
-                                                 .addLogRecordProcessor(
-                                                     BatchLogRecordProcessor.builder(
-                                                                                OtlpGrpcLogRecordExporter.builder()
-                                                                                                         .setEndpoint("http://collector:4317")
-                                                                                                         .build()
-                                                                            )
-                                                                            .build()
-                                                 )
-                                                 .build()
-                            )
-                            .build();
+        final var logRecordExporter = OtlpGrpcLogRecordExporter
+            .builder()
+            .setEndpoint(System.getenv("LOG_EXPORTER_ENDPOINT"))
+            .build();
+
+        final var logRecordProcessor = BatchLogRecordProcessor
+            .builder(logRecordExporter)
+            .build();
+
+        final var serviceNameResource = Resource
+            .getDefault()
+            .toBuilder()
+            .put("service.name", "scriletio")
+            .build();
+
+        final var loggerProvider = SdkLoggerProvider
+            .builder()
+            .setResource(serviceNameResource)
+            .addLogRecordProcessor(logRecordProcessor)
+            .build();
+
+        final var openTelemetrySDK = OpenTelemetrySdk
+            .builder()
+            .setLoggerProvider(loggerProvider)
+            .build();
 
         // Add hook to close SDK, which flushes logs
-        Runtime.getRuntime().addShutdownHook(new Thread(sdk::close));
+        Runtime.getRuntime().addShutdownHook(new Thread(openTelemetrySDK::close));
 
-        return sdk;
+        return openTelemetrySDK;
     }
 }
