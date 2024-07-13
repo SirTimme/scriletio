@@ -14,10 +14,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class UpdateConfigCommand implements ISubCommand {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
     private final IQueryableRepository<DeleteConfig> configRepository;
     private final IRepository<User> userRepository;
 
@@ -52,6 +55,8 @@ public class UpdateConfigCommand implements ISubCommand {
         deleteConfig.setDuration(newDuration);
 
         event.reply("Config for channel <#" + channelId + "> successfully updated. The new duration is **" + newDuration + "** minutes").queue();
+
+        LOGGER.info("Updated config for channel <#{}>: The new duration is {} minutes", channelId, newDuration);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class UpdateConfigCommand implements ISubCommand {
         final var channelOption = new OptionData(
             OptionType.STRING,
             "channel",
-            "The channel you want to delete the config for",
+            "The channel you want to update the config for",
             true,
             true
         );

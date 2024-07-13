@@ -34,5 +34,23 @@ services:
     ports:
       - "8080:8080"
 
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.104.0
+    volumes:
+      - ./src/main/resources/open-telemetry/otel-config.yml:/otel-config.yml
+    command: [ "--config=/otel-config.yml" ]
+    ports:
+      - 4317:4317
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - 3000:3000
+
+  loki:
+    image: grafana/loki:3.1.0
+    ports:
+      - 3100:3100
+
 volumes:
   pg-data:
