@@ -25,6 +25,7 @@
 | [/autodelete get](#autodelete-get)                                               | Displays an overview for all autodelete configs in this server |
 | [/autodelete update \<channel> \<duration>](#autodelete-update-channel-duration) | Updates an existing config with the specified duration         |
 | [/autodelete delete](#autodelete-delete)                                         | Deletes an existing autodelete config                          |
+| [/delete](#delete)                                                               | Deletes all of your stored data from the database              |
 
 ---
 
