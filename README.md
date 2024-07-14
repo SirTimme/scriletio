@@ -127,8 +127,7 @@ Example:
 
 > [!IMPORTANT]
 > The duration format is structured as follows:\
-> The duration is specified with a **number**, followed by a **letter** for the unit.\
-> The following letters are permitted:
+> The duration is specified with a **number**, followed by a **letter** for the unit. These letters are permitted:
 >
 > | Letter     | Unit   |
 > |------------|--------|
