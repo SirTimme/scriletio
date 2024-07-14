@@ -27,13 +27,10 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        final var openTelemetrySdk = initializeOpenTelemetry();
-        OpenTelemetryAppender.install(openTelemetrySdk);
-
-        final var eventHandler = buildEventhandler();
+        OpenTelemetryAppender.install(buildOpenTelemetry());
 
         JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
-                  .addEventListeners(eventHandler)
+                  .addEventListeners(buildEventhandler())
                   .build();
     }
 
@@ -75,7 +72,7 @@ public class Main {
         return Persistence.createEntityManagerFactory("scriletio", properties);
     }
 
-    private static OpenTelemetry initializeOpenTelemetry() {
+    private static OpenTelemetry buildOpenTelemetry() {
         final var logRecordExporter = OtlpGrpcLogRecordExporter
             .builder()
             .setEndpoint(System.getenv("LOG_EXPORTER_ENDPOINT"))
