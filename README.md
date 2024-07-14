@@ -84,11 +84,37 @@ Example:
 > The choices for **channel** are dynamically resolved based on your saved autodelete configs.\
 > You need to use one of the provided choices to update an autodelete config!
 >
-> ![autodelete update channel choices](src/main/resources/assets/autodelete_update_channel_choices.png)
+> ![autodelete update choices information](src/main/resources/assets/autodelete_update_channel_choices.png)
 
 ---
 
 ### /autodelete delete
+
+> [!NOTE]
+> | Parameter | Type | Required |
+> | -- | -- | -- |
+> | - | - | - |
+
+Example:
+
+![autodelete delete command](src/main/resources/assets/autodelete_delete_command.png)
+
+---
+
+### /delete
+
+> [!NOTE]
+> | Parameter | Type | Required |
+> | -- | -- | -- |
+> | - | - | - |
+
+Example:
+
+![delete command](src/main/resources/assets/delete_command.png)
+
+> [!IMPORTANT]
+> When clicking **Accept** all of your saved autodelete configs will be deleted.\
+> This also means that the scheduled deletion of messages in these channels will be cancelled!
 
 ## Self-hosting
 
