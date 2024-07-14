@@ -54,6 +54,8 @@ Example:
 
 ![autodelete add command](src/main/resources/assets/autodelete_add_command.png)
 
+For more information regarding the **duration** format [click here](#duration-format).
+
 ---
 
 ### /autodelete get
@@ -87,6 +89,8 @@ Example:
 >
 > ![autodelete update choices information](src/main/resources/assets/autodelete_update_channel_choices.png)
 
+For more information regarding the **duration** format [click here](#duration-format).
+
 ---
 
 ### /autodelete delete
@@ -113,9 +117,32 @@ Example:
 
 ![delete command](src/main/resources/assets/delete_command.png)
 
-> [!IMPORTANT]
+> [!CAUTION]
 > When clicking **Accept** all of your saved autodelete configs will be deleted.\
 > This also means that the scheduled deletion of messages in these channels will be cancelled!
+
+---
+
+### Duration format
+
+> [!IMPORTANT]
+> The duration format is structured as follows:\
+> The duration is specified with a **number**, followed by a **letter** for the unit.\
+> The following letters are permitted:
+>
+> | Letter     | Unit   |
+> |------------|--------|
+> | `D` or `d` | Day    |
+> | `H` or `h` | Hour   |
+> | `M` or `m` | Minute |
+>
+> The order of the units **does not** matter.\
+> You can even specify **multiple** durations of the **same** unit (e.g. `3H3H`). It is simply added together.
+
+Examples:
+- `4D` or `4d` = 4 days
+- `2D3H` or `2d3h` = 2 days 3 hours
+- `1D5H3M` or `1d5h3m` = 1 day 5 hours 3 minutes
 
 ## Self-hosting
 
