@@ -1,5 +1,7 @@
+package dev.sirtimme.scriletio
+
 plugins {
-    id("scriletio.java-convention")
+    id("dev.sirtimme.scriletio.java-convention")
 }
 
 dependencies {
