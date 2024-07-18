@@ -1,7 +1,7 @@
 name: scriletio
 services:
   database:
-    image: postgres:${POSTGRES_VERSION}
+    image: postgres:${POSTGRES_VERSION-16.2}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -13,8 +13,8 @@ services:
 
   bot:
     build:
-      context: ../../../..
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/main/resources/docker/Dockerfile
     environment:
       OWNER_ID: ${OWNER_ID}
       TOKEN: ${TOKEN_DEV}
@@ -26,7 +26,7 @@ services:
       - database
 
   adminer:
-    image: adminer:${ADMINER_VERSION}
+    image: adminer:${ADMINER_VERSION-4.8.1}
     environment:
       ADMINER_DESIGN: pepa-linha-dark
     depends_on:
