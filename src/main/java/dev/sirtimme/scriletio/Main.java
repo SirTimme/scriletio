@@ -22,12 +22,22 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
 public class Main {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
-        OpenTelemetryAppender.install(buildOpenTelemetry());
+        if (System.getenv("LOG_EXPORTER_ENDPOINT") != null) {
+            OpenTelemetryAppender.install(buildOpenTelemetry());
+
+            LOGGER.info("Initialization of OpenTelemetry successful");
+        } else {
+            LOGGER.info("Environment variable 'LOG_EXPORTER_ENDPOINT' is not set, skipping initialization of OpenTelemetry");
+        }
 
         JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
                   .addEventListeners(buildEventhandler())
