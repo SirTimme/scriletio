@@ -145,3 +145,76 @@ Examples:
 
 ## Self-hosting
 
+Scriletio provides a docker image for self-hosting purposes. It can be found in the [dockerhub](https://hub.docker.com/repository/docker/sirtimme/scriletio/general) registry.
+
+> [!IMPORTANT]
+> This directory structure is needed for Scriletio to run:
+> ```
+> /
+> ├── compose.yml
+> └── .env
+> ```
+
+The `.env` file needs the following entries:
+
+````
+# discord related
+TOKEN=                      # the bot token
+OWNER_ID=                   # your discord user id
+
+# postgres
+POSTGRES_USER=              # the database username of your choice
+POSTGRES_PASSWORD=          # the database password of your choice
+POSTGRES_URL=               # the jdbc url of the postgres database
+POSTGRES_DB=                # the database name of your choice
+
+# image versions (optional)
+POSTGRES_VERSION=           # if left empty, 16.2 is used
+ADMINER_VERSION=            # if left empty, 4.8.1 is used
+SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
+````
+
+The `compose.yml` configures these `required` services:
+- `database` - a postgres database for data storage
+- `bot` - scriletio itself
+- `adminer` - a GUI for accessing the database
+
+````yml
+name: scriletio
+services:
+    database:
+        image: postgres:${POSTGRES_VERSION-16.2}
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - pg-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+    bot:
+        image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.8}
+        environment:
+            OWNER_ID: ${OWNER_ID}
+            TOKEN: ${TOKEN}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_URL: ${POSTGRES_URL}
+            LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
+        depends_on:
+            - database
+
+    adminer:
+        image: adminer:${ADMINER_VERSION-4.8.1}
+        environment:
+            ADMINER_DESIGN: pepa-linha-dark
+        depends_on:
+            - database
+        ports:
+            - "8080:8080"
+
+volumes:
+    pg-data:
+````
+
