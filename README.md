@@ -48,6 +48,7 @@ Example:
 | channel   | Textchannel | true     |
 | duration  | String      | true     |
 
+> [!IMPORTANT]
 > For more information regarding the **duration** format [click here](#duration-format).
 
 Example:
@@ -176,11 +177,15 @@ OTLP_ENDPOINT=              # the grpc endpoint for the otel-config
 ````
 
 The `compose.yml` configures these `required` services:
+
 - `database` - a postgres database for data storage
 - `bot` - scriletio itself
 - `adminer` - a GUI for accessing the database
 
-````yml
+> [!TIP]
+> Keep in mind that you may need to adjust the specified **ports** in the compose file below:
+
+```yml
 name: scriletio
 services:
     database:
@@ -217,4 +222,5 @@ services:
 volumes:
     pg-data:
 ````
+```
 
