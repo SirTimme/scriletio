@@ -13,7 +13,7 @@ services:
 
   bot:
     build:
-      context: .
+      context: ../../../..
       dockerfile: Dockerfile
     environment:
       OWNER_ID: ${OWNER_ID}
