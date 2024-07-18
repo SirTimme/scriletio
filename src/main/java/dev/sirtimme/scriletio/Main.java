@@ -22,18 +22,25 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
 public class Main {
-    public static void main(String[] args) {
-        final var openTelemetrySdk = initializeOpenTelemetry();
-        OpenTelemetryAppender.install(openTelemetrySdk);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-        final var eventHandler = buildEventhandler();
+    public static void main(String[] args) {
+        if (System.getenv("LOG_EXPORTER_ENDPOINT") != null) {
+            OpenTelemetryAppender.install(buildOpenTelemetry());
+
+            LOGGER.info("Initialization of OpenTelemetry successful");
+        } else {
+            LOGGER.info("Environment variable 'LOG_EXPORTER_ENDPOINT' is not set, skipping initialization of OpenTelemetry");
+        }
 
         JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
-                  .addEventListeners(eventHandler)
+                  .addEventListeners(buildEventhandler())
                   .build();
     }
 
@@ -75,7 +82,7 @@ public class Main {
         return Persistence.createEntityManagerFactory("scriletio", properties);
     }
 
-    private static OpenTelemetry initializeOpenTelemetry() {
+    private static OpenTelemetry buildOpenTelemetry() {
         final var logRecordExporter = OtlpGrpcLogRecordExporter
             .builder()
             .setEndpoint(System.getenv("LOG_EXPORTER_ENDPOINT"))
