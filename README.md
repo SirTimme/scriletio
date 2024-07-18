@@ -31,10 +31,9 @@
 
 ### /register
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | - | - | - |
+| Parameter | Type | Required |
+|-----------|------|----------|
+| -         | -    | -        |
 
 Example:
 
@@ -44,26 +43,25 @@ Example:
 
 ### /autodelete add \<channel> \<duration>
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | channel | Textchannel | true |
-> | duration | String | true |
+| Parameter | Type        | Required |
+|-----------|-------------|----------|
+| channel   | Textchannel | true     |
+| duration  | String      | true     |
+
+> For more information regarding the **duration** format [click here](#duration-format).
 
 Example:
 
 ![autodelete add command](src/main/resources/assets/autodelete_add_command.png)
 
-For more information regarding the **duration** format [click here](#duration-format).
 
 ---
 
 ### /autodelete get
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | - | - | - |
+| Parameter | Type | Required |
+|-----------|------|----------|
+| -         | -    | -        |
 
 Example:
 
@@ -73,32 +71,30 @@ Example:
 
 ### /autodelete update \<channel> \<duration>
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | channel | Textchannel | true |
-> | duration | String | true |
-
-Example:
-
-![autodelete update command](src/main/resources/assets/autodelete_update_command.png)
+| Parameter | Type        | Required |
+|-----------|-------------|----------|
+| channel   | Textchannel | true     |
+| duration  | String      | true     |
 
 > [!IMPORTANT]
 > The choices for **channel** are dynamically resolved based on your saved autodelete configs.\
 > You need to use one of the provided choices to update an autodelete config!
 >
 > ![autodelete update choices information](src/main/resources/assets/autodelete_update_channel_choices.png)
+>
+> For more information regarding the **duration** format [click here](#duration-format).
 
-For more information regarding the **duration** format [click here](#duration-format).
+Example:
+
+![autodelete update command](src/main/resources/assets/autodelete_update_command.png)
 
 ---
 
 ### /autodelete delete
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | - | - | - |
+| Parameter | Type | Required |
+|-----------|------|----------|
+| -         | -    | -        |
 
 Example:
 
@@ -108,18 +104,17 @@ Example:
 
 ### /delete
 
-> [!NOTE]
-> | Parameter | Type | Required |
-> | -- | -- | -- |
-> | - | - | - |
-
-Example:
-
-![delete command](src/main/resources/assets/delete_command.png)
+| Parameter | Type | Required |
+|-----------|------|----------|
+| -         | -    | -        |
 
 > [!CAUTION]
 > When clicking **Accept** all of your saved autodelete configs will be deleted.\
 > This also means that the scheduled deletion of messages in these channels will be cancelled!
+
+Example:
+
+![delete command](src/main/resources/assets/delete_command.png)
 
 ---
 
@@ -139,6 +134,7 @@ Example:
 > You can even specify **multiple** durations of the **same** unit (e.g. `3H3H`). It is simply added together.
 
 Examples:
+
 - `4D` or `4d` = 4 days
 - `2D3H` or `2d3h` = 2 days 3 hours
 - `1D5H3M` or `1d5h3m` = 1 day 5 hours 3 minutes
