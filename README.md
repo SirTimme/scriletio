@@ -172,6 +172,11 @@ POSTGRES_DB=                # the database name of your choice
 POSTGRES_VERSION=           # if left empty, 16.2 is used
 ADMINER_VERSION=            # if left empty, 4.8.1 is used
 SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
+
+# Open Telemetry (optional)
+LOG_EXPORTER_ENDPOINT=      # the endpoint of the OpenTelemetry Collector
+LOKI_ENDPOINT=              # the endpoint of the loki container
+OTLP_ENDPOINT=              # the grpc endpoint for the otel-config
 ````
 
 The `compose.yml` configures these `required` services:
@@ -201,7 +206,6 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_URL: ${POSTGRES_URL}
-            LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
         depends_on:
             - database
 
