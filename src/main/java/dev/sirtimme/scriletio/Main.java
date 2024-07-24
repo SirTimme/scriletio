@@ -1,9 +1,6 @@
 package dev.sirtimme.scriletio;
 
-import dev.sirtimme.scriletio.factory.event.ChannelDeleteEventCommandFactory;
-import dev.sirtimme.scriletio.factory.event.GuildReadyEventCommandFactory;
-import dev.sirtimme.scriletio.factory.event.MessageDeleteEventCommandFactory;
-import dev.sirtimme.scriletio.factory.event.MessageReceiveEventCommandFactory;
+import dev.sirtimme.scriletio.factory.event.*;
 import dev.sirtimme.scriletio.managers.EventCommandManager;
 import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
@@ -21,6 +18,14 @@ import io.opentelemetry.sdk.resources.Resource;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,37 +44,25 @@ public class Main {
             LOGGER.info("Environment variable 'LOG_EXPORTER_ENDPOINT' is not set, skipping initialization of OpenTelemetry");
         }
 
-        JDABuilder.createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
-                  .addEventListeners(buildEventhandler())
-                  .build();
-    }
-
-    private static EventHandler buildEventhandler() {
         final var entityManagerFactory = buildEntityManagerFactory();
         final var deleteTaskManager = new DeleteTaskManager();
 
-        // interaction events
-        final var slashCommandManager = new InteractionCommandManager<>(entityManagerFactory, new SlashEventCommandFactory());
-        final var buttonCommandManager = new InteractionCommandManager<>(entityManagerFactory, new ButtonEventCommandFactory());
-        final var menuCommandManager = new InteractionCommandManager<>(entityManagerFactory, new MenuEventCommandFactory());
-        final var commandAutoCompleteCommandManager = new InteractionCommandManager<>(entityManagerFactory, new CommandAutoCompleteEventCommandFactory());
+        JDABuilder
+            .createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
+            .addEventListeners(
+                // normal events
+                new EventCommandManager<>(MessageReceivedEvent.class, entityManagerFactory, new MessageReceiveEventCommandFactory(deleteTaskManager)),
+                new EventCommandManager<>(MessageDeleteEvent.class, entityManagerFactory, new MessageDeleteEventCommandFactory(deleteTaskManager)),
+                new EventCommandManager<>(GuildReadyEvent.class, entityManagerFactory, new GuildReadyEventCommandFactory(deleteTaskManager)),
+                new EventCommandManager<>(ChannelDeleteEvent.class, entityManagerFactory, new ChannelDeleteEventCommandFactory()),
 
-        // normal events
-        final var messageReceiveManager = new EventCommandManager<>(entityManagerFactory, new MessageReceiveEventCommandFactory(deleteTaskManager));
-        final var messageDeleteManager = new EventCommandManager<>(entityManagerFactory, new MessageDeleteEventCommandFactory(deleteTaskManager));
-        final var guildReadyCommandManager = new EventCommandManager<>(entityManagerFactory, new GuildReadyEventCommandFactory(deleteTaskManager));
-        final var channelDeleteCommandManager = new EventCommandManager<>(entityManagerFactory, new ChannelDeleteEventCommandFactory());
-
-        return new EventHandler(
-            slashCommandManager,
-            buttonCommandManager,
-            messageReceiveManager,
-            messageDeleteManager,
-            menuCommandManager,
-            guildReadyCommandManager,
-            channelDeleteCommandManager,
-            commandAutoCompleteCommandManager
-        );
+                // interaction events
+                new InteractionCommandManager<>(SlashCommandInteractionEvent.class, entityManagerFactory, new SlashEventCommandFactory()),
+                new InteractionCommandManager<>(ButtonInteractionEvent.class, entityManagerFactory, new ButtonEventCommandFactory()),
+                new InteractionCommandManager<>(StringSelectInteractionEvent.class, entityManagerFactory, new MenuEventCommandFactory()),
+                new InteractionCommandManager<>(CommandAutoCompleteInteractionEvent.class, entityManagerFactory, new CommandAutoCompleteEventCommandFactory())
+            )
+            .build();
     }
 
     private static EntityManagerFactory buildEntityManagerFactory() {

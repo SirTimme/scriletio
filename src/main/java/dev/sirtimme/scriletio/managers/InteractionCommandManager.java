@@ -6,12 +6,13 @@ import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InteractionCommandManager<T extends GenericInteractionCreateEvent> implements ICommandManager<T> {
+public class InteractionCommandManager<T extends GenericInteractionCreateEvent> extends CommandManager<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(InteractionCommandManager.class);
     private final EntityManagerFactory entityManagerFactory;
     private final IInteractionCommandFactory<T> commandFactory;
 
-    public InteractionCommandManager(final EntityManagerFactory entityManagerFactory, final IInteractionCommandFactory<T> commandFactory) {
+    public InteractionCommandManager(final Class<T> clazz, final EntityManagerFactory entityManagerFactory, final IInteractionCommandFactory<T> commandFactory) {
+        super(clazz);
         this.entityManagerFactory = entityManagerFactory;
         this.commandFactory = commandFactory;
     }

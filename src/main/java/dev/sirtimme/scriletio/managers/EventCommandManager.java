@@ -6,12 +6,13 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EventCommandManager<T extends GenericEvent> implements ICommandManager<T> {
+public class EventCommandManager<T extends GenericEvent> extends CommandManager<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventCommandManager.class);
     private final EntityManagerFactory entityManagerFactory;
     private final IEventCommandFactory<T> commandFactory;
 
-    public EventCommandManager(final EntityManagerFactory entityManagerFactory, final IEventCommandFactory<T> commandFactory) {
+    public EventCommandManager(final Class<T> clazz, final EntityManagerFactory entityManagerFactory, final IEventCommandFactory<T> commandFactory) {
+        super(clazz);
         this.entityManagerFactory = entityManagerFactory;
         this.commandFactory = commandFactory;
     }
