@@ -19,9 +19,3 @@ dependencies {
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-hikaricp:6.4.4.Final")
 }
-
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "dev.sirtimme.scriletio.Main"
-    }
-}
