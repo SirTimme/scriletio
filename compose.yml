@@ -24,6 +24,8 @@ services:
       LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
     depends_on:
       - database
+    volumes:
+      - ./src/main/resources/cfg/logback.xml:/home/gradle/src/cfg/logback.xml
 
   adminer:
     image: adminer:${ADMINER_VERSION}
