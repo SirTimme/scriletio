@@ -1,11 +1,7 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
 import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
-import dev.sirtimme.scriletio.commands.interaction.slash.ISlashCommand;
-import dev.sirtimme.scriletio.commands.interaction.slash.AutoDeleteCommand;
-import dev.sirtimme.scriletio.commands.interaction.slash.DeleteCommand;
-import dev.sirtimme.scriletio.commands.interaction.slash.RegisterCommand;
-import dev.sirtimme.scriletio.commands.interaction.slash.UpdateCommand;
+import dev.sirtimme.scriletio.commands.interaction.slash.*;
 import dev.sirtimme.scriletio.repository.UserRepository;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;

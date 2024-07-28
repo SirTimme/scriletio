@@ -1,17 +1,17 @@
-package dev.sirtimme.scriletio.managers;
+package dev.sirtimme.scriletio.commands.listener;
 
-import dev.sirtimme.scriletio.factory.interaction.IInteractionCommandFactory;
+import dev.sirtimme.scriletio.factory.event.IEventCommandFactory;
 import jakarta.persistence.EntityManagerFactory;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InteractionCommandManager<T extends GenericInteractionCreateEvent> extends CommandManager<T> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InteractionCommandManager.class);
+public class EventListener<T extends GenericEvent> extends EventListenerBase<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventListener.class);
     private final EntityManagerFactory entityManagerFactory;
-    private final IInteractionCommandFactory<T> commandFactory;
+    private final IEventCommandFactory<T> commandFactory;
 
-    public InteractionCommandManager(final Class<T> clazz, final EntityManagerFactory entityManagerFactory, final IInteractionCommandFactory<T> commandFactory) {
+    public EventListener(final Class<T> clazz, final EntityManagerFactory entityManagerFactory, final IEventCommandFactory<T> commandFactory) {
         super(clazz);
         this.entityManagerFactory = entityManagerFactory;
         this.commandFactory = commandFactory;
@@ -20,11 +20,7 @@ public class InteractionCommandManager<T extends GenericInteractionCreateEvent> 
     @Override
     public void handleCommand(final T event) {
         final var context = entityManagerFactory.createEntityManager();
-        final var command = commandFactory.createCommand(event, context);
-
-        if (command.hasInvalidPreconditions(event)) {
-            return;
-        }
+        final var command = commandFactory.createCommand(context);
 
         try {
             context.getTransaction().begin();
