@@ -1,7 +1,7 @@
 name: scriletio
 services:
   database:
-    image: postgres:${POSTGRES_VERSION}
+    image: postgres:${POSTGRES_VERSION-16.2}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,7 +28,7 @@ services:
       - ./src/main/resources/cfg/logback.xml:/home/gradle/src/cfg/logback.xml
 
   adminer:
-    image: adminer:${ADMINER_VERSION}
+    image: adminer:${ADMINER_VERSION-4.8.1}
     environment:
       ADMINER_DESIGN: pepa-linha-dark
     depends_on:
