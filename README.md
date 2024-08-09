@@ -172,8 +172,6 @@ SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
 
 # Open Telemetry (optional)
 LOG_EXPORTER_ENDPOINT=      # the endpoint of the OpenTelemetry Collector
-LOKI_ENDPOINT=              # the endpoint of the loki container
-OTLP_ENDPOINT=              # the grpc endpoint for the otel-config
 ````
 
 The `compose.yml` configures these `required` services:
