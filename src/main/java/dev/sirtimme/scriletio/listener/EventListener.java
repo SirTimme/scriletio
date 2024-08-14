@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.listener;
+package dev.sirtimme.scriletio.listener;
 
 import dev.sirtimme.scriletio.factory.event.IEventCommandFactory;
 import jakarta.persistence.EntityManagerFactory;

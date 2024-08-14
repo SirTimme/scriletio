@@ -1,4 +1,4 @@
-package dev.sirtimme.scriletio.commands.listener;
+package dev.sirtimme.scriletio.listener;
 
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
