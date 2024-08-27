@@ -1,21 +1,21 @@
 package dev.sirtimme.scriletio.commands.event;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.iuvo.commands.event.IEventCommand;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.DeleteTask;
-import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
-public class MessageReceiveCommand implements ICommand<MessageReceivedEvent> {
+public class MessageReceiveCommand implements IEventCommand<MessageReceivedEvent> {
     private final DeleteTaskManager deleteTaskManager;
-    private final IRepository<DeleteConfig> configRepository;
+    private final Repository<DeleteConfig> configRepository;
 
-    public MessageReceiveCommand(final DeleteTaskManager deleteTaskManager, final IRepository<DeleteConfig> configRepository) {
+    public MessageReceiveCommand(final DeleteTaskManager deleteTaskManager, final Repository<DeleteConfig> configRepository) {
         this.deleteTaskManager = deleteTaskManager;
         this.configRepository = configRepository;
     }

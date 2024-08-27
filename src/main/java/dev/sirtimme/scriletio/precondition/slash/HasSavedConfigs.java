@@ -1,17 +1,17 @@
-package dev.sirtimme.scriletio.precondition.interaction.slash;
+package dev.sirtimme.scriletio.precondition.slash;
 
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HasSavedConfigs implements IPrecondition<SlashCommandInteractionEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HasSavedConfigs.class);
-    private final IQueryableRepository<DeleteConfig> configRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
 
-    public HasSavedConfigs(final IQueryableRepository<DeleteConfig> configRepository) {
+    public HasSavedConfigs(final QueryableRepository<DeleteConfig> configRepository) {
         this.configRepository = configRepository;
     }
 

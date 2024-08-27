@@ -1,12 +1,13 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
+import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.HasSavedConfigs;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
-import dev.sirtimme.scriletio.repository.IRepository;
+import dev.sirtimme.scriletio.precondition.slash.HasSavedConfigs;
+import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -16,21 +17,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Locale;
 
 import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 
 public class DeleteConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteConfigCommand.class);
-    private final IQueryableRepository<DeleteConfig> configRepository;
-    private final IRepository<User> userRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
+    private final Repository<User> userRepository;
 
-    public DeleteConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
+    public DeleteConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         // noinspection DataFlowIssue command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
         final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "delete").setPlaceholder("Saved configs");
@@ -54,7 +56,7 @@ public class DeleteConfigCommand implements ISubCommand {
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new HasSavedConfigs(configRepository),
             new IsRegistered(userRepository)
@@ -62,7 +64,7 @@ public class DeleteConfigCommand implements ISubCommand {
     }
 
     @Override
-    public SubcommandData getSubcommandData() {
+    public SubcommandData getSubCommandData() {
         return new SubcommandData("delete", "Deletes an existing auto delete config");
     }
 }

@@ -1,15 +1,16 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
+import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
-import dev.sirtimme.scriletio.repository.IRepository;
+import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.HasSavedConfigs;
+import dev.sirtimme.scriletio.precondition.slash.HasSavedConfigs;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -18,19 +19,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Locale;
 
 public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
-    private final IQueryableRepository<DeleteConfig> configRepository;
-    private final IRepository<User> userRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
+    private final Repository<User> userRepository;
 
-    public UpdateConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
+    public UpdateConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
         final long newDuration;
@@ -60,7 +62,7 @@ public class UpdateConfigCommand implements ISubCommand {
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new HasSavedConfigs(configRepository),
             new IsRegistered(userRepository)
@@ -68,7 +70,7 @@ public class UpdateConfigCommand implements ISubCommand {
     }
 
     @Override
-    public SubcommandData getSubcommandData() {
+    public SubcommandData getSubCommandData() {
         final var channelOption = new OptionData(
             OptionType.STRING,
             "channel",

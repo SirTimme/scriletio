@@ -1,24 +1,25 @@
 package dev.sirtimme.scriletio.commands.interaction.component.menu;
 
-import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.component.menu.IsMenuAuthor;
-import dev.sirtimme.scriletio.repository.IRepository;
+import dev.sirtimme.scriletio.precondition.component.IsComponentAuthor;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEvent> {
-    private final IRepository<DeleteConfig> configRepository;
+    private final Repository<DeleteConfig> configRepository;
 
-    public DeleteMenu(final IRepository<DeleteConfig> configRepository) {
+    public DeleteMenu(final Repository<DeleteConfig> configRepository) {
         this.configRepository = configRepository;
     }
 
     @Override
-    public void execute(final StringSelectInteractionEvent event) {
+    public void execute(final StringSelectInteractionEvent event, final Locale locale) {
         final var channelId = event.getValues().getFirst();
         final var deleteConfig = configRepository.get(Long.parseLong(channelId));
 
@@ -28,9 +29,9 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
     }
 
     @Override
-    public List<IPrecondition<StringSelectInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super StringSelectInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsMenuAuthor()
+            new IsComponentAuthor()
         );
     }
 }

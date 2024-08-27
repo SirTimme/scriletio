@@ -1,14 +1,14 @@
-package dev.sirtimme.scriletio.precondition.interaction.slash;
+package dev.sirtimme.scriletio.precondition.slash;
 
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class IsRegistered implements IPrecondition<SlashCommandInteractionEvent> {
-    private final IRepository<User> userRepository;
+    private final Repository<User> userRepository;
 
-    public IsRegistered(final IRepository<User> userRepository) {
+    public IsRegistered(final Repository<User> userRepository) {
         this.userRepository = userRepository;
     }
 

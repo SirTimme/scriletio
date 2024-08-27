@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.factory.event;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.iuvo.commands.event.IEventCommand;
+import dev.sirtimme.iuvo.factory.event.IEventCommandFactory;
 import dev.sirtimme.scriletio.commands.event.MessageDeleteCommand;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
@@ -15,7 +16,7 @@ public class MessageDeleteEventCommandFactory implements IEventCommandFactory<Me
     }
 
     @Override
-    public ICommand<MessageDeleteEvent> createCommand(final EntityManager context) {
+    public IEventCommand<MessageDeleteEvent> createCommand(final EntityManager context) {
         return new MessageDeleteCommand(deleteTaskManager, new DeleteConfigRepository(context));
     }
 }

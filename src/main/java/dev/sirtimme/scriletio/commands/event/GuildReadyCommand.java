@@ -1,21 +1,21 @@
 package dev.sirtimme.scriletio.commands.event;
 
-import dev.sirtimme.scriletio.commands.ICommand;
+import dev.sirtimme.iuvo.commands.event.IEventCommand;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GuildReadyCommand implements ICommand<GuildReadyEvent> {
+public class GuildReadyCommand implements IEventCommand<GuildReadyEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuildReadyCommand.class);
     private final DeleteTaskManager deleteTaskManager;
-    private final IQueryableRepository<DeleteConfig> configRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
 
-    public GuildReadyCommand(final DeleteTaskManager deleteTaskManager, final IQueryableRepository<DeleteConfig> configRepository) {
+    public GuildReadyCommand(final DeleteTaskManager deleteTaskManager, final QueryableRepository<DeleteConfig> configRepository) {
         this.deleteTaskManager = deleteTaskManager;
         this.configRepository = configRepository;
     }

@@ -8,9 +8,11 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
+    implementation("dev.sirtimme:iuvo:0.0.5")
     implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("net.dv8tion:JDA:5.0.0") {
         exclude(group = "club.minnced", module = "opus-java")

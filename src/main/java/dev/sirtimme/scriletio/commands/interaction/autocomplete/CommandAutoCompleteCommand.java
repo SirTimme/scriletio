@@ -1,25 +1,26 @@
 package dev.sirtimme.scriletio.commands.interaction.autocomplete;
 
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
+import dev.sirtimme.iuvo.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
 import dev.sirtimme.scriletio.utils.Pair;
-import dev.sirtimme.scriletio.commands.interaction.IInteractionCommand;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAutoCompleteInteractionEvent> {
-    private final IQueryableRepository<DeleteConfig> configRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
 
-    public CommandAutoCompleteCommand(final IQueryableRepository<DeleteConfig> configRepository) {
+    public CommandAutoCompleteCommand(final QueryableRepository<DeleteConfig> configRepository) {
         this.configRepository = configRepository;
     }
 
     @Override
-    public void execute(final CommandAutoCompleteInteractionEvent event) {
+    public void execute(final CommandAutoCompleteInteractionEvent event, final Locale locale) {
         // noinspection DataFlowIssue the command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
@@ -34,7 +35,7 @@ public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAu
     }
 
     @Override
-    public List<IPrecondition<CommandAutoCompleteInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super CommandAutoCompleteInteractionEvent>> getPreconditions() {
         return List.of();
     }
 

@@ -1,26 +1,18 @@
 package dev.sirtimme.scriletio.repository;
 
+import dev.sirtimme.iuvo.repository.QueryableRepository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 
 import java.util.List;
 
-public class DeleteConfigRepository implements IQueryableRepository<DeleteConfig> {
+public class DeleteConfigRepository extends QueryableRepository<DeleteConfig> {
     private final EntityManager context;
 
     public DeleteConfigRepository(final EntityManager context) {
+        super(DeleteConfig.class, context);
         this.context = context;
-    }
-
-    @Override
-    public void add(final DeleteConfig entity) {
-        context.persist(entity);
-    }
-
-    @Override
-    public DeleteConfig get(final long id) {
-        return context.unwrap(Session.class).bySimpleNaturalId(DeleteConfig.class).load(id);
     }
 
     @Override
@@ -39,10 +31,5 @@ public class DeleteConfigRepository implements IQueryableRepository<DeleteConfig
             .createMutationQuery("DELETE FROM DeleteConfig WHERE authorId = :authorId")
             .setParameter("authorId", id)
             .executeUpdate();
-    }
-
-    @Override
-    public void delete(final DeleteConfig entity) {
-        context.remove(entity);
     }
 }
