@@ -8,11 +8,14 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven {
+        url = uri("http://192.168.0.227:8082/releases")
+        isAllowInsecureProtocol = true
+    }
 }
 
 dependencies {
-    implementation("dev.sirtimme:iuvo:0.0.5")
+    implementation("dev.sirtimme:iuvo:0.0.2")
     implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("net.dv8tion:JDA:5.0.0") {
         exclude(group = "club.minnced", module = "opus-java")
