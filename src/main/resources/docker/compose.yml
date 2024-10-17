@@ -14,7 +14,7 @@ services:
   bot:
     build:
       context: ../../../../
-      dockerfile: src/main/resources/docker/Dockerfile
+      dockerfile: Dockerfile
     environment:
       OWNER_ID: ${OWNER_ID}
       TOKEN: ${TOKEN_DEV}
