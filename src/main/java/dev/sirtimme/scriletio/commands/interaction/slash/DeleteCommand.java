@@ -1,9 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
+import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
-import dev.sirtimme.scriletio.repository.IRepository;
+import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -11,16 +12,17 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
+import java.util.Locale;
 
 public class DeleteCommand implements ISlashCommand {
-    private final IRepository<User> userRepository;
+    private final Repository<User> userRepository;
 
-    public DeleteCommand(final IRepository<User> userRepository) {
+    public DeleteCommand(final Repository<User> userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var userId = event.getUser().getIdLong();
         final var btnAccept = Button.success(userId + ":deleteAccept", "Accept");
         final var btnCancel = Button.danger(userId + ":deleteCancel", "Cancel");
@@ -29,7 +31,7 @@ public class DeleteCommand implements ISlashCommand {
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new IsRegistered(userRepository)
         );

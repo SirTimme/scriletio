@@ -12,18 +12,20 @@ services:
       - "5432:5432"
 
   bot:
-    image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.8}
+    build:
+      context: ../../../../
+      dockerfile: src/main/resources/docker/Dockerfile
     environment:
       OWNER_ID: ${OWNER_ID}
-      TOKEN: ${TOKEN}
+      TOKEN: ${TOKEN_DEV}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: ${POSTGRES_URL}
       LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
-    volumes:
-      - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
     depends_on:
       - database
+    volumes:
+      - ./../cfg/logback.xml:/home/gradle/src/cfg/logback.xml
 
   adminer:
     image: adminer:${ADMINER_VERSION-4.8.1}
@@ -31,6 +33,8 @@ services:
       - database
     ports:
       - "8080:8080"
+    volumes:
+      - ./../assets/adminer.css:/var/www/html/adminer.css
 
 volumes:
   pg-data:

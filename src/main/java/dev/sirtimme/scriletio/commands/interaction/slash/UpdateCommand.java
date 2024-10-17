@@ -1,7 +1,8 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
+import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.List;
+import java.util.Locale;
 
 public class UpdateCommand implements ISlashCommand {
     private final SlashEventCommandFactory manager;
@@ -18,7 +20,7 @@ public class UpdateCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         if (!event.getUser().getId().equals(System.getenv("OWNER_ID"))) {
             event.reply("This command can only be executed by the owner").setEphemeral(true).queue();
             return;
@@ -33,7 +35,7 @@ public class UpdateCommand implements ISlashCommand {
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of();
     }
 

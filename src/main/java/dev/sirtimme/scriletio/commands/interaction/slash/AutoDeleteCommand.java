@@ -1,15 +1,16 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.scriletio.commands.interaction.sub.ISubCommand;
+import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.commands.interaction.sub.AddConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.DeleteConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.GetConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.UpdateConfigCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
-import dev.sirtimme.scriletio.repository.IRepository;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -17,12 +18,13 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class AutoDeleteCommand implements ISlashCommand {
     private final HashMap<DeleteSubCommand, Supplier<ISubCommand>> subCommands;
 
-    public AutoDeleteCommand(final IRepository<User> userRepository, final IQueryableRepository<DeleteConfig> configRepository) {
+    public AutoDeleteCommand(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository) {
         this.subCommands = new HashMap<>();
         this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(configRepository, userRepository));
         this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(configRepository));
@@ -31,7 +33,7 @@ public class AutoDeleteCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
             event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
@@ -46,11 +48,11 @@ public class AutoDeleteCommand implements ISlashCommand {
             return;
         }
 
-        subCommand.execute(event);
+        subCommand.execute(event, locale);
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of();
     }
 
@@ -59,7 +61,7 @@ public class AutoDeleteCommand implements ISlashCommand {
         final var subCommandData = subCommands
             .values()
             .stream()
-            .map(function -> function.get().getSubcommandData())
+            .map(function -> function.get().getSubCommandData())
             .toList();
 
         return Commands.slash("autodelete", "Manage auto delete configs")

@@ -143,7 +143,6 @@ Examples:
 ## Self-hosting
 
 Scriletio provides a docker image for self-hosting purposes. It can be found in the [dockerhub](https://hub.docker.com/repository/docker/sirtimme/scriletio/general) registry.
-
 > [!IMPORTANT]
 > This directory structure is needed for Scriletio to run:
 > ```
@@ -152,36 +151,43 @@ Scriletio provides a docker image for self-hosting purposes. It can be found in 
 > └── .env
 > ```
 
-The `.env` file needs the following entries:
+First, copy the `.env.example` to `.env`:
+```shell
+> cp .env.example .env
+```
 
-````
-# discord related
+The `.env` file needs these `required` entries:
+```env
+# Discord credentials
 TOKEN=                      # the bot token
 OWNER_ID=                   # your discord user id
-
-# postgres
+# Postgres connection credentials
 POSTGRES_USER=              # the database username of your choice
 POSTGRES_PASSWORD=          # the database password of your choice
 POSTGRES_URL=               # the jdbc url of the postgres database
 POSTGRES_DB=                # the database name of your choice
+```
 
-# image versions (optional)
+The following entries are `optional`:
+```env
+# Docker image versions
 POSTGRES_VERSION=           # if left empty, 16.2 is used
 ADMINER_VERSION=            # if left empty, 4.8.1 is used
 SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
-
-# Open Telemetry (optional)
+# Open Telemetry
 LOG_EXPORTER_ENDPOINT=      # the endpoint of the OpenTelemetry Collector
-````
+# Logging
+LOGBACK_CONFIG_FILE=        # the filepath to a logback.xml file
+```
 
-The `compose.yml` configures these `required` services:
+The `compose.yml` configures these services:
 
 - `database` - a postgres database for data storage
 - `bot` - scriletio itself
 - `adminer` - a GUI for accessing the database
 
 > [!TIP]
-> Keep in mind that you may need to adjust the specified **ports** in the compose file below:
+> Keep in mind that you may need to adjust the specified `ports` in the compose file below:
 
 ```yml
 name: scriletio
@@ -205,13 +211,13 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_URL: ${POSTGRES_URL}
+        volumes:
+            - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
         depends_on:
             - database
 
     adminer:
         image: adminer:${ADMINER_VERSION-4.8.1}
-        environment:
-            ADMINER_DESIGN: pepa-linha-dark
         depends_on:
             - database
         ports:

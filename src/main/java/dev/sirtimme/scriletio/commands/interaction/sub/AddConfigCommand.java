@@ -1,14 +1,15 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
+import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.repository.IQueryableRepository;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.utils.Parser;
-import dev.sirtimme.scriletio.precondition.IPrecondition;
-import dev.sirtimme.scriletio.precondition.interaction.slash.IsRegistered;
-import dev.sirtimme.scriletio.repository.IRepository;
+import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -17,18 +18,19 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AddConfigCommand implements ISubCommand {
-    private final IQueryableRepository<DeleteConfig> configRepository;
-    private final IRepository<User> userRepository;
+    private final QueryableRepository<DeleteConfig> configRepository;
+    private final Repository<User> userRepository;
 
-    public AddConfigCommand(final IQueryableRepository<DeleteConfig> configRepository, final IRepository<User> userRepository) {
+    public AddConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         // noinspection DataFlowIssue command can only be executed within a guild
         final var guildId = event.getGuild().getIdLong();
 
@@ -81,14 +83,14 @@ public class AddConfigCommand implements ISubCommand {
     }
 
     @Override
-    public List<IPrecondition<SlashCommandInteractionEvent>> getPreconditions() {
+    public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new IsRegistered(userRepository)
         );
     }
 
     @Override
-    public SubcommandData getSubcommandData() {
+    public SubcommandData getSubCommandData() {
         final var channelOptionData = new OptionData(
             OptionType.CHANNEL,
             "channel",

@@ -1,5 +1,6 @@
 package dev.sirtimme.scriletio.entities;
 
+import dev.sirtimme.iuvo.entity.IEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.OnDelete;
