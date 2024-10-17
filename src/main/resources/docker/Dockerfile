@@ -2,7 +2,7 @@ FROM gradle:8.7.0-jdk21 AS build
 ENV HOME=/home/gradle/src
 RUN mkdir -p $HOME
 WORKDIR $HOME
-ADD ../../../.. $HOME
+ADD . $HOME
 RUN gradle shadowJar
 
 FROM openjdk:21
