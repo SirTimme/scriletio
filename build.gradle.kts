@@ -9,8 +9,7 @@ version = "0.0.1"
 repositories {
     mavenCentral()
     maven {
-        url = uri("http://192.168.0.227:8082/releases")
-        isAllowInsecureProtocol = true
+        url = uri("https://patient-turkey-beloved.ngrok-free.app/releases")
     }
 }
 
