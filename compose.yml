@@ -20,6 +20,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: ${POSTGRES_URL}
       LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
+    volumes:
+      - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
     depends_on:
       - database
 

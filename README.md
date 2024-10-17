@@ -176,6 +176,8 @@ ADMINER_VERSION=            # if left empty, 4.8.1 is used
 SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
 # Open Telemetry
 LOG_EXPORTER_ENDPOINT=      # the endpoint of the OpenTelemetry Collector
+# Logging
+LOGBACK_CONFIG_FILE=        # the filepath to a logback.xml file
 ```
 
 The `compose.yml` configures these services:
@@ -209,6 +211,8 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_URL: ${POSTGRES_URL}
+        volumes:
+            - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
         depends_on:
             - database
 
