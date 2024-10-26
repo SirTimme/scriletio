@@ -1,10 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
-import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.QueryableRepository;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.QueryableRepository;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.commands.interaction.sub.AddConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.DeleteConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.GetConfigCommand;

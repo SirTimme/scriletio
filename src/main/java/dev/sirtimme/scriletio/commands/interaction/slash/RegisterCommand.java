@@ -1,8 +1,8 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

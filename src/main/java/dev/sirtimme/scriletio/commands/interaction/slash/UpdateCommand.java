@@ -1,13 +1,14 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.localization.ResourceBundleLocalizationFunction;
 
 import java.util.List;
 import java.util.Locale;
@@ -26,9 +27,19 @@ public class UpdateCommand implements ISlashCommand {
             return;
         }
 
+        final var localizationFunc = ResourceBundleLocalizationFunction
+            .fromBundles("localization/commands", DiscordLocale.ENGLISH_US, DiscordLocale.GERMAN)
+            .build();
+
+        final var commandData = manager
+            .getCommandData()
+            .stream()
+            .map(cmdData -> cmdData.setLocalizationFunction(localizationFunc))
+            .toList();
+
         event.getJDA()
              .updateCommands()
-             .addCommands(manager.getCommandData())
+             .addCommands(commandData)
              .queue();
 
         event.reply("Update of slash commands were successful!").queue();
@@ -42,7 +53,6 @@ public class UpdateCommand implements ISlashCommand {
     @Override
     public CommandData getCommandData() {
         return Commands.slash("update", "Refreshes all slash commands")
-                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 }

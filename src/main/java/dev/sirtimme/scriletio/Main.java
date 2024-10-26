@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio;
 
-import dev.sirtimme.iuvo.listener.event.EventListener;
-import dev.sirtimme.iuvo.listener.interaction.InteractionListener;
+import dev.sirtimme.iuvo.api.listener.event.EventListener;
+import dev.sirtimme.iuvo.api.listener.interaction.InteractionListener;
 import dev.sirtimme.scriletio.factory.event.*;
 import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
@@ -48,7 +48,7 @@ public class Main {
         final var deleteTaskManager = new DeleteTaskManager();
 
         JDABuilder
-            .createLight(System.getenv("TOKEN"), GatewayIntent.GUILD_MESSAGES)
+            .createLight(System.getenv("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES)
             .addEventListeners(
                 // normal events
                 new EventListener<>(MessageReceivedEvent.class, entityManagerFactory, new MessageReceiveEventCommandFactory(deleteTaskManager)),
@@ -64,7 +64,7 @@ public class Main {
             )
             .build();
     }
-
+    
     private static EntityManagerFactory buildEntityManagerFactory() {
         final var properties = new HashMap<String, String>() {{
             put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));

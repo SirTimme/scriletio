@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.factory.event;
 
-import dev.sirtimme.iuvo.commands.event.IEventCommand;
-import dev.sirtimme.iuvo.factory.event.IEventCommandFactory;
+import dev.sirtimme.iuvo.api.commands.event.IEventCommand;
+import dev.sirtimme.iuvo.api.factory.event.IEventCommandFactory;
 import dev.sirtimme.scriletio.commands.event.ChannelDeleteCommand;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;

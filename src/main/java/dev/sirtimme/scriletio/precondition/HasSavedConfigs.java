@@ -1,7 +1,7 @@
-package dev.sirtimme.scriletio.precondition.slash;
+package dev.sirtimme.scriletio.precondition;
 
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.slf4j.Logger;

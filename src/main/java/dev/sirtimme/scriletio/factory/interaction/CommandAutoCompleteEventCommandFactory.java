@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.factory.interaction;
 
-import dev.sirtimme.iuvo.commands.interaction.IInteractionCommand;
-import dev.sirtimme.iuvo.factory.interaction.IInteractionCommandFactory;
+import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.api.factory.interaction.IInteractionCommandFactory;
 import dev.sirtimme.scriletio.commands.interaction.autocomplete.CommandAutoCompleteCommand;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;

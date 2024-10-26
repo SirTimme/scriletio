@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.repository;
 
-import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
