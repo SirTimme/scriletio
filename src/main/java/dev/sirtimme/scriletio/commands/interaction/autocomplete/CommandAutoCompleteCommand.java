@@ -1,8 +1,8 @@
 package dev.sirtimme.scriletio.commands.interaction.autocomplete;
 
-import dev.sirtimme.iuvo.commands.interaction.IInteractionCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.QueryableRepository;
+import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.scriletio.utils.Pair;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;

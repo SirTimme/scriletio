@@ -1,10 +1,9 @@
 package dev.sirtimme.scriletio.commands.interaction.component.menu;
 
-import dev.sirtimme.iuvo.commands.interaction.IInteractionCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.precondition.component.IsComponentAuthor;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
     @Override
     public List<IPrecondition<? super StringSelectInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsComponentAuthor()
+            IPrecondition.isComponentAuthor()
         );
     }
 }

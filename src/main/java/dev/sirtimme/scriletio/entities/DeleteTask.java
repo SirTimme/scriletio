@@ -1,6 +1,6 @@
 package dev.sirtimme.scriletio.entities;
 
-import dev.sirtimme.iuvo.entity.IEntity;
+import dev.sirtimme.iuvo.api.entity.IEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 

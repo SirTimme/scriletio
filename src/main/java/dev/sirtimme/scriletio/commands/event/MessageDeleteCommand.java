@@ -1,7 +1,7 @@
 package dev.sirtimme.scriletio.commands.event;
 
-import dev.sirtimme.iuvo.commands.event.IEventCommand;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.event.IEventCommand;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;

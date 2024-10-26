@@ -1,12 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
-import dev.sirtimme.iuvo.commands.interaction.ISlashCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -33,13 +31,12 @@ public class DeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsRegistered(userRepository)
+            IPrecondition.isRegistered(userRepository)
         );
     }
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("delete", "Deletes all of your stored data")
-                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Löscht all deine gespeicherten Daten");
+        return Commands.slash("delete", "Deletes all of your stored data");
     }
 }

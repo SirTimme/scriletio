@@ -1,15 +1,14 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
-import dev.sirtimme.iuvo.commands.interaction.ISubCommand;
-import dev.sirtimme.iuvo.precondition.IPrecondition;
-import dev.sirtimme.iuvo.repository.QueryableRepository;
-import dev.sirtimme.iuvo.repository.Repository;
+import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.api.precondition.IPrecondition;
+import dev.sirtimme.iuvo.api.repository.QueryableRepository;
+import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.utils.Parser;
-import dev.sirtimme.scriletio.precondition.slash.IsRegistered;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -85,7 +84,7 @@ public class AddConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new IsRegistered(userRepository)
+            IPrecondition.isRegistered(userRepository)
         );
     }
 
