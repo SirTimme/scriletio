@@ -7,6 +7,7 @@ import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
@@ -26,6 +27,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,12 @@ public class Main {
         final var entityManagerFactory = buildEntityManagerFactory();
         final var deleteTaskManager = new DeleteTaskManager();
 
+        LocalizationManager.addBundles(
+            "localization/responses",
+            DiscordLocale.ENGLISH_US,
+            DiscordLocale.GERMAN
+        );
+
         JDABuilder
             .createLight(System.getenv("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES)
             .addEventListeners(
@@ -64,7 +72,7 @@ public class Main {
             )
             .build();
     }
-    
+
     private static EntityManagerFactory buildEntityManagerFactory() {
         final var properties = new HashMap<String, String>() {{
             put("jakarta.persistence.jdbc.user", System.getenv("POSTGRES_USER"));
