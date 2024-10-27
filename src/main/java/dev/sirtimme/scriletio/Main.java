@@ -33,12 +33,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        if (System.getenv("LOG_EXPORTER_ENDPOINT") != null) {
+        if (!Objects.equals(System.getenv("LOG_EXPORTER_ENDPOINT"), "")) {
             OpenTelemetryAppender.install(buildOpenTelemetry());
 
             LOGGER.info("Initialization of OpenTelemetry successful");
