@@ -12,7 +12,7 @@ services:
       - "5432:5432"
 
   bot:
-    image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.8}
+    image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.10}
     environment:
       OWNER_ID: ${OWNER_ID}
       BOT_TOKEN: ${BOT_TOKEN}
