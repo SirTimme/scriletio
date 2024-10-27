@@ -26,6 +26,7 @@ public class LocalizationManager {
     public static String getResponse(final String key, final DiscordLocale locale, final Object... values) {
         final var bundle = getBundle(locale);
         final var template = new MessageFormat(bundle.getString(key));
+
         return template.format(values);
     }
 
