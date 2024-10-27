@@ -156,28 +156,23 @@ First, copy the `.env.example` to `.env`:
 > cp .env.example .env
 ```
 
-The `.env` file needs these `required` entries:
+The `.env` file needs these entries:
 ```env
-# Discord credentials
-TOKEN=                      # the bot token
-OWNER_ID=                   # your discord user id
-# Postgres connection credentials
-POSTGRES_USER=              # the database username of your choice
-POSTGRES_PASSWORD=          # the database password of your choice
-POSTGRES_URL=               # the jdbc url of the postgres database
-POSTGRES_DB=                # the database name of your choice
+BOT_TOKEN=
+OWNER_ID=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+POSTGRES_URL=
 ```
 
 The following entries are `optional`:
 ```env
-# Docker image versions
-POSTGRES_VERSION=           # if left empty, 16.2 is used
-ADMINER_VERSION=            # if left empty, 4.8.1 is used
-SCRILETIO_VERSION=          # if left empty, 0.0.8 is used
-# Open Telemetry
-LOG_EXPORTER_ENDPOINT=      # the endpoint of the OpenTelemetry Collector
-# Logging
-LOGBACK_CONFIG_FILE=        # the filepath to a logback.xml file
+POSTGRES_VERSION=
+ADMINER_VERSION=
+SCRILETIO_VERSION=
+LOG_EXPORTER_ENDPOINT=
+LOGBACK_CONFIG_FILE=
 ```
 
 The `compose.yml` configures these services:
@@ -204,13 +199,14 @@ services:
             - "5432:5432"
 
     bot:
-        image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.8}
+        image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.10}
         environment:
             OWNER_ID: ${OWNER_ID}
-            TOKEN: ${TOKEN}
+            BOT_TOKEN: ${BOT_TOKEN}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_URL: ${POSTGRES_URL}
+            LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
         volumes:
             - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
         depends_on:
