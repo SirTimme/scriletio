@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import java.util.Collections;
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
+
 public class AcceptDeletionButton implements IInteractionCommand<ButtonInteractionEvent> {
     private final Repository<User> userRepository;
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -34,7 +36,7 @@ public class AcceptDeletionButton implements IInteractionCommand<ButtonInteracti
     @Override
     public List<IPrecondition<? super ButtonInteractionEvent>> getPreconditions() {
         return List.of(
-            IPrecondition.isComponentAuthor()
+            isComponentAuthor()
         );
     }
 }

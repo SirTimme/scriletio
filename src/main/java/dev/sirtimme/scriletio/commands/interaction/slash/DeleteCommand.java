@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+
 public class DeleteCommand implements ISlashCommand {
     private final Repository<User> userRepository;
 
@@ -30,7 +32,7 @@ public class DeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            IPrecondition.isRegistered(userRepository)
+            isRegistered(userRepository)
         );
     }
 

@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import java.util.Collections;
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
+
 public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEvent> {
     private final Repository<DeleteConfig> configRepository;
 
@@ -29,7 +31,7 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
     @Override
     public List<IPrecondition<? super StringSelectInteractionEvent>> getPreconditions() {
         return List.of(
-            IPrecondition.isComponentAuthor()
+            isComponentAuthor()
         );
     }
 }

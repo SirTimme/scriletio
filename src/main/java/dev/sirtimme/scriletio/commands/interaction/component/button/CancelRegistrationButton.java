@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import java.util.Collections;
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
+
 public class CancelRegistrationButton implements IInteractionCommand<ButtonInteractionEvent> {
     @Override
     public void execute(final ButtonInteractionEvent event) {
@@ -16,7 +18,7 @@ public class CancelRegistrationButton implements IInteractionCommand<ButtonInter
     @Override
     public List<IPrecondition<? super ButtonInteractionEvent>> getPreconditions() {
         return List.of(
-            IPrecondition.isComponentAuthor()
+            isComponentAuthor()
         );
     }
 }
