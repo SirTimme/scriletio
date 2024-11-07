@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.interactions.commands.Command;
 
 import java.util.List;
-import java.util.Locale;
 
 public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAutoCompleteInteractionEvent> {
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -20,7 +19,7 @@ public class CommandAutoCompleteCommand implements IInteractionCommand<CommandAu
     }
 
     @Override
-    public void execute(final CommandAutoCompleteInteractionEvent event, final Locale locale) {
+    public void execute(final CommandAutoCompleteInteractionEvent event) {
         // noinspection DataFlowIssue the command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 

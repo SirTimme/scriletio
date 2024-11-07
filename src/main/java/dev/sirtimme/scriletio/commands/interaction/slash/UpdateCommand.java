@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.localization.ResourceBundleLocalizationFunction;
 
 import java.util.List;
-import java.util.Locale;
 
 public class UpdateCommand implements ISlashCommand {
     private final SlashEventCommandFactory manager;
@@ -21,7 +20,7 @@ public class UpdateCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         if (!event.getUser().getId().equals(System.getenv("OWNER_ID"))) {
             event.reply("This command can only be executed by the owner").setEphemeral(true).queue();
             return;

@@ -18,7 +18,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Supplier;
 
 public class AutoDeleteCommand implements ISlashCommand {
@@ -33,7 +32,7 @@ public class AutoDeleteCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
             event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
@@ -48,7 +47,7 @@ public class AutoDeleteCommand implements ISlashCommand {
             return;
         }
 
-        subCommand.execute(event, locale);
+        subCommand.execute(event);
     }
 
     @Override

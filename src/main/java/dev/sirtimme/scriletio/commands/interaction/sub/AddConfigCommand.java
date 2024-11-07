@@ -4,11 +4,11 @@ import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
-import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.utils.ParsingException;
-import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
+import dev.sirtimme.scriletio.utils.ParsingException;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
-import java.util.Locale;
 
 public class AddConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -29,7 +28,7 @@ public class AddConfigCommand implements ISubCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         final var guildId = event.getGuild().getIdLong();
 

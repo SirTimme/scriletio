@@ -25,8 +25,8 @@ public class DeleteConfigRepository extends QueryableRepository<DeleteConfig> {
     }
 
     @Override
-    public void deleteAll(final long id) {
-        context
+    public int deleteAll(final long id) {
+        return context
             .unwrap(Session.class)
             .createMutationQuery("DELETE FROM DeleteConfig WHERE authorId = :authorId")
             .setParameter("authorId", id)
