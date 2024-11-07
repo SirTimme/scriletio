@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEvent> {
     private final Repository<DeleteConfig> configRepository;
@@ -18,7 +17,7 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
     }
 
     @Override
-    public void execute(final StringSelectInteractionEvent event, final Locale locale) {
+    public void execute(final StringSelectInteractionEvent event) {
         final var channelId = event.getValues().getFirst();
         final var deleteConfig = configRepository.get(Long.parseLong(channelId));
 

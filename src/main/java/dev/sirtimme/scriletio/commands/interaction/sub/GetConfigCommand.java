@@ -3,14 +3,13 @@ package dev.sirtimme.scriletio.commands.interaction.sub;
 import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.QueryableRepository;
+import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
-import dev.sirtimme.scriletio.entities.DeleteConfig;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
-import java.util.Locale;
 
 public class GetConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -20,7 +19,7 @@ public class GetConfigCommand implements ISubCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 

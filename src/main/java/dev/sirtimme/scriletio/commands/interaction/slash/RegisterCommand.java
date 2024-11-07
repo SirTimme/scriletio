@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
-import java.util.Locale;
 
 public class RegisterCommand implements ISlashCommand {
     private final Repository<User> userRepository;
@@ -21,7 +20,7 @@ public class RegisterCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
         final var user = userRepository.get(userId);
 

@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
-import java.util.Locale;
 
 public class DeleteCommand implements ISlashCommand {
     private final Repository<User> userRepository;
@@ -20,7 +19,7 @@ public class DeleteCommand implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
         final var btnAccept = Button.success(userId + ":deleteAccept", "Accept");
         final var btnCancel = Button.danger(userId + ":deleteCancel", "Cancel");

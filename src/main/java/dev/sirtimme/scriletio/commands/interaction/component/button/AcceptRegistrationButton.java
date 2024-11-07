@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class AcceptRegistrationButton implements IInteractionCommand<ButtonInteractionEvent> {
     private final Repository<User> userRepository;
@@ -18,7 +17,7 @@ public class AcceptRegistrationButton implements IInteractionCommand<ButtonInter
     }
 
     @Override
-    public void execute(final ButtonInteractionEvent event, final Locale locale) {
+    public void execute(final ButtonInteractionEvent event) {
         userRepository.add(new User(event.getUser().getIdLong()));
 
         event.editMessage("You were successfully registered").setComponents(Collections.emptyList()).queue();

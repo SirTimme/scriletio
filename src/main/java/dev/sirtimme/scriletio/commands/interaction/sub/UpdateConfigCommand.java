@@ -7,9 +7,9 @@ import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
-import dev.sirtimme.scriletio.utils.ParsingException;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
+import dev.sirtimme.scriletio.utils.ParsingException;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Locale;
 
 public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
@@ -31,7 +30,7 @@ public class UpdateConfigCommand implements ISubCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+    public void execute(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
         final long newDuration;
