@@ -18,6 +18,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+
 public class AddConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
@@ -83,7 +85,7 @@ public class AddConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            IPrecondition.isRegistered(userRepository)
+            isRegistered(userRepository)
         );
     }
 

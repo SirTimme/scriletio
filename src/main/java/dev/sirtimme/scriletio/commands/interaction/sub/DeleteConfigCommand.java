@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
 import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 
 public class DeleteConfigCommand implements ISubCommand {
@@ -57,7 +58,7 @@ public class DeleteConfigCommand implements ISubCommand {
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new HasSavedConfigs(configRepository),
-            IPrecondition.isRegistered(userRepository)
+            isRegistered(userRepository)
         );
     }
 

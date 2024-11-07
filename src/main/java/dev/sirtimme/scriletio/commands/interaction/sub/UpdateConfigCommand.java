@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+
 public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -63,7 +65,7 @@ public class UpdateConfigCommand implements ISubCommand {
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             new HasSavedConfigs(configRepository),
-            IPrecondition.isRegistered(userRepository)
+            isRegistered(userRepository)
         );
     }
 
