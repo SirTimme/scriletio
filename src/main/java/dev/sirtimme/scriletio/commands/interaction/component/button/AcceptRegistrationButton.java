@@ -4,6 +4,7 @@ import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Collections;
@@ -12,9 +13,11 @@ import java.util.List;
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
 public class AcceptRegistrationButton implements IInteractionCommand<ButtonInteractionEvent> {
+    private final LocalizationManager l10nManager;
     private final Repository<User> userRepository;
 
-    public AcceptRegistrationButton(final Repository<User> userRepository) {
+    public AcceptRegistrationButton(final Repository<User> userRepository, final LocalizationManager l10nManager) {
+        this.l10nManager = l10nManager;
         this.userRepository = userRepository;
     }
 

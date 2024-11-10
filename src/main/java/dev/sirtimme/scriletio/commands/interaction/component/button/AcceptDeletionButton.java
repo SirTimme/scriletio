@@ -6,6 +6,7 @@ import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Collections;
@@ -14,10 +15,12 @@ import java.util.List;
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
 public class AcceptDeletionButton implements IInteractionCommand<ButtonInteractionEvent> {
+    private final LocalizationManager l10nManager;
     private final Repository<User> userRepository;
     private final QueryableRepository<DeleteConfig> configRepository;
 
-    public AcceptDeletionButton(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository) {
+    public AcceptDeletionButton(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository, final LocalizationManager l10nManager) {
+        this.l10nManager = l10nManager;
         this.userRepository = userRepository;
         this.configRepository = configRepository;
     }

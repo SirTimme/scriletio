@@ -3,6 +3,7 @@ package dev.sirtimme.scriletio.commands.interaction.slash;
 import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -14,13 +15,14 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isOwner;
-import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class UpdateCommand implements ISlashCommand {
-    private final SlashEventCommandFactory manager;
+    private final SlashEventCommandFactory slashCommandManager;
+    private final LocalizationManager l10nManager;
 
-    public UpdateCommand(final SlashEventCommandFactory manager) {
-        this.manager = manager;
+    public UpdateCommand(final SlashEventCommandFactory slashCommandManager, final LocalizationManager l10nManager) {
+        this.slashCommandManager = slashCommandManager;
+        this.l10nManager = l10nManager;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class UpdateCommand implements ISlashCommand {
             .fromBundles("localization/commands", DiscordLocale.ENGLISH_US, DiscordLocale.GERMAN)
             .build();
 
-        final var commandData = manager
+        final var commandData = slashCommandManager
             .getCommandData()
             .stream()
             .map(cmdData -> cmdData.setLocalizationFunction(localizationFunc))
@@ -52,7 +54,7 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash(getResponse("update.name", Locale.US), getResponse("update.description", Locale.US))
+        return Commands.slash(l10nManager.get("update.name", Locale.US), l10nManager.get("update.description", Locale.US))
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 }

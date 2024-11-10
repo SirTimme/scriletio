@@ -3,6 +3,7 @@ package dev.sirtimme.scriletio.factory.interaction;
 import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
 import dev.sirtimme.iuvo.api.factory.interaction.IInteractionCommandFactory;
 import dev.sirtimme.scriletio.commands.interaction.component.menu.DeleteMenu;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
@@ -13,9 +14,9 @@ import java.util.function.Function;
 public class MenuEventCommandFactory implements IInteractionCommandFactory<StringSelectInteractionEvent> {
     private final HashMap<String, Function<EntityManager, IInteractionCommand<StringSelectInteractionEvent>>> menuCommands;
 
-    public MenuEventCommandFactory() {
+    public MenuEventCommandFactory(final LocalizationManager l10nManager) {
         this.menuCommands = new HashMap<>();
-        this.menuCommands.put("delete", context -> new DeleteMenu(new DeleteConfigRepository(context)));
+        this.menuCommands.put("delete", context -> new DeleteMenu(l10nManager, new DeleteConfigRepository(context)));
     }
 
     @Override

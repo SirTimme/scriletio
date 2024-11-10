@@ -6,6 +6,7 @@ import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -19,17 +20,18 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
-import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 
 public class DeleteConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteConfigCommand.class);
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
+    private final LocalizationManager l10nManager;
 
-    public DeleteConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository) {
+    public DeleteConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository, final LocalizationManager l10nManager) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
+        this.l10nManager = l10nManager;
     }
 
     @Override
@@ -59,13 +61,13 @@ public class DeleteConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(configRepository),
+            new HasSavedConfigs(configRepository, l10nManager),
             isRegistered(userRepository)
         );
     }
 
     @Override
     public SubcommandData getSubCommandData() {
-        return new SubcommandData(getResponse("auto-delete.delete.name", Locale.US), getResponse("auto-delete.delete.description", Locale.US));
+        return new SubcommandData(l10nManager.get("auto-delete.delete.name", Locale.US), l10nManager.get("auto-delete.delete.description", Locale.US));
     }
 }
