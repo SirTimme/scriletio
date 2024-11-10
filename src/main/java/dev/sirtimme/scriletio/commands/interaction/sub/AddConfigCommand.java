@@ -6,6 +6,7 @@ import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.precondition.HasLessThanConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
 import dev.sirtimme.scriletio.utils.ParsingException;
@@ -33,14 +34,6 @@ public class AddConfigCommand implements ISubCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // noinspection DataFlowIssue command can only be executed within a guild
-        final var guildId = event.getGuild().getIdLong();
-
-        if (configRepository.findAll(guildId).size() == 25) {
-            event.reply("Each guild can only have up to 25 configs").queue();
-            return;
-        }
-
         // noinspection DataFlowIssue command option 'channel' is required
         final var channelOption = event.getOption("channel").getAsChannel();
         final var channelId = channelOption.getIdLong();
@@ -50,6 +43,7 @@ public class AddConfigCommand implements ISubCommand {
             return;
         }
 
+        // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getGuild().getSelfMember().hasPermission(channelOption, Permission.MESSAGE_MANAGE)) {
             event.reply("I'm missing the **" + Permission.MESSAGE_MANAGE.getName() + "** permission in channel " + channelOption.getAsMention() + "!").queue();
             return;
@@ -73,7 +67,7 @@ public class AddConfigCommand implements ISubCommand {
 
         final var deleteConfig = new DeleteConfig(
             event.getUser().getIdLong(),
-            guildId,
+            event.getGuild().getIdLong(),
             channelId,
             List.of(),
             duration
@@ -87,7 +81,8 @@ public class AddConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            isRegistered(userRepository)
+            isRegistered(userRepository),
+            new HasLessThanConfigs(25, configRepository)
         );
     }
 
