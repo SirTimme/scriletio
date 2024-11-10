@@ -11,6 +11,7 @@ import dev.sirtimme.scriletio.commands.interaction.sub.GetConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.UpdateConfigCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.precondition.HasPermission;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -36,12 +37,6 @@ public class AutoDeleteCommand implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        // noinspection DataFlowIssue command can only be executed within a guild
-        if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-            event.reply("You're missing the MANAGE_SERVER permission to execute admin commands!").queue();
-            return;
-        }
-
         final var subCommand = subCommands.get(event.getSubcommandName()).get();
 
         if (subCommand.hasInvalidPreconditions(event)) {
@@ -53,7 +48,9 @@ public class AutoDeleteCommand implements ISlashCommand {
 
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of();
+        return List.of(
+            new HasPermission(Permission.MANAGE_SERVER)
+        );
     }
 
     @Override
