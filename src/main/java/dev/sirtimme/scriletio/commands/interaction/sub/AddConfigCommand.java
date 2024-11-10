@@ -6,6 +6,7 @@ import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.precondition.HasLessThanConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
@@ -21,15 +22,16 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
-import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class AddConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
+    private final LocalizationManager l10nManager;
 
-    public AddConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository) {
+    public AddConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository, final LocalizationManager l10nManager) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
+        this.l10nManager = l10nManager;
     }
 
     @Override
@@ -82,7 +84,7 @@ public class AddConfigCommand implements ISubCommand {
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             isRegistered(userRepository),
-            new HasLessThanConfigs(25, configRepository)
+            new HasLessThanConfigs(25, configRepository, l10nManager)
         );
     }
 
@@ -90,21 +92,21 @@ public class AddConfigCommand implements ISubCommand {
     public SubcommandData getSubCommandData() {
         final var channelOptionData = new OptionData(
             OptionType.CHANNEL,
-            getResponse("auto-delete.add.channel.name", Locale.US),
-            getResponse("auto-delete.add.channel.description", Locale.US),
+            l10nManager.get("auto-delete.add.channel.name", Locale.US),
+            l10nManager.get("auto-delete.add.channel.description", Locale.US),
             true
         ).setChannelTypes(ChannelType.TEXT);
 
         final var durationOptionData = new OptionData(
             OptionType.STRING,
-            getResponse("auto-delete.add.duration.name", Locale.US),
-            getResponse("auto-delete.add.duration.description", Locale.US),
+            l10nManager.get("auto-delete.add.duration.name", Locale.US),
+            l10nManager.get("auto-delete.add.duration.description", Locale.US),
             true
         );
 
         return new SubcommandData(
-            getResponse("auto-delete.add.name", Locale.US),
-            getResponse("auto-delete.add.description", Locale.US)
+            l10nManager.get("auto-delete.add.name", Locale.US),
+            l10nManager.get("auto-delete.add.description", Locale.US)
         ).addOptions(channelOptionData, durationOptionData);
     }
 }

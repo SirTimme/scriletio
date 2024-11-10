@@ -4,6 +4,7 @@ import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -13,20 +14,21 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
-import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class DeleteCommand implements ISlashCommand {
     private final Repository<User> userRepository;
+    private final LocalizationManager l10nManager;
 
-    public DeleteCommand(final Repository<User> userRepository) {
+    public DeleteCommand(final Repository<User> userRepository, final LocalizationManager l10nManager) {
         this.userRepository = userRepository;
+        this.l10nManager = l10nManager;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-        final var btnAccept = Button.success(userId + ":deleteAccept", "Accept");
-        final var btnCancel = Button.danger(userId + ":deleteCancel", "Cancel");
+        final var btnAccept = Button.success(userId + ":delete-accept", "Accept");
+        final var btnCancel = Button.danger(userId + ":delete-cancel", "Cancel");
 
         event.reply("Do you really want to delete your data? All of your created delete configs will be permanently deleted").addActionRow(btnAccept, btnCancel).queue();
     }
@@ -40,6 +42,6 @@ public class DeleteCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash(getResponse("delete.name", Locale.US), getResponse("delete.description", Locale.US));
+        return Commands.slash(l10nManager.get("delete.name", Locale.US), l10nManager.get("delete.description", Locale.US));
     }
 }

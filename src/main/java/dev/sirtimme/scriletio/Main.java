@@ -41,17 +41,14 @@ public class Main {
     public static void main(String[] args) {
         if (!Objects.equals(System.getenv("LOG_EXPORTER_ENDPOINT"), "")) {
             OpenTelemetryAppender.install(buildOpenTelemetry());
-
             LOGGER.info("Initialization of OpenTelemetry successful");
         } else {
             LOGGER.info("Environment variable 'LOG_EXPORTER_ENDPOINT' is not set, skipping initialization of OpenTelemetry");
         }
 
         final var entityManagerFactory = buildEntityManagerFactory();
+        final var l10nManager = new LocalizationManager();
         final var deleteTaskManager = new DeleteTaskManager();
-
-        // register resource bundles
-        LocalizationManager.registerBundles();
 
         JDABuilder
             .createLight(System.getenv("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES)
@@ -63,9 +60,9 @@ public class Main {
                 new EventListener<>(ChannelDeleteEvent.class, entityManagerFactory, new ChannelDeleteEventCommandFactory()),
 
                 // interaction events
-                new InteractionListener<>(SlashCommandInteractionEvent.class, entityManagerFactory, new SlashEventCommandFactory()),
-                new InteractionListener<>(ButtonInteractionEvent.class, entityManagerFactory, new ButtonEventCommandFactory()),
-                new InteractionListener<>(StringSelectInteractionEvent.class, entityManagerFactory, new MenuEventCommandFactory()),
+                new InteractionListener<>(SlashCommandInteractionEvent.class, entityManagerFactory, new SlashEventCommandFactory(l10nManager)),
+                new InteractionListener<>(ButtonInteractionEvent.class, entityManagerFactory, new ButtonEventCommandFactory(l10nManager)),
+                new InteractionListener<>(StringSelectInteractionEvent.class, entityManagerFactory, new MenuEventCommandFactory(l10nManager)),
                 new InteractionListener<>(CommandAutoCompleteInteractionEvent.class, entityManagerFactory, new CommandAutoCompleteEventCommandFactory())
             )
             .build();

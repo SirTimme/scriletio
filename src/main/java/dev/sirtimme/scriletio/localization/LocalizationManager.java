@@ -11,23 +11,27 @@ import static dev.sirtimme.iuvo.api.listener.interaction.InteractionListener.USE
 
 public class LocalizationManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalizationManager.class);
-    private static final HashMap<Locale, MultiResourceBundle> bundles = new HashMap<>();
+    private final HashMap<Locale, MultiResourceBundle> bundles = new HashMap<>();
 
-    public static String getResponse(final String key, final Object... values) {
-        final var bundle = bundles.get(USER_LOCALE.get());
+    public LocalizationManager() {
+        registerBundles();
+    }
+
+    public String get(final String key, final Object... values) {
+        final var bundle = getBundle(USER_LOCALE.get());
         final var template = new MessageFormat(bundle.getString(key));
 
         return template.format(values);
     }
 
-    public static String getResponse(final String key, final Locale locale, final Object... values) {
-        final var bundle = bundles.get(locale);
+    public String get(final String key, final Locale locale, final Object... values) {
+        final var bundle = getBundle(locale);
         final var template = new MessageFormat(bundle.getString(key));
 
         return template.format(values);
     }
 
-    public static void registerBundles() {
+    private void registerBundles() {
         for (final var locale : getAvailableLocales()) {
             final var combinedBundle = new MultiResourceBundle(
                 ResourceBundle.getBundle("localization/responses", locale),
@@ -39,7 +43,7 @@ public class LocalizationManager {
         }
     }
 
-    private static Set<Locale> getAvailableLocales() {
+    private Set<Locale> getAvailableLocales() {
         final var availableLocales = new HashSet<Locale>();
 
         try (final var scanResult = new ClassGraph().acceptJars("scriletio.jar").acceptPathsNonRecursive("localization").scan()) {
@@ -56,7 +60,7 @@ public class LocalizationManager {
         return availableLocales;
     }
 
-    private static Locale parseLocale(final String string) {
+    private Locale parseLocale(final String string) {
         if (!string.contains("_")) {
             return Locale.of(string);
         }
@@ -65,5 +69,15 @@ public class LocalizationManager {
         final var country = string.substring(string.indexOf("_") + 1);
 
         return Locale.of(language, country);
+    }
+
+    private ResourceBundle getBundle(final Locale locale) {
+        final var bundle = bundles.get(locale);
+
+        if (bundle == null) {
+            return bundles.get(Locale.US);
+        }
+
+        return bundle;
     }
 }
