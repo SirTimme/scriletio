@@ -18,17 +18,20 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Supplier;
 
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
+
 public class AutoDeleteCommand implements ISlashCommand {
-    private final HashMap<DeleteSubCommand, Supplier<ISubCommand>> subCommands;
+    private final HashMap<String, Supplier<ISubCommand>> subCommands;
 
     public AutoDeleteCommand(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository) {
-        this.subCommands = new HashMap<>();
-        this.subCommands.put(DeleteSubCommand.ADD, () -> new AddConfigCommand(configRepository, userRepository));
-        this.subCommands.put(DeleteSubCommand.GET, () -> new GetConfigCommand(configRepository));
-        this.subCommands.put(DeleteSubCommand.UPDATE, () -> new UpdateConfigCommand(configRepository, userRepository));
-        this.subCommands.put(DeleteSubCommand.DELETE, () -> new DeleteConfigCommand(configRepository, userRepository));
+        subCommands = new HashMap<>();
+        subCommands.put(getResponse("auto-delete.add.name", Locale.US), () -> new AddConfigCommand(configRepository, userRepository));
+        subCommands.put(getResponse("auto-delete.get.name", Locale.US), () -> new GetConfigCommand(configRepository));
+        subCommands.put(getResponse("auto-delete.update.name", Locale.US), () -> new UpdateConfigCommand(configRepository, userRepository));
+        subCommands.put(getResponse("auto-delete.delete.name", Locale.US), () -> new DeleteConfigCommand(configRepository, userRepository));
     }
 
     @Override
@@ -39,9 +42,7 @@ public class AutoDeleteCommand implements ISlashCommand {
             return;
         }
 
-        // noinspection DataFlowIssue this command only consists of subcommands
-        final var subCommandName = DeleteSubCommand.valueOf(event.getSubcommandName().toUpperCase());
-        final var subCommand = subCommands.get(subCommandName).get();
+        final var subCommand = subCommands.get(event.getSubcommandName()).get();
 
         if (subCommand.hasInvalidPreconditions(event)) {
             return;
@@ -63,15 +64,8 @@ public class AutoDeleteCommand implements ISlashCommand {
             .map(function -> function.get().getSubCommandData())
             .toList();
 
-        return Commands.slash("autodelete", "Manage auto delete configs")
+        return Commands.slash(getResponse("auto-delete.name", Locale.US), getResponse("auto-delete.description", Locale.US))
                        .addSubcommands(subCommandData)
                        .setGuildOnly(true);
-    }
-
-    private enum DeleteSubCommand {
-        ADD,
-        GET,
-        UPDATE,
-        DELETE,
     }
 }

@@ -10,8 +10,10 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
+import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class DeleteCommand implements ISlashCommand {
     private final Repository<User> userRepository;
@@ -38,6 +40,6 @@ public class DeleteCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("delete", "Deletes all of your stored data");
+        return Commands.slash(getResponse("delete.name", Locale.US), getResponse("delete.description", Locale.US));
     }
 }

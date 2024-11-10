@@ -12,17 +12,20 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
+
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class SlashEventCommandFactory implements IInteractionCommandFactory<SlashCommandInteractionEvent> {
     private final HashMap<String, Function<EntityManager, ISlashCommand>> slashCommands;
 
     public SlashEventCommandFactory() {
-        this.slashCommands = new HashMap<>();
-        this.slashCommands.put("update", context -> new UpdateCommand(this));
-        this.slashCommands.put("autodelete", context -> new AutoDeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
-        this.slashCommands.put("register", context -> new RegisterCommand(new UserRepository(context)));
-        this.slashCommands.put("delete", context -> new DeleteCommand(new UserRepository(context)));
+        slashCommands = new HashMap<>();
+        slashCommands.put(getResponse("update.name", Locale.US), context -> new UpdateCommand(this));
+        slashCommands.put(getResponse("auto-delete.name", Locale.US), context -> new AutoDeleteCommand(new UserRepository(context), new DeleteConfigRepository(context)));
+        slashCommands.put(getResponse("register.name", Locale.US), context -> new RegisterCommand(new UserRepository(context)));
+        slashCommands.put(getResponse("delete.name", Locale.US), context -> new DeleteCommand(new UserRepository(context)));
     }
 
     @Override

@@ -11,6 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
+import java.util.Locale;
+
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class RegisterCommand implements ISlashCommand {
     private final Repository<User> userRepository;
@@ -42,6 +45,6 @@ public class RegisterCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("register", "Register yourself to use Scriletios services");
+        return Commands.slash(getResponse("register.name", Locale.US), getResponse("register.description", Locale.US));
     }
 }

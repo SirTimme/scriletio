@@ -7,6 +7,7 @@ import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
+import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Objects;
 
+
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
@@ -47,6 +49,9 @@ public class Main {
 
         final var entityManagerFactory = buildEntityManagerFactory();
         final var deleteTaskManager = new DeleteTaskManager();
+
+        // register resource bundles
+        LocalizationManager.registerBundles();
 
         JDABuilder
             .createLight(System.getenv("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES)

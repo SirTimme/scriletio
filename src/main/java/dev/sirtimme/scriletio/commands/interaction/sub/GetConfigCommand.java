@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
+import java.util.Locale;
+
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class GetConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -35,6 +38,6 @@ public class GetConfigCommand implements ISubCommand {
 
     @Override
     public SubcommandData getSubCommandData() {
-        return new SubcommandData("get", "Displays all of your create auto delete configs");
+        return new SubcommandData(getResponse("auto-delete.get.name", Locale.US), getResponse("auto-delete.get.description", Locale.US));
     }
 }

@@ -17,8 +17,10 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
+import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class AddConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
@@ -93,18 +95,21 @@ public class AddConfigCommand implements ISubCommand {
     public SubcommandData getSubCommandData() {
         final var channelOptionData = new OptionData(
             OptionType.CHANNEL,
-            "channel",
-            "The channel to delete the messages in",
+            getResponse("auto-delete.add.channel.name", Locale.US),
+            getResponse("auto-delete.add.channel.description", Locale.US),
             true
         ).setChannelTypes(ChannelType.TEXT);
 
         final var durationOptionData = new OptionData(
             OptionType.STRING,
-            "duration",
-            "Delete messages after specified duration",
+            getResponse("auto-delete.add.duration.name", Locale.US),
+            getResponse("auto-delete.add.duration.description", Locale.US),
             true
         );
 
-        return new SubcommandData("add", "Adds a new auto delete config").addOptions(channelOptionData, durationOptionData);
+        return new SubcommandData(
+            getResponse("auto-delete.add.name", Locale.US),
+            getResponse("auto-delete.add.description", Locale.US)
+        ).addOptions(channelOptionData, durationOptionData);
     }
 }
