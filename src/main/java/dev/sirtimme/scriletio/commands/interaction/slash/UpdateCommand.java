@@ -11,6 +11,10 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.localization.ResourceBundleLocalizationFunction;
 
 import java.util.List;
+import java.util.Locale;
+
+import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isOwner;
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class UpdateCommand implements ISlashCommand {
     private final SlashEventCommandFactory manager;
@@ -21,11 +25,6 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        if (!event.getUser().getId().equals(System.getenv("OWNER_ID"))) {
-            event.reply("This command can only be executed by the owner").setEphemeral(true).queue();
-            return;
-        }
-
         final var localizationFunc = ResourceBundleLocalizationFunction
             .fromBundles("localization/commands", DiscordLocale.ENGLISH_US, DiscordLocale.GERMAN)
             .build();
@@ -46,12 +45,14 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
-        return List.of();
+        return List.of(
+            isOwner()
+        );
     }
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("update", "Refreshes all slash commands")
+        return Commands.slash(getResponse("update.name", Locale.US), getResponse("update.description", Locale.US))
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 }

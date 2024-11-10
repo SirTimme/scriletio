@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 import static dev.sirtimme.scriletio.utils.TimeUtils.createReadableDuration;
 
 public class DeleteConfigCommand implements ISubCommand {
@@ -64,6 +66,6 @@ public class DeleteConfigCommand implements ISubCommand {
 
     @Override
     public SubcommandData getSubCommandData() {
-        return new SubcommandData("delete", "Deletes an existing auto delete config");
+        return new SubcommandData(getResponse("auto-delete.delete.name", Locale.US), getResponse("auto-delete.delete.description", Locale.US));
     }
 }

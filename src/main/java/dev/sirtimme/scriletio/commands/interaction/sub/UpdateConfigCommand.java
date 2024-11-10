@@ -18,8 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.localization.LocalizationManager.getResponse;
 
 public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
@@ -73,19 +75,22 @@ public class UpdateConfigCommand implements ISubCommand {
     public SubcommandData getSubCommandData() {
         final var channelOption = new OptionData(
             OptionType.STRING,
-            "channel",
-            "The channel you want to update the config for",
+            getResponse("auto-delete.update.channel.name", Locale.US),
+            getResponse("auto-delete.update.channel.description", Locale.US),
             true,
             true
         );
 
         final var durationOption = new OptionData(
             OptionType.STRING,
-            "duration",
-            "The new delete duration",
+            getResponse("auto-delete.update.duration.name", Locale.US),
+            getResponse("auto-delete.update.duration.description", Locale.US),
             true
         );
 
-        return new SubcommandData("update", "Updates an existing auto delete config").addOptions(channelOption, durationOption);
+        return new SubcommandData(
+            getResponse("auto-delete.update.name", Locale.US),
+            getResponse("auto-delete.update.description", Locale.US)
+        ).addOptions(channelOption, durationOption);
     }
 }
