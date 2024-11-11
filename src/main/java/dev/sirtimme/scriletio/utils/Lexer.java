@@ -1,5 +1,7 @@
 package dev.sirtimme.scriletio.utils;
 
+import dev.sirtimme.scriletio.exceptions.ParsingException;
+
 import java.util.ArrayList;
 
 public class Lexer {
