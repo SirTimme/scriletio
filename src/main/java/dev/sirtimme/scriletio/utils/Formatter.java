@@ -1,6 +1,7 @@
 package dev.sirtimme.scriletio.utils;
 
 import dev.sirtimme.scriletio.entities.DeleteConfig;
+import dev.sirtimme.scriletio.exceptions.ParsingException;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Formatter {
         sb.append("\n```\n");
         sb.append(content);
         sb.append("\n");
-        sb.repeat(" ", exception.getColumn());
+        sb.repeat(" ", exception.getIndex());
         sb.append("^");
         sb.append("\n```\n");
         sb.append("**Cause:**\n");
