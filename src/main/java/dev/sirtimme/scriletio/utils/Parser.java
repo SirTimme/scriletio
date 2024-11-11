@@ -1,5 +1,7 @@
 package dev.sirtimme.scriletio.utils;
 
+import dev.sirtimme.scriletio.exceptions.ParsingException;
+
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -12,7 +14,7 @@ public class Parser {
         this.index = 0;
     }
 
-    public long parse(final String content) throws ParsingException {
+    public long parse(final String content) {
         var lexer = new Lexer(content);
         tokens = lexer.lex();
         var totalDuration = 0L;
@@ -35,7 +37,7 @@ public class Parser {
         return totalDuration;
     }
 
-    private Duration getDuration(Token.Digit digit) throws ParsingException {
+    private Duration getDuration(Token.Digit digit) {
         final var nextToken = index + 1 >= tokens.size() ? new Token.EOF(index) : tokens.get(index + 1);
         return switch (nextToken) {
             case Token.Day day -> Duration.ofDays(digit.value());

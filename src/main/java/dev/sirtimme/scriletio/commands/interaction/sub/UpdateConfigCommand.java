@@ -9,7 +9,7 @@ import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
-import dev.sirtimme.scriletio.utils.ParsingException;
+import dev.sirtimme.scriletio.exceptions.ParsingException;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
