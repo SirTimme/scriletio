@@ -10,16 +10,16 @@ import java.util.List;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
-public class CancelRegistrationButton implements IInteractionCommand<ButtonInteractionEvent> {
+public class DeleteCancelButton implements IInteractionCommand<ButtonInteractionEvent> {
     private final LocalizationManager l10nManager;
 
-    public CancelRegistrationButton(final LocalizationManager l10nManager) {
+    public DeleteCancelButton(final LocalizationManager l10nManager) {
         this.l10nManager = l10nManager;
     }
 
     @Override
     public void execute(final ButtonInteractionEvent event) {
-        event.editMessage("Registration has been cancelled").setComponents(Collections.emptyList()).queue();
+        event.editMessage(l10nManager.get("button.delete.cancel")).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
