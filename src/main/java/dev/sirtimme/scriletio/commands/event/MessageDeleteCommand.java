@@ -18,13 +18,11 @@ public class MessageDeleteCommand implements IEventCommand<MessageDeleteEvent> {
     @Override
     public void execute(final MessageDeleteEvent event) {
         final var deleteConfig = configRepository.get(event.getChannel().getIdLong());
-
         if (deleteConfig == null) {
             return;
         }
 
         final var deleteTask = deleteConfig.getTask(event.getMessageIdLong());
-
         if (deleteTask == null) {
             return;
         }
