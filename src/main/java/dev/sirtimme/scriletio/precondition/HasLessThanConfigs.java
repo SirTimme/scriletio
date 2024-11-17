@@ -6,7 +6,7 @@ import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import static dev.sirtimme.scriletio.response.ResponseHelpers.withBold;
+import static dev.sirtimme.scriletio.response.Markdown.bold;
 
 public class HasLessThanConfigs implements IPrecondition<SlashCommandInteractionEvent> {
     private final int limit;
@@ -23,7 +23,7 @@ public class HasLessThanConfigs implements IPrecondition<SlashCommandInteraction
     public boolean isValid(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         if (configRepository.findAll(event.getGuild().getIdLong()).size() >= limit) {
-            event.reply(l10nManager.get("precondition.hasLessThanConfigs.invalid", withBold(limit))).queue();
+            event.reply(l10nManager.get("precondition.hasLessThanConfigs.invalid", bold(limit))).queue();
             return false;
         }
 
