@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
+import static dev.sirtimme.scriletio.response.Markdown.channel;
 
 public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEvent> {
     private final LocalizationManager l10nManager;
@@ -28,7 +29,7 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
 
         configRepository.delete(deleteConfig);
 
-        event.editMessage("Config for channel <#" + channelId + "> was successfully deleted").setComponents(Collections.emptyList()).queue();
+        event.editMessage(l10nManager.get("menu.delete", channel(channelId))).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
