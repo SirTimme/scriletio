@@ -5,7 +5,7 @@ import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import static dev.sirtimme.scriletio.response.ResponseHelpers.withBold;
+import static dev.sirtimme.scriletio.response.Markdown.bold;
 
 public class HasPermission implements IPrecondition<SlashCommandInteractionEvent> {
     private final Permission permission;
@@ -20,7 +20,7 @@ public class HasPermission implements IPrecondition<SlashCommandInteractionEvent
     public boolean isValid(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getMember().hasPermission(permission)) {
-            event.reply(l10nManager.get("precondition.hasPermission.invalid", withBold(permission.getName()))).queue();
+            event.reply(l10nManager.get("precondition.hasPermission.invalid", bold(permission.getName()))).queue();
             return false;
         }
 
