@@ -4,7 +4,6 @@ import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.localization.LocalizationManager;
-import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -13,6 +12,9 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
 import java.util.Locale;
+
+import static dev.sirtimme.scriletio.response.Markdown.bold;
+import static dev.sirtimme.scriletio.response.Markdown.monospace;
 
 public class RegisterCommand implements ISlashCommand {
     private final Repository<User> userRepository;
@@ -33,10 +35,17 @@ public class RegisterCommand implements ISlashCommand {
             return;
         }
 
-        final var btnAccept = Button.success(userId + ":register-accept", "Accept");
-        final var btnCancel = Button.danger(userId + ":register-cancel", "Cancel");
+        final var btnAccept = Button.success(userId + ":register-accept", l10nManager.get("button.label.accept"));
+        final var btnCancel = Button.danger(userId + ":register-cancel", l10nManager.get("button.label.cancel"));
 
-        event.reply(Formatter.format()).addActionRow(btnAccept, btnCancel).queue();
+        final var response = l10nManager.get(
+            "slash.register",
+            bold(l10nManager.get("notice")),
+            monospace(l10nManager.get("delete.name")),
+            bold(l10nManager.get("continue"))
+        );
+
+        event.reply(response).addActionRow(btnAccept, btnCancel).queue();
     }
 
     @Override
