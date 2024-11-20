@@ -28,7 +28,7 @@ public class Formatter {
 
     public static String format() {
         return """
-            **Disclaimer:**
+            **Notice:**
             In order for Scriletio to work, your `discord user id` gets saved. [What's this?](<https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID>)
             This is public available information and you can delete all of your stored data at any time using the `/delete` command.
 
