@@ -27,10 +27,10 @@ public class DeleteCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-        final var btnAccept = Button.success(userId + ":delete-accept", "Accept");
-        final var btnCancel = Button.danger(userId + ":delete-cancel", "Cancel");
+        final var btnAccept = Button.success(userId + ":delete-accept", l10nManager.get("button.label.accept"));
+        final var btnCancel = Button.danger(userId + ":delete-cancel", l10nManager.get("button.label.cancel"));
 
-        event.reply("Do you really want to delete your data? All of your created delete configs will be permanently deleted").addActionRow(btnAccept, btnCancel).queue();
+        event.reply(l10nManager.get("slash.delete")).addActionRow(btnAccept, btnCancel).queue();
     }
 
     @Override

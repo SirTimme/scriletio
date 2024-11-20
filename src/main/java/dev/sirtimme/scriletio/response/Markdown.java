@@ -9,6 +9,10 @@ public class Markdown {
         return "<#" + content + ">";
     }
 
+    public static String monospace(final Object content) {
+        return "`" + content + "`";
+    }
+
     public static String italic(final Object content) {
         return "_" + content + "_";
     }
