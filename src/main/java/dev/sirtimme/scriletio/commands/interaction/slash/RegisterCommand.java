@@ -13,16 +13,15 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.List;
 import java.util.Locale;
 
-import static dev.sirtimme.scriletio.response.Markdown.bold;
-import static dev.sirtimme.scriletio.response.Markdown.monospace;
+import static dev.sirtimme.scriletio.response.Markdown.*;
 
 public class RegisterCommand implements ISlashCommand {
     private final Repository<User> userRepository;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public RegisterCommand(final Repository<User> userRepository, final LocalizationManager l10nManager) {
+    public RegisterCommand(final Repository<User> userRepository, final LocalizationManager localizationManager) {
         this.userRepository = userRepository;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
@@ -35,14 +34,14 @@ public class RegisterCommand implements ISlashCommand {
             return;
         }
 
-        final var btnAccept = Button.success(userId + ":register-accept", l10nManager.get("button.label.accept"));
-        final var btnCancel = Button.danger(userId + ":register-cancel", l10nManager.get("button.label.cancel"));
+        final var btnAccept = Button.success(userId + ":register-accept", localizationManager.get("button.label.accept"));
+        final var btnCancel = Button.danger(userId + ":register-cancel", localizationManager.get("button.label.cancel"));
 
-        final var response = l10nManager.get(
+        final var response = localizationManager.get(
             "slash.register",
-            bold(l10nManager.get("notice")),
-            monospace(l10nManager.get("delete.name")),
-            bold(l10nManager.get("continue"))
+            h2(localizationManager.get("notice")),
+            command(localizationManager.get("delete.name", Locale.US), 1304427640861622345L),
+            h3(localizationManager.get("continue"))
         );
 
         event.reply(response).addActionRow(btnAccept, btnCancel).queue();
@@ -55,6 +54,9 @@ public class RegisterCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash(l10nManager.get("register.name", Locale.US), l10nManager.get("register.description", Locale.US));
+        final var commandName = localizationManager.get("register.name", Locale.US);
+        final var commandDescription = localizationManager.get("register.description", Locale.US);
+
+        return Commands.slash(commandName, commandDescription);
     }
 }
