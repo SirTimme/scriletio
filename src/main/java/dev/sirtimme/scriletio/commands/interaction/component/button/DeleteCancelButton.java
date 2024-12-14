@@ -11,15 +11,16 @@ import java.util.List;
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
 public class DeleteCancelButton implements IInteractionCommand<ButtonInteractionEvent> {
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public DeleteCancelButton(final LocalizationManager l10nManager) {
-        this.l10nManager = l10nManager;
+    public DeleteCancelButton(final LocalizationManager localizationManager) {
+        this.localizationManager = localizationManager;
     }
 
     @Override
     public void execute(final ButtonInteractionEvent event) {
-        event.editMessage(l10nManager.get("button.delete.cancel")).setComponents(Collections.emptyList()).queue();
+        final var response = localizationManager.get("button.delete.cancel");
+        event.editMessage(response).setComponents(Collections.emptyList()).queue();
     }
 
     @Override

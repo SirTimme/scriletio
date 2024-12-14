@@ -13,11 +13,11 @@ import java.util.List;
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
 public class RegisterAcceptButton implements IInteractionCommand<ButtonInteractionEvent> {
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
     private final Repository<User> userRepository;
 
-    public RegisterAcceptButton(final Repository<User> userRepository, final LocalizationManager l10nManager) {
-        this.l10nManager = l10nManager;
+    public RegisterAcceptButton(final Repository<User> userRepository, final LocalizationManager localizationManager) {
+        this.localizationManager = localizationManager;
         this.userRepository = userRepository;
     }
 
@@ -25,7 +25,8 @@ public class RegisterAcceptButton implements IInteractionCommand<ButtonInteracti
     public void execute(final ButtonInteractionEvent event) {
         userRepository.add(new User(event.getUser().getIdLong()));
 
-        event.editMessage(l10nManager.get("button.register.accept")).setComponents(Collections.emptyList()).queue();
+        final var response = localizationManager.get("button.register.accept");
+        event.editMessage(response).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
