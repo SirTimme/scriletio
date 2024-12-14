@@ -9,23 +9,15 @@ public class Markdown {
         return "<#" + content + ">";
     }
 
-    public static String monospace(final Object content) {
-        return "`" + content + "`";
+    public static String command(final String commandName, final Long commandId) {
+        return "</" + commandName + ":" + commandId + ">";
     }
 
-    public static String italic(final Object content) {
-        return "_" + content + "_";
+    public static String h2(final Object content) {
+        return "## " + content;
     }
 
-    public static String codeBlock(final Object content) {
-        return "```\n" + content + "```\n";
-    }
-
-    public static String list(final Object... items) {
-        final var sb = new StringBuilder();
-        for (final var item : items) {
-            sb.append("- ").append(item).append("\n");
-        }
-        return sb.toString();
+    public static String h3(final Object content) {
+        return "### " + content;
     }
 }
