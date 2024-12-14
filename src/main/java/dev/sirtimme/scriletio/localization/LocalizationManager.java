@@ -48,10 +48,7 @@ public class LocalizationManager {
 
         try (final var scanResult = new ClassGraph().acceptJars("scriletio.jar").acceptPathsNonRecursive("localization").scan()) {
             for (final var resource : scanResult.getResourcesWithExtension("properties")) {
-                final var resourcePath = resource.getPath();
-                // bundle-name_<Locale>.properties
-                final var localeString = resourcePath.substring(resourcePath.indexOf("_") + 1, resourcePath.lastIndexOf("."));
-                final var locale = parseLocale(localeString);
+                final var locale = parseResourcePath(resource.getPath());
 
                 availableLocales.add(locale);
             }
@@ -60,13 +57,18 @@ public class LocalizationManager {
         return availableLocales;
     }
 
-    private Locale parseLocale(final String string) {
-        if (!string.contains("_")) {
-            return Locale.of(string);
+    private Locale parseResourcePath(final String resourcePath) {
+        // commands_en_US.properties → en_US
+        final var localeFilename = resourcePath.substring(resourcePath.indexOf("_") + 1, resourcePath.lastIndexOf("."));
+
+        // locale only consists of language
+        if (!localeFilename.contains("_")) {
+            return Locale.of(localeFilename);
         }
 
-        final var language = string.substring(0, string.indexOf("_"));
-        final var country = string.substring(string.indexOf("_") + 1);
+        // locale consists of language and country
+        final var language = localeFilename.substring(0, localeFilename.indexOf("_"));
+        final var country = localeFilename.substring(localeFilename.indexOf("_") + 1);
 
         return Locale.of(language, country);
     }
