@@ -15,12 +15,16 @@ import java.util.List;
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor;
 
 public class DeleteAcceptButton implements IInteractionCommand<ButtonInteractionEvent> {
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
     private final Repository<User> userRepository;
     private final QueryableRepository<DeleteConfig> configRepository;
 
-    public DeleteAcceptButton(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository, final LocalizationManager l10nManager) {
-        this.l10nManager = l10nManager;
+    public DeleteAcceptButton(
+        final Repository<User> userRepository,
+        final QueryableRepository<DeleteConfig> configRepository,
+        final LocalizationManager localizationManager
+    ) {
+        this.localizationManager = localizationManager;
         this.userRepository = userRepository;
         this.configRepository = configRepository;
     }
@@ -33,7 +37,8 @@ public class DeleteAcceptButton implements IInteractionCommand<ButtonInteraction
         userRepository.delete(user);
         configRepository.deleteAll(userId);
 
-        event.editMessage(l10nManager.get("button.delete.accept")).setComponents(Collections.emptyList()).queue();
+        final var response = localizationManager.get("button.delete.accept");
+        event.editMessage(response).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
