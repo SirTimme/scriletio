@@ -18,11 +18,11 @@ import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isOwner;
 
 public class UpdateCommand implements ISlashCommand {
     private final SlashEventCommandFactory slashCommandManager;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public UpdateCommand(final SlashEventCommandFactory slashCommandManager, final LocalizationManager l10nManager) {
+    public UpdateCommand(final SlashEventCommandFactory slashCommandManager, final LocalizationManager localizationManager) {
         this.slashCommandManager = slashCommandManager;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
@@ -54,7 +54,9 @@ public class UpdateCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash(l10nManager.get("update.name", Locale.US), l10nManager.get("update.description", Locale.US))
-                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+        final var commandName = localizationManager.get("update.name", Locale.US);
+        final var commandDescription = localizationManager.get("update.description", Locale.US);
+
+        return Commands.slash(commandName, commandDescription).setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 }
