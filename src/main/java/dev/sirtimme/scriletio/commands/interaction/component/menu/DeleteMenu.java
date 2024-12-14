@@ -14,11 +14,11 @@ import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isComponentAuthor
 import static dev.sirtimme.scriletio.response.Markdown.channel;
 
 public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEvent> {
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
     private final Repository<DeleteConfig> configRepository;
 
-    public DeleteMenu(final LocalizationManager l10nManager, final Repository<DeleteConfig> configRepository) {
-        this.l10nManager = l10nManager;
+    public DeleteMenu(final LocalizationManager localizationManager, final Repository<DeleteConfig> configRepository) {
+        this.localizationManager = localizationManager;
         this.configRepository = configRepository;
     }
 
@@ -29,7 +29,8 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
 
         configRepository.delete(deleteConfig);
 
-        event.editMessage(l10nManager.get("menu.delete", channel(channelId))).setComponents(Collections.emptyList()).queue();
+        final var response = localizationManager.get("menu.delete", channel(channelId));
+        event.editMessage(response).setComponents(Collections.emptyList()).queue();
     }
 
     @Override

@@ -25,16 +25,20 @@ import java.util.function.Supplier;
 
 public class AutoDeleteCommand implements ISlashCommand {
     private final HashMap<String, Supplier<ISubCommand>> subCommands;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public AutoDeleteCommand(final Repository<User> userRepository, final QueryableRepository<DeleteConfig> configRepository, final LocalizationManager l10nManager) {
+    public AutoDeleteCommand(
+        final Repository<User> userRepository,
+        final QueryableRepository<DeleteConfig> configRepository,
+        final LocalizationManager localizationManager
+    ) {
         this.subCommands = new HashMap<>();
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
 
-        registerSubcommand("auto-delete.add.name", () -> new AddConfigCommand(configRepository, userRepository, l10nManager));
-        registerSubcommand("auto-delete.get.name", () -> new GetConfigCommand(configRepository, l10nManager));
-        registerSubcommand("auto-delete.update.name", () -> new UpdateConfigCommand(configRepository, userRepository, l10nManager));
-        registerSubcommand("auto-delete.delete.name", () -> new DeleteConfigCommand(configRepository, userRepository, l10nManager));
+        registerSubcommand("auto-delete.add.name", () -> new AddConfigCommand(configRepository, userRepository, localizationManager));
+        registerSubcommand("auto-delete.get.name", () -> new GetConfigCommand(configRepository, localizationManager));
+        registerSubcommand("auto-delete.update.name", () -> new UpdateConfigCommand(configRepository, userRepository, localizationManager));
+        registerSubcommand("auto-delete.delete.name", () -> new DeleteConfigCommand(configRepository, userRepository, localizationManager));
     }
 
     @Override
@@ -51,7 +55,7 @@ public class AutoDeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasPermission(Permission.MANAGE_SERVER, l10nManager)
+            new HasPermission(Permission.MANAGE_SERVER, localizationManager)
         );
     }
 
@@ -63,12 +67,13 @@ public class AutoDeleteCommand implements ISlashCommand {
             .map(function -> function.get().getSubCommandData())
             .toList();
 
-        return Commands.slash(l10nManager.get("auto-delete.name", Locale.US), l10nManager.get("auto-delete.description", Locale.US))
-                       .addSubcommands(subCommandData)
-                       .setGuildOnly(true);
+        final var commandName = localizationManager.get("auto-delete.name", Locale.US);
+        final var commandDescription = localizationManager.get("auto-delete.description", Locale.US);
+
+        return Commands.slash(commandName, commandDescription).addSubcommands(subCommandData).setGuildOnly(true);
     }
 
     private void registerSubcommand(final String key, final Supplier<ISubCommand> value) {
-        subCommands.put(l10nManager.get(key, Locale.US), value);
+        subCommands.put(localizationManager.get(key, Locale.US), value);
     }
 }

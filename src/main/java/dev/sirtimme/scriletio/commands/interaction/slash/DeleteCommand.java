@@ -17,20 +17,20 @@ import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
 
 public class DeleteCommand implements ISlashCommand {
     private final Repository<User> userRepository;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public DeleteCommand(final Repository<User> userRepository, final LocalizationManager l10nManager) {
+    public DeleteCommand(final Repository<User> userRepository, final LocalizationManager localizationManager) {
         this.userRepository = userRepository;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var userId = event.getUser().getIdLong();
-        final var btnAccept = Button.success(userId + ":delete-accept", l10nManager.get("button.label.accept"));
-        final var btnCancel = Button.danger(userId + ":delete-cancel", l10nManager.get("button.label.cancel"));
+        final var btnAccept = Button.success(userId + ":delete-accept", localizationManager.get("button.label.accept"));
+        final var btnCancel = Button.danger(userId + ":delete-cancel", localizationManager.get("button.label.cancel"));
 
-        event.reply(l10nManager.get("slash.delete")).addActionRow(btnAccept, btnCancel).queue();
+        event.reply(localizationManager.get("slash.delete")).addActionRow(btnAccept, btnCancel).queue();
     }
 
     @Override
@@ -42,6 +42,9 @@ public class DeleteCommand implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash(l10nManager.get("delete.name", Locale.US), l10nManager.get("delete.description", Locale.US));
+        final var commandName = localizationManager.get("delete.name", Locale.US);
+        final var commandDescription = localizationManager.get("delete.description", Locale.US);
+
+        return Commands.slash(commandName, commandDescription);
     }
 }
