@@ -25,8 +25,7 @@ public class RegisterAcceptButton implements IInteractionCommand<ButtonInteracti
     public void execute(final ButtonInteractionEvent event) {
         userRepository.add(new User(event.getUser().getIdLong()));
 
-        final var response = localizationManager.get("button.register.accept");
-        event.editMessage(response).setComponents(Collections.emptyList()).queue();
+        event.editMessage(localizationManager.get("button.register.accept")).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
