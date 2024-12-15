@@ -22,16 +22,21 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.response.Markdown.bold;
 
 public class AddConfigCommand implements ISubCommand {
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public AddConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository, final LocalizationManager l10nManager) {
+    public AddConfigCommand(
+        final QueryableRepository<DeleteConfig> configRepository,
+        final Repository<User> userRepository,
+        final LocalizationManager localizationManager
+    ) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
@@ -40,30 +45,35 @@ public class AddConfigCommand implements ISubCommand {
         final var channelOption = event.getOption("channel").getAsChannel();
         final var channelId = channelOption.getIdLong();
 
+        // is a config saved for this channel?
         if (configRepository.get(channelId) != null) {
-            event.reply("There is already a delete config for that channel!").queue();
+            event.reply(localizationManager.get("error.channelInUse")).queue();
             return;
         }
 
         // noinspection DataFlowIssue command can only be executed within a guild
         if (!event.getGuild().getSelfMember().hasPermission(channelOption, Permission.MESSAGE_MANAGE)) {
-            event.reply("I'm missing the **" + Permission.MESSAGE_MANAGE.getName() + "** permission in channel " + channelOption.getAsMention() + "!").queue();
+            final var response = localizationManager.get(
+                "error.missingPermission",
+                bold(localizationManager.get("permission.manageMessages")),
+                channelOption.getAsMention()
+            );
+            event.reply(response).queue();
             return;
         }
 
         // noinspection DataFlowIssue command option 'duration' is required
         final var durationOption = event.getOption("duration").getAsString();
-
-        var duration = 0L;
+        final long minutes;
         try {
-            duration = new Parser().parse(durationOption);
+            minutes = new Parser().parse(durationOption);
         } catch (ParsingException exception) {
             event.reply(Formatter.format(durationOption, exception)).queue();
             return;
         }
 
-        if (duration == 0) {
-            event.reply("Please specify a duration of at least 1 minute").queue();
+        if (minutes == 0) {
+            event.reply(localizationManager.get("error.nonPositiveDuration")).queue();
             return;
         }
 
@@ -72,19 +82,19 @@ public class AddConfigCommand implements ISubCommand {
             event.getGuild().getIdLong(),
             channelId,
             List.of(),
-            duration
+            minutes
         );
 
         configRepository.add(deleteConfig);
 
-        event.reply("Successfully created an auto delete config for " + channelOption.getAsMention()).queue();
+        event.reply(localizationManager.get("slash.auto-delete.add", channelOption.getAsMention())).queue();
     }
 
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
             isRegistered(userRepository),
-            new HasLessThanConfigs(25, configRepository, l10nManager)
+            new HasLessThanConfigs(25, configRepository, localizationManager)
         );
     }
 
@@ -92,21 +102,21 @@ public class AddConfigCommand implements ISubCommand {
     public SubcommandData getSubCommandData() {
         final var channelOptionData = new OptionData(
             OptionType.CHANNEL,
-            l10nManager.get("auto-delete.add.channel.name", Locale.US),
-            l10nManager.get("auto-delete.add.channel.description", Locale.US),
+            localizationManager.get("auto-delete.add.channel.name", Locale.US),
+            localizationManager.get("auto-delete.add.channel.description", Locale.US),
             true
         ).setChannelTypes(ChannelType.TEXT);
 
         final var durationOptionData = new OptionData(
             OptionType.STRING,
-            l10nManager.get("auto-delete.add.duration.name", Locale.US),
-            l10nManager.get("auto-delete.add.duration.description", Locale.US),
+            localizationManager.get("auto-delete.add.duration.name", Locale.US),
+            localizationManager.get("auto-delete.add.duration.description", Locale.US),
             true
         );
 
         return new SubcommandData(
-            l10nManager.get("auto-delete.add.name", Locale.US),
-            l10nManager.get("auto-delete.add.description", Locale.US)
+            localizationManager.get("auto-delete.add.name", Locale.US),
+            localizationManager.get("auto-delete.add.description", Locale.US)
         ).addOptions(channelOptionData, durationOptionData);
     }
 }
