@@ -19,8 +19,7 @@ public class DeleteCancelButton implements IInteractionCommand<ButtonInteraction
 
     @Override
     public void execute(final ButtonInteractionEvent event) {
-        final var response = localizationManager.get("button.delete.cancel");
-        event.editMessage(response).setComponents(Collections.emptyList()).queue();
+        event.editMessage(localizationManager.get("button.delete.cancel")).setComponents(Collections.emptyList()).queue();
     }
 
     @Override

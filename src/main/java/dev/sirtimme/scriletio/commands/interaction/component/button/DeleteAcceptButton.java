@@ -37,8 +37,7 @@ public class DeleteAcceptButton implements IInteractionCommand<ButtonInteraction
         userRepository.delete(user);
         configRepository.deleteAll(userId);
 
-        final var response = localizationManager.get("button.delete.accept");
-        event.editMessage(response).setComponents(Collections.emptyList()).queue();
+        event.editMessage(localizationManager.get("button.delete.accept")).setComponents(Collections.emptyList()).queue();
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isOwner;
+import static dev.sirtimme.scriletio.response.Markdown.bold;
 
 public class UpdateCommand implements ISlashCommand {
     private final SlashEventCommandFactory slashCommandManager;
@@ -42,7 +43,7 @@ public class UpdateCommand implements ISlashCommand {
              .addCommands(commandData)
              .queue();
 
-        event.reply("Update of slash commands were successful!").queue();
+        event.reply(localizationManager.get("slash.update", bold(commandData.size()))).queue();
     }
 
     @Override

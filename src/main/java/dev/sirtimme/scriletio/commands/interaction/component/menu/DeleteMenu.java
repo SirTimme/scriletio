@@ -29,8 +29,7 @@ public class DeleteMenu implements IInteractionCommand<StringSelectInteractionEv
 
         configRepository.delete(deleteConfig);
 
-        final var response = localizationManager.get("menu.delete", channel(channelId));
-        event.editMessage(response).setComponents(Collections.emptyList()).queue();
+        event.editMessage(localizationManager.get("menu.delete", channel(channelId))).setComponents(Collections.emptyList()).queue();
     }
 
     @Override
