@@ -26,25 +26,29 @@ public class DeleteConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteConfigCommand.class);
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public DeleteConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository, final LocalizationManager l10nManager) {
+    public DeleteConfigCommand(
+        final QueryableRepository<DeleteConfig> configRepository,
+        final Repository<User> userRepository,
+        final LocalizationManager localizationManager
+    ) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         // noinspection DataFlowIssue command can only be executed within a guild
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
-        final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":" + "delete").setPlaceholder("Saved configs");
+        final var deleteMenuBuilder = StringSelectMenu.create(event.getUser().getIdLong() + ":delete").setPlaceholder("Saved configs");
 
         for (final var config : deleteConfigs) {
             final var channel = event.getGuild().getChannelById(TextChannel.class, config.getChannelId());
 
             if (channel == null) {
-                LOGGER.warn("Could not retrieve channel with id {}: Result was null", config.getChannelId());
+                LOGGER.warn("Could not retrieve channel with id '{}': Result was null", config.getChannelId());
                 continue;
             }
 
@@ -55,19 +59,22 @@ public class DeleteConfigCommand implements ISubCommand {
             deleteMenuBuilder.addOption(channelName, value, description, Emoji.fromUnicode("U+1F4D1"));
         }
 
-        event.reply("Please select the config you want to delete").addActionRow(deleteMenuBuilder.build()).queue();
+        event.reply(localizationManager.get("slash.auto-delete.delete")).addActionRow(deleteMenuBuilder.build()).queue();
     }
 
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(configRepository, l10nManager),
+            new HasSavedConfigs(configRepository, localizationManager),
             isRegistered(userRepository)
         );
     }
 
     @Override
     public SubcommandData getSubCommandData() {
-        return new SubcommandData(l10nManager.get("auto-delete.delete.name", Locale.US), l10nManager.get("auto-delete.delete.description", Locale.US));
+        final var commandName = localizationManager.get("auto-delete.delete.name", Locale.US);
+        final var commandDescription = localizationManager.get("auto-delete.delete.description", Locale.US);
+
+        return new SubcommandData(commandName, commandDescription);
     }
 }
