@@ -8,5 +8,5 @@ RUN gradle shadowJar
 FROM openjdk:21
 ENV HOME=/home/gradle/src
 WORKDIR $HOME
-COPY --from=build $HOME/build/libs/scriletio-*.jar scriletio.jar
-ENTRYPOINT java -Dlogback.configurationFile=$HOME/cfg/logback.xml -jar scriletio.jar
+COPY --from=build $HOME/build/libs/*-all.jar scriletio.jar
+ENTRYPOINT java -Dlogback.configurationFile=$HOME/cfg/logback.xml --enable-preview -jar scriletio.jar
