@@ -30,7 +30,7 @@ public class RegisterCommand implements ISlashCommand {
         final var user = userRepository.get(userId);
 
         if (user != null) {
-            event.reply("You are already registered").queue();
+            event.reply(localizationManager.get("error.alreadyRegistered")).queue();
             return;
         }
 
