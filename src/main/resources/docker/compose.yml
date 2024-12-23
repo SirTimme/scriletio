@@ -21,11 +21,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: ${POSTGRES_URL}
-      LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
     depends_on:
       - database
-    volumes:
-      - ./../cfg/logback.xml:/home/gradle/src/cfg/logback.xml
 
   adminer:
     image: adminer:${ADMINER_VERSION-4.8.1}

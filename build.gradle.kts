@@ -1,6 +1,6 @@
 plugins {
     id("com.gradleup.shadow") version "8.3.3"
-    id("dev.sirtimme.scriletio.open-telemetry")
+    java
 }
 
 group = "dev.sirtimme"
@@ -23,4 +23,19 @@ dependencies {
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-hikaricp:6.4.4.Final")
     implementation("io.github.classgraph:classgraph:4.8.179")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType<Jar>().configureEach {
+    manifest {
+        attributes["Main-Class"] = "dev.sirtimme.scriletio.Main"
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("--enable-preview")
 }
