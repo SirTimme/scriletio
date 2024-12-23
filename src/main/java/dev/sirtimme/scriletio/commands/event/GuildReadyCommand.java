@@ -24,8 +24,6 @@ public class GuildReadyCommand implements IEventCommand<GuildReadyEvent> {
     public void execute(final GuildReadyEvent event) {
         final var deleteConfigs = configRepository.findAll(event.getGuild().getIdLong());
 
-        LOGGER.debug("Found '{}' configs for guild with id '{}'", deleteConfigs.size(), event.getGuild().getIdLong());
-
         for (final var deleteConfig : deleteConfigs) {
             final var channel = event.getGuild().getChannelById(TextChannel.class, deleteConfig.getChannelId());
 
@@ -34,14 +32,11 @@ public class GuildReadyCommand implements IEventCommand<GuildReadyEvent> {
                 continue;
             }
 
-            LOGGER.debug("Found '{}' delete tasks for channel with id '{}'", deleteConfig.getDeleteTasks().size(), deleteConfig.getChannelId());
-
             for (final var iterator = deleteConfig.getDeleteTasks().iterator(); iterator.hasNext(); ) {
                 final var deleteTask = iterator.next();
 
                 try {
                     final var message = channel.retrieveMessageById(deleteTask.getMessageId()).complete();
-                    LOGGER.debug("Submitted delete task for message with id '{}'", deleteTask.getMessageId());
 
                     deleteTaskManager.submitTask(deleteTask, message);
                 } catch (ErrorResponseException error) {
