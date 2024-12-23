@@ -9,10 +9,9 @@ RUN ./gradlew shadowJar
 FROM eclipse-temurin:21-jre-alpine
 
 ENV HOME=/home/app
-ENV VERSION=0.0.10
 
 WORKDIR $HOME
 
-COPY --from=build /build/libs/scriletio-${VERSION}-all.jar $HOME/scriletio.jar
+COPY --from=build /build/libs/*-all.jar $HOME/scriletio.jar
 
 ENTRYPOINT [ "java", "--enable-preview", "-jar", "scriletio.jar" ]
