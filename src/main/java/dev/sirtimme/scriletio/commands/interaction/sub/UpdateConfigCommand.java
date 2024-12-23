@@ -22,17 +22,23 @@ import java.util.List;
 import java.util.Locale;
 
 import static dev.sirtimme.iuvo.api.precondition.IPrecondition.isRegistered;
+import static dev.sirtimme.scriletio.response.Markdown.bold;
+import static dev.sirtimme.scriletio.response.Markdown.channel;
 
 public class UpdateConfigCommand implements ISubCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
-    private final LocalizationManager l10nManager;
+    private final LocalizationManager localizationManager;
 
-    public UpdateConfigCommand(final QueryableRepository<DeleteConfig> configRepository, final Repository<User> userRepository, final LocalizationManager l10nManager) {
+    public UpdateConfigCommand(
+        final QueryableRepository<DeleteConfig> configRepository,
+        final Repository<User> userRepository,
+        final LocalizationManager localizationManager
+    ) {
         this.configRepository = configRepository;
         this.userRepository = userRepository;
-        this.l10nManager = l10nManager;
+        this.localizationManager = localizationManager;
     }
 
     @Override
@@ -53,22 +59,30 @@ public class UpdateConfigCommand implements ISubCommand {
         try {
             channelId = Long.parseLong(channelOption);
         } catch (NumberFormatException error) {
-            event.reply("A config for that channel does not exist! Please use one of the suggested channels").queue();
+            event.reply(localizationManager.get("error.invalidChannel")).queue();
             return;
         }
 
         final var deleteConfig = configRepository.get(channelId);
+        if (deleteConfig == null) {
+            LOGGER.warn("Could not update channel with id '{}': Database returned null", channelId);
+            return;
+        }
+
         deleteConfig.setDuration(newDuration);
 
-        event.reply("Config for channel <#" + channelId + "> successfully updated. The new duration is **" + newDuration + "** minutes").queue();
-
-        LOGGER.info("Updated config for channel <#{}>: The new duration is {} minutes", channelId, newDuration);
+        final var response = localizationManager.get(
+            "slash.auto-delete.update",
+            channel(channelId),
+            bold(newDuration)
+        );
+        event.reply(response).queue();
     }
 
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            new HasSavedConfigs(configRepository, l10nManager),
+            new HasSavedConfigs(configRepository, localizationManager),
             isRegistered(userRepository)
         );
     }
@@ -77,22 +91,22 @@ public class UpdateConfigCommand implements ISubCommand {
     public SubcommandData getSubCommandData() {
         final var channelOption = new OptionData(
             OptionType.STRING,
-            l10nManager.get("auto-delete.update.channel.name", Locale.US),
-            l10nManager.get("auto-delete.update.channel.description", Locale.US),
+            localizationManager.get("auto-delete.update.channel.name", Locale.US),
+            localizationManager.get("auto-delete.update.channel.description", Locale.US),
             true,
             true
         );
 
         final var durationOption = new OptionData(
             OptionType.STRING,
-            l10nManager.get("auto-delete.update.duration.name", Locale.US),
-            l10nManager.get("auto-delete.update.duration.description", Locale.US),
+            localizationManager.get("auto-delete.update.duration.name", Locale.US),
+            localizationManager.get("auto-delete.update.duration.description", Locale.US),
             true
         );
 
         return new SubcommandData(
-            l10nManager.get("auto-delete.update.name", Locale.US),
-            l10nManager.get("auto-delete.update.description", Locale.US)
+            localizationManager.get("auto-delete.update.name", Locale.US),
+            localizationManager.get("auto-delete.update.description", Locale.US)
         ).addOptions(channelOption, durationOption);
     }
 }
