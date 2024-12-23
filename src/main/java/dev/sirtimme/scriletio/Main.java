@@ -9,13 +9,6 @@ import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
-import io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.logs.SdkLoggerProvider;
-import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;
-import io.opentelemetry.sdk.resources.Resource;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
@@ -28,24 +21,12 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-
-    public static void main(String[] args) {
-        if (!Objects.equals(System.getenv("LOG_EXPORTER_ENDPOINT"), "")) {
-            OpenTelemetryAppender.install(buildOpenTelemetry());
-            LOGGER.info("Initialization of OpenTelemetry successful");
-        } else {
-            LOGGER.info("Environment variable 'LOG_EXPORTER_ENDPOINT' is not set, skipping initialization of OpenTelemetry");
-        }
-
+    public static void main() {
         final var entityManagerFactory = buildEntityManagerFactory();
         final var l10nManager = new LocalizationManager();
         final var deleteTaskManager = new DeleteTaskManager();
@@ -76,38 +57,5 @@ public class Main {
         }};
 
         return Persistence.createEntityManagerFactory("scriletio", properties);
-    }
-
-    private static OpenTelemetry buildOpenTelemetry() {
-        final var logRecordExporter = OtlpGrpcLogRecordExporter
-            .builder()
-            .setEndpoint(System.getenv("LOG_EXPORTER_ENDPOINT"))
-            .build();
-
-        final var logRecordProcessor = BatchLogRecordProcessor
-            .builder(logRecordExporter)
-            .build();
-
-        final var serviceNameResource = Resource
-            .getDefault()
-            .toBuilder()
-            .put("service.name", "scriletio")
-            .build();
-
-        final var loggerProvider = SdkLoggerProvider
-            .builder()
-            .setResource(serviceNameResource)
-            .addLogRecordProcessor(logRecordProcessor)
-            .build();
-
-        final var openTelemetrySDK = OpenTelemetrySdk
-            .builder()
-            .setLoggerProvider(loggerProvider)
-            .build();
-
-        // Add hook to close SDK, which flushes logs
-        Runtime.getRuntime().addShutdownHook(new Thread(openTelemetrySDK::close));
-
-        return openTelemetrySDK;
     }
 }
