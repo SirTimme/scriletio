@@ -1,9 +1,6 @@
 package dev.sirtimme.scriletio.utils;
 
-import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.exceptions.ParsingException;
-
-import java.util.List;
 
 public class Formatter {
     public static String format(String content, ParsingException exception) {
@@ -23,27 +20,6 @@ public class Formatter {
         sb.append("- `4D` or `4d` = 4 days\n");
         sb.append("- `2D3H` or `2d3h` = 2 days 3 hours\n");
         sb.append("- `1D5H3M` or `1d5h3m` = 1 day 5 hours 3 minutes");
-        return sb.toString();
-    }
-
-    public static String format() {
-        return """
-            **Notice:**
-            In order for Scriletio to work, your `discord user id` gets saved. [What's this?](<https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID>)
-            This is public available information and you can delete all of your stored data at any time using the `/delete` command.
-
-            **Continue?**
-            """;
-    }
-
-    public static String response(final List<DeleteConfig> deleteConfigs) {
-        final var sb = new StringBuilder();
-
-        for (final var deleteConfig : deleteConfigs) {
-            sb.append("Channel: <#").append(deleteConfig.getChannelId()).append(">").append("\n")
-              .append(TimeUtils.createReadableDuration(deleteConfig.getDuration())).append("\n\n");
-        }
-
         return sb.toString();
     }
 }
