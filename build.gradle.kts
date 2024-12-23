@@ -11,10 +11,13 @@ repositories {
     maven {
         url = uri("https://patient-turkey-beloved.ngrok-free.app/releases")
     }
+    maven {
+        url = uri("https://patient-turkey-beloved.ngrok-free.app/snapshots")
+    }
 }
 
 dependencies {
-    implementation("dev.sirtimme:iuvo:0.0.6")
+    implementation("dev.sirtimme:iuvo:7568c1e")
     implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("net.dv8tion:JDA:5.0.0") {
         exclude(group = "club.minnced", module = "opus-java")
@@ -22,4 +25,5 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.3")
     implementation("org.hibernate:hibernate-core:6.4.4.Final")
     implementation("org.hibernate:hibernate-hikaricp:6.4.4.Final")
+    implementation("io.github.classgraph:classgraph:4.8.179")
 }
