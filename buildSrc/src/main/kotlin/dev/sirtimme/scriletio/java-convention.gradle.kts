@@ -9,8 +9,12 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-tasks.named<Jar>("jar").configure {
+tasks.withType<Jar>().configureEach {
     manifest {
         attributes["Main-Class"] = "dev.sirtimme.scriletio.Main"
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("--enable-preview")
 }
