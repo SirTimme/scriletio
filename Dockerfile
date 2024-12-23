@@ -1,12 +1,18 @@
-FROM gradle:8.7.0-jdk21 AS build
-ENV HOME=/home/gradle/src
-RUN mkdir -p $HOME
-WORKDIR $HOME
-ADD . $HOME
-RUN gradle shadowJar
+FROM eclipse-temurin:21-jdk-alpine AS build
 
-FROM openjdk:21
-ENV HOME=/home/gradle/src
+COPY settings.gradle.kts build.gradle.kts gradlew /
+COPY gradle gradle
+COPY src src
+
+RUN ./gradlew shadowJar
+
+FROM eclipse-temurin:21-jre-alpine
+
+ENV HOME=/home/app
+ENV VERSION=0.0.10
+
 WORKDIR $HOME
-COPY --from=build $HOME/build/libs/scriletio-*.jar scriletio.jar
-ENTRYPOINT java -Dlogback.configurationFile=$HOME/cfg/logback.xml -jar scriletio.jar
+
+COPY --from=build /build/libs/scriletio-${VERSION}-all.jar $HOME/scriletio.jar
+
+ENTRYPOINT [ "java", "--enable-preview", "-jar", "scriletio.jar" ]
