@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white" alt="gradle badge"/>
 </div>
 
-<h3 align="center">Scriletio is a discord bot that automatically <br/> deletes your messages after a configured duration.</h3><br>
+<h3 align="center">Scriletio is a Discord bot that automatically <br/> deletes your messages after a configured duration.</h3><br>
 
 ## Table of contents
 
@@ -142,7 +142,7 @@ Examples:
 
 ## Self-hosting
 
-Scriletio provides a docker image for self-hosting purposes. It can be found in the [dockerhub](https://hub.docker.com/repository/docker/sirtimme/scriletio/general) registry.
+Scriletio provides a Docker image for self-hosting purposes. It can be found in the [DockerHub](https://hub.docker.com/repository/docker/sirtimme/scriletio/general) registry.
 > [!IMPORTANT]
 > This directory structure is needed for Scriletio to run:
 > ```
@@ -156,69 +156,17 @@ First, copy the `.env.example` to `.env`:
 > cp .env.example .env
 ```
 
-The `.env` file needs these entries:
+Fill in the following environment variables in the `.env` file:
 ```env
-BOT_TOKEN=
-OWNER_ID=
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-POSTGRES_DB=
-POSTGRES_URL=
+BOT_TOKEN=                      # the token of the bot (copied from the Discord developer portal)
+OWNER_ID=                       # the Discord user id of the owner (needed for owner-only commands)
+POSTGRES_USER=                  # the username of the postgres account
+POSTGRES_PASSWORD=              # the password of the postgres account
+POSTGRES_DB=                    # the name of the database
+POSTGRES_URL=                   # the postgres JDBC connection string
 ```
 
-The following entries are `optional`:
-```env
-POSTGRES_VERSION=
-ADMINER_VERSION=
-SCRILETIO_VERSION=
-LOG_EXPORTER_ENDPOINT=
-LOGBACK_CONFIG_FILE=
-```
-
-The `compose.yml` configures these services:
-
-- `database` - a postgres database for data storage
-- `bot` - scriletio itself
-- `adminer` - a GUI for accessing the database
-
-> [!TIP]
-> Keep in mind that you may need to adjust the specified `ports` in the compose file below:
-
-```yml
-name: scriletio
-services:
-    database:
-        image: postgres:${POSTGRES_VERSION-16.2}
-        environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
-        volumes:
-            - pg-data:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
-
-    bot:
-        image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.10}
-        environment:
-            OWNER_ID: ${OWNER_ID}
-            BOT_TOKEN: ${BOT_TOKEN}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_URL: ${POSTGRES_URL}
-            LOG_EXPORTER_ENDPOINT: ${LOG_EXPORTER_ENDPOINT}
-        volumes:
-            - ${LOGBACK_CONFIG_FILE-./src/main/resources/cfg/logback.xml}:/home/gradle/src/cfg/logback.xml
-        depends_on:
-            - database
-
-    adminer:
-        image: adminer:${ADMINER_VERSION-4.8.1}
-        depends_on:
-            - database
-        ports:
-            - "8080:8080"
-
-volumes:
-    pg-data:
-```
+Start the Docker deployment:
+````shell
+docker compose up -d
+````
