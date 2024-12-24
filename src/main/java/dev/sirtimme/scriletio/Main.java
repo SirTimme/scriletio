@@ -4,7 +4,6 @@ import dev.sirtimme.iuvo.api.listener.event.EventListener;
 import dev.sirtimme.iuvo.api.listener.interaction.InteractionListener;
 import dev.sirtimme.scriletio.factory.event.*;
 import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
-import dev.sirtimme.scriletio.factory.interaction.CommandAutoCompleteEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
 import dev.sirtimme.scriletio.localization.LocalizationManager;
@@ -14,7 +13,6 @@ import jakarta.persistence.Persistence;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
@@ -24,11 +22,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.HashMap;
 
-
 public class Main {
     public static void main() {
         final var entityManagerFactory = buildEntityManagerFactory();
-        final var l10nManager = new LocalizationManager();
+        final var localizationManager = new LocalizationManager();
         final var deleteTaskManager = new DeleteTaskManager();
 
         JDABuilder
@@ -41,10 +38,9 @@ public class Main {
                 new EventListener<>(ChannelDeleteEvent.class, entityManagerFactory, new ChannelDeleteEventCommandFactory()),
 
                 // interaction events
-                new InteractionListener<>(SlashCommandInteractionEvent.class, entityManagerFactory, new SlashEventCommandFactory(l10nManager)),
-                new InteractionListener<>(ButtonInteractionEvent.class, entityManagerFactory, new ButtonEventCommandFactory(l10nManager)),
-                new InteractionListener<>(StringSelectInteractionEvent.class, entityManagerFactory, new MenuEventCommandFactory(l10nManager)),
-                new InteractionListener<>(CommandAutoCompleteInteractionEvent.class, entityManagerFactory, new CommandAutoCompleteEventCommandFactory())
+                new InteractionListener<>(SlashCommandInteractionEvent.class, entityManagerFactory, new SlashEventCommandFactory(localizationManager)),
+                new InteractionListener<>(ButtonInteractionEvent.class, entityManagerFactory, new ButtonEventCommandFactory(localizationManager)),
+                new InteractionListener<>(StringSelectInteractionEvent.class, entityManagerFactory, new MenuEventCommandFactory(localizationManager))
             )
             .build();
     }
