@@ -11,12 +11,11 @@ import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
 import dev.sirtimme.scriletio.exceptions.ParsingException;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +25,6 @@ import static dev.sirtimme.scriletio.response.Markdown.bold;
 import static dev.sirtimme.scriletio.response.Markdown.channel;
 
 public class UpdateConfigCommand implements ISubCommand {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateConfigCommand.class);
     private final QueryableRepository<DeleteConfig> configRepository;
     private final Repository<User> userRepository;
     private final LocalizationManager localizationManager;
@@ -54,18 +52,12 @@ public class UpdateConfigCommand implements ISubCommand {
         }
 
         // noinspection DataFlowIssue command option 'channel' is required
-        final var channelOption = event.getOption("channel").getAsString();
-        final long channelId;
-        try {
-            channelId = Long.parseLong(channelOption);
-        } catch (NumberFormatException error) {
-            event.reply(localizationManager.get("error.invalidChannel")).queue();
-            return;
-        }
+        final var channelOption = event.getOption("channel").getAsChannel();
+        final var channelId = channelOption.getIdLong();
 
         final var deleteConfig = configRepository.get(channelId);
         if (deleteConfig == null) {
-            LOGGER.warn("Could not update channel with id '{}': Database returned null", channelId);
+            event.reply(localizationManager.get("error.invalidChannel")).queue();
             return;
         }
 
@@ -76,6 +68,7 @@ public class UpdateConfigCommand implements ISubCommand {
             channel(channelId),
             bold(newDuration)
         );
+
         event.reply(response).queue();
     }
 
@@ -90,12 +83,11 @@ public class UpdateConfigCommand implements ISubCommand {
     @Override
     public SubcommandData getSubCommandData() {
         final var channelOption = new OptionData(
-            OptionType.STRING,
+            OptionType.CHANNEL,
             localizationManager.get("auto-delete.update.channel.name", Locale.US),
             localizationManager.get("auto-delete.update.channel.description", Locale.US),
-            true,
             true
-        );
+        ).setChannelTypes(ChannelType.TEXT);
 
         final var durationOption = new OptionData(
             OptionType.STRING,

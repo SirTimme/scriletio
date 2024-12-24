@@ -78,11 +78,6 @@ Example:
 | duration  | String      | true     |
 
 > [!IMPORTANT]
-> The choices for **channel** are dynamically resolved based on your saved autodelete configs.\
-> You need to use one of the provided choices to update an autodelete config!
->
-> ![autodelete update choices information](src/main/resources/assets/autodelete_update_channel_choices.png)
->
 > For more information regarding the **duration** format [click here](#duration-format).
 
 Example:
