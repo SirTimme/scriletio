@@ -82,8 +82,6 @@ Example:
 
 Example:
 
-![autodelete update command](src/main/resources/assets/autodelete_update_command.png)
-
 ---
 
 ### /autodelete delete
