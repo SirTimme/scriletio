@@ -14,13 +14,13 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.sirtimme:iuvo:0.0.7")
-    implementation("ch.qos.logback:logback-classic:1.5.15")
-    implementation("net.dv8tion:JDA:5.0.0") {
+    implementation("dev.sirtimme:iuvo:0.0.8")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("net.dv8tion:JDA:5.6.1") {
         exclude(group = "club.minnced", module = "opus-java")
     }
-    implementation("org.postgresql:postgresql:42.7.3")
-    implementation("org.hibernate:hibernate-core:6.4.4.Final")
-    implementation("org.hibernate:hibernate-hikaricp:6.4.4.Final")
-    implementation("io.github.classgraph:classgraph:4.8.179")
+    implementation("org.postgresql:postgresql:42.7.7")
+    implementation("org.hibernate:hibernate-core:7.0.5.Final")
+    implementation("org.hibernate:hibernate-hikaricp:7.0.5.Final")
+    implementation("io.github.classgraph:classgraph:4.8.180")
 }
