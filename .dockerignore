@@ -1,0 +1,12 @@
+.github
+.gradle
+.idea
+build
+.editorconfig
+.env
+.env.example
+.gitignore
+compose.yml
+LICENSE
+README.md
+gradlew.bat
