@@ -2,11 +2,11 @@ package dev.sirtimme.scriletio;
 
 import dev.sirtimme.iuvo.api.listener.event.EventListener;
 import dev.sirtimme.iuvo.api.listener.interaction.InteractionListener;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.scriletio.factory.event.*;
 import dev.sirtimme.scriletio.factory.interaction.ButtonEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.MenuEventCommandFactory;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.managers.DeleteTaskManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

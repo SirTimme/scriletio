@@ -1,10 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
 import dev.sirtimme.scriletio.utils.TimeUtils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
