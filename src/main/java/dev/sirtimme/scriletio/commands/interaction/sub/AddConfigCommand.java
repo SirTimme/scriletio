@@ -1,12 +1,12 @@
 package dev.sirtimme.scriletio.commands.interaction.sub;
 
 import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.precondition.HasLessThanConfigs;
 import dev.sirtimme.scriletio.utils.Formatter;
 import dev.sirtimme.scriletio.utils.Parser;
@@ -93,7 +93,7 @@ public class AddConfigCommand implements ISubCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            isRegistered(userRepository),
+            isRegistered(userRepository, localizationManager),
             new HasLessThanConfigs(25, configRepository, localizationManager)
         );
     }

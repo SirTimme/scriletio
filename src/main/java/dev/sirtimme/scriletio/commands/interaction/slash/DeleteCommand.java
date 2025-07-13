@@ -1,10 +1,10 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
 import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -36,7 +36,7 @@ public class DeleteCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            isRegistered(userRepository)
+            isRegistered(userRepository, localizationManager)
         );
     }
 
