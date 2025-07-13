@@ -31,6 +31,7 @@ public class MessageReceiveCommand implements IEventCommand<MessageReceivedEvent
             final var msgReference = event.getMessage().getMessageReference();
             // noinspection DataFlowIssue since this is a pinned message notification there is always a message reference
             final var deleteTask = deleteConfig.getTask(msgReference.getMessageIdLong());
+
             // pinned messages could be older than the bot tracks
             if (deleteTask == null) {
                 return;
