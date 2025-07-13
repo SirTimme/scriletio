@@ -1,9 +1,9 @@
 package dev.sirtimme.scriletio.commands.interaction.slash;
 
 import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.scriletio.factory.interaction.SlashEventCommandFactory;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -49,7 +49,7 @@ public class UpdateCommand implements ISlashCommand {
     @Override
     public List<IPrecondition<? super SlashCommandInteractionEvent>> getPreconditions() {
         return List.of(
-            isOwner()
+            isOwner(localizationManager)
         );
     }
 

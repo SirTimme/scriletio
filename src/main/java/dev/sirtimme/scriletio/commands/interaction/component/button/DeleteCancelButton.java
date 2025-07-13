@@ -1,8 +1,8 @@
 package dev.sirtimme.scriletio.commands.interaction.component.button;
 
 import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class DeleteCancelButton implements IInteractionCommand<ButtonInteraction
     @Override
     public List<IPrecondition<? super ButtonInteractionEvent>> getPreconditions() {
         return List.of(
-            isComponentAuthor()
+            isComponentAuthor(localizationManager)
         );
     }
 }

@@ -2,8 +2,8 @@ package dev.sirtimme.scriletio.factory.interaction;
 
 import dev.sirtimme.iuvo.api.commands.interaction.IInteractionCommand;
 import dev.sirtimme.iuvo.api.factory.interaction.IInteractionCommandFactory;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.scriletio.commands.interaction.component.menu.DeleteMenu;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.repository.DeleteConfigRepository;
 import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;

@@ -2,6 +2,7 @@ package dev.sirtimme.scriletio.commands.interaction.slash;
 
 import dev.sirtimme.iuvo.api.commands.interaction.ISlashCommand;
 import dev.sirtimme.iuvo.api.commands.interaction.ISubCommand;
+import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.QueryableRepository;
 import dev.sirtimme.iuvo.api.repository.Repository;
@@ -11,7 +12,6 @@ import dev.sirtimme.scriletio.commands.interaction.sub.GetConfigCommand;
 import dev.sirtimme.scriletio.commands.interaction.sub.UpdateConfigCommand;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
-import dev.sirtimme.scriletio.localization.LocalizationManager;
 import dev.sirtimme.scriletio.precondition.HasPermission;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
