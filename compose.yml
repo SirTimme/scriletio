@@ -1,7 +1,7 @@
 name: scriletio
 services:
   database:
-    image: postgres:${POSTGRES_VERSION-16.2}
+    image: postgres:${POSTGRES_VERSION}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -9,13 +9,13 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
 
   bot:
-    image: sirtimme/scriletio:${SCRILETIO_VERSION-0.0.10}
+    image: sirtimme/scriletio:${SCRILETIO_VERSION}
     environment:
       OWNER_ID: ${OWNER_ID}
-      BOT_TOKEN: ${TOKEN_DEV}
+      BOT_TOKEN: ${BOT_TOKEN}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: ${POSTGRES_URL}
@@ -23,11 +23,11 @@ services:
       - database
 
   adminer:
-    image: adminer:${ADMINER_VERSION-4.8.1}
+    image: adminer:${ADMINER_VERSION}
     depends_on:
       - database
     ports:
-      - "8080:8080"
+      - "${ADMINER_PORT}:8080"
 
 volumes:
   pg-data:
