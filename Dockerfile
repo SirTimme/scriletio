@@ -1,17 +1,18 @@
 FROM eclipse-temurin:21-jdk-alpine AS build
 
-COPY settings.gradle.kts build.gradle.kts gradlew /
-COPY gradle gradle
-COPY src src
+COPY . .
 
 RUN ./gradlew shadowJar
 
 FROM eclipse-temurin:21-jre-alpine
 
-ENV HOME=/home/app
+RUN addgroup -S scriletio && \
+    adduser -S -H scriletio -G scriletio
 
-WORKDIR $HOME
+WORKDIR /home/app
 
-COPY --from=build /build/libs/*-all.jar $HOME/scriletio.jar
+COPY --chown=scriletio:scriletio --from=build /build/libs/*-all.jar scriletio.jar
+
+USER scriletio
 
 ENTRYPOINT [ "java", "--enable-preview", "-jar", "scriletio.jar" ]
