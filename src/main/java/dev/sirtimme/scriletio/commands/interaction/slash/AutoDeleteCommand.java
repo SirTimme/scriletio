@@ -15,6 +15,7 @@ import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.precondition.HasPermission;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -70,7 +71,7 @@ public class AutoDeleteCommand implements ISlashCommand {
         final var commandName = localizationManager.get("auto-delete.name", Locale.US);
         final var commandDescription = localizationManager.get("auto-delete.description", Locale.US);
 
-        return Commands.slash(commandName, commandDescription).addSubcommands(subCommandData).setGuildOnly(true);
+        return Commands.slash(commandName, commandDescription).addSubcommands(subCommandData).setContexts(InteractionContextType.GUILD);
     }
 
     private void registerSubcommand(final String key, final Supplier<ISubCommand> value) {
