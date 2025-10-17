@@ -9,7 +9,7 @@ version = "0.0.12"
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://patient-turkey-beloved.ngrok-free.app/releases")
+        url = uri("https://artifactory.sirtimme.dev/releases")
     }
 }
 
