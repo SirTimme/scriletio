@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import java.util.HashMap;
 
 public class Main {
-    public static void main() {
+    static void main() {
         final var entityManagerFactory = buildEntityManagerFactory();
         final var localizationManager = new LocalizationManager();
         final var deleteTaskManager = new DeleteTaskManager();
