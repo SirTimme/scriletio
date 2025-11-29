@@ -1,6 +1,7 @@
-name: Publish docker image
+name: Publish Docker Image
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*
@@ -33,7 +34,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
