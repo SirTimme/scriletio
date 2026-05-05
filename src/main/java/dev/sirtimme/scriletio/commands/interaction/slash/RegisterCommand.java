@@ -5,10 +5,11 @@ import dev.sirtimme.iuvo.api.localization.LocalizationManager;
 import dev.sirtimme.iuvo.api.precondition.IPrecondition;
 import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.User;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +45,7 @@ public class RegisterCommand implements ISlashCommand {
             h3(localizationManager.get("continue"))
         );
 
-        event.reply(response).addActionRow(btnAccept, btnCancel).queue();
+        event.reply(response).addComponents(ActionRow.of(btnAccept, btnCancel)).queue();
     }
 
     @Override

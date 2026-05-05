@@ -8,11 +8,12 @@ import dev.sirtimme.iuvo.api.repository.Repository;
 import dev.sirtimme.scriletio.entities.DeleteConfig;
 import dev.sirtimme.scriletio.entities.User;
 import dev.sirtimme.scriletio.precondition.HasSavedConfigs;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +60,7 @@ public class DeleteConfigCommand implements ISubCommand {
             deleteMenuBuilder.addOption(channelName, value, description, Emoji.fromUnicode("U+1F4D1"));
         }
 
-        event.reply(localizationManager.get("slash.auto-delete.delete")).addActionRow(deleteMenuBuilder.build()).queue();
+        event.reply(localizationManager.get("slash.auto-delete.delete")).addComponents(ActionRow.of(deleteMenuBuilder.build())).queue();
     }
 
     @Override
