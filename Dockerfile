@@ -1,10 +1,10 @@
-FROM gradle:9.1.0-jdk25-alpine AS build
+FROM eclipse-temurin:25 AS build
 
 WORKDIR /home/gradle
 
 COPY . .
 
-RUN gradle shadowJar
+RUN ./gradlew shadowJar
 
 FROM eclipse-temurin:25-jre-alpine
 
