@@ -4,7 +4,9 @@ WORKDIR /home/gradle
 
 COPY . .
 
-RUN ./gradlew shadowJar
+RUN --mount=type=secret,id=FORGEJO_USERNAME,env=FORGEJO_USERNAME \
+    --mount=type=secret,id=FORGEJO_ACCESS_TOKEN,env=FORGEJO_ACCESS_TOKEN \
+    ./gradlew shadowJar
 
 FROM eclipse-temurin:25-jre-alpine
 
