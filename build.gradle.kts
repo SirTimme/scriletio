@@ -9,7 +9,11 @@ version = "0.0.12"
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://artifactory.sirtimme.dev/releases")
+        url = uri("https://forgejo.sirtimme.dev/api/packages/sirtimme/maven")
+        credentials {
+            username = providers.environmentVariable("FORGEJO_USERNAME").orNull
+            password = providers.environmentVariable("FORGEJO_ACCESS_TOKEN").orNull
+        }
     }
 }
 
