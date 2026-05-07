@@ -10,10 +10,6 @@ repositories {
     mavenCentral()
     maven {
         url = uri("https://forgejo.sirtimme.dev/api/packages/sirtimme/maven")
-        credentials {
-            username = providers.environmentVariable("FORGEJO_USERNAME").orNull
-            password = providers.environmentVariable("FORGEJO_ACCESS_TOKEN").orNull
-        }
     }
 }
 
