@@ -2,11 +2,17 @@ FROM eclipse-temurin:25 AS build
 
 WORKDIR /home/gradle
 
-COPY . .
+COPY gradle gradle
+COPY gradlew gradlew
+RUN ./gradlew --version
 
-RUN --mount=type=secret,id=FORGEJO_USERNAME,env=FORGEJO_USERNAME \
-    --mount=type=secret,id=FORGEJO_ACCESS_TOKEN,env=FORGEJO_ACCESS_TOKEN \
-    ./gradlew shadowJar
+COPY buildSrc buildSrc
+COPY build.gradle.kts build.gradle.kts
+COPY settings.gradle.kts settings.gradle.kts
+RUN ./gradlew dependencies
+
+COPY src src
+RUN ./gradlew shadowJar
 
 FROM eclipse-temurin:25-jre-alpine
 
