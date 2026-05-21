@@ -1,6 +1,6 @@
 plugins {
     id("com.gradleup.shadow") version "9.4.1"
-    id("dev.sirtimme.gradle.java-convention")
+    id("dev.sirtimme.gradle.java-conventions")
 }
 
 group = "dev.sirtimme"
