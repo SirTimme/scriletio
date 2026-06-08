@@ -21,7 +21,7 @@ dependencies {
         exclude(group = "club.minnced", module = "opus-java")
     }
     implementation("org.postgresql:postgresql:42.7.11")
-    implementation("org.hibernate:hibernate-core:7.3.3.Final")
-    implementation("org.hibernate:hibernate-hikaricp:7.3.3.Final")
+    implementation("org.hibernate.orm:hibernate-core:7.4.0.Final")
+    implementation("org.hibernate.orm:hibernate-hikaricp:7.4.0.Final")
     implementation("io.github.classgraph:classgraph:4.8.184")
 }
