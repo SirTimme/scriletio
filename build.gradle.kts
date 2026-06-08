@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.sirtimme:iuvo:0.0.9")
+    implementation("dev.sirtimme:iuvo:0.0.10")
     implementation("ch.qos.logback:logback-classic:1.5.34")
     implementation("net.dv8tion:JDA:6.4.2") {
         exclude(group = "club.minnced", module = "opus-java")
