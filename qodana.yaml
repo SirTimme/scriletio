@@ -1,5 +1,6 @@
-version: 1.0
-projectJDK: "temurin-25"
+version: "1.0"
+
 profile:
   name: qodana.recommended
+
 image: jetbrains/qodana-jvm-community:latest
