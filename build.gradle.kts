@@ -2,6 +2,7 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1"
     id("dev.sirtimme.gradle.java-conventions")
     id("dev.sirtimme.gradle.dependency-conventions")
+    id("dev.sirtimme.gradle.test-conventions")
 }
 
 group = "dev.sirtimme"
@@ -24,4 +25,8 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-core:7.4.0.Final")
     implementation("org.hibernate.orm:hibernate-hikaricp:7.4.0.Final")
     implementation("io.github.classgraph:classgraph:4.8.184")
+
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
